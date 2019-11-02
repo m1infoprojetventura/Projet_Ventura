@@ -40,15 +40,20 @@ public class VueGestionaire extends JFrame {
         this.setVisible(true);
     }
 
+
+
     private JPanel saisieInfoPersonne(){
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
+
         panel.setBackground(Color.white);
 
         JLabel nom = new JLabel("NOM");
         panel.add(nom);
         this.personneNom = new JTextField();
-        personneNom.setColumns(10);
+        personneNom.setColumns(12);
+
+
         panel.add(personneNom);
 
         JLabel prenom = new JLabel("Prenom");
@@ -74,6 +79,7 @@ public class VueGestionaire extends JFrame {
         JLabel statut = new JLabel("Statut");
         panel.add(statut);
         panel.setLayout(new FlowLayout());
+        panel.setBackground(Color.white);
 
         Object[] elements = new Object[]{"ETUDIANT", "PROFESSEUR", "RESPONSABLE_FORMATION"};
 
