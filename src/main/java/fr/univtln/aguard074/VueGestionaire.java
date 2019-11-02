@@ -34,66 +34,92 @@ public class VueGestionaire extends JFrame {
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
         setResizable(false); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
+        this.getContentPane().add(saisieInfoPersonne());
 
-        setContentPane(saisieInfoPersonne());
-        getContentPane().add(choixStatut());
+
+        //getContentPane().add();
         this.setVisible(true);
     }
 
+
+
     private JPanel saisieInfoPersonne(){
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridLayout(6,1));
         panel.setBackground(Color.white);
+        // création des sous containers
+        JPanel panel1 = new JPanel(new FlowLayout());
+        JPanel panel2 = new JPanel(new FlowLayout());
+        JPanel panel3 = new JPanel(new FlowLayout());
+        JPanel panel4 = new JPanel(new FlowLayout());
+        JPanel panel5 = new JPanel(new FlowLayout());
+        panel1.setBackground(Color.white);
+        panel2.setBackground(Color.white);
+        panel3.setBackground(Color.white);
+        panel4.setBackground(Color.white);
+        panel5.setBackground(Color.white);
 
-        JLabel nom = new JLabel("NOM");
-        panel.add(nom);
+
+        JLabel nom = new JLabel("NOM :");
+        panel1.add(nom);
         this.personneNom = new JTextField();
-        personneNom.setColumns(10);
-        panel.add(personneNom);
+        this.personneNom.setPreferredSize(new Dimension(150,20));
+        panel1.add(personneNom);
 
-        JLabel prenom = new JLabel("Prenom");
-        panel.add(prenom);
+
+        JLabel prenom = new JLabel("Prenom :");
+        panel2.add(prenom);
         this.personnePrenom = new JTextField();
-        personnePrenom.setColumns(10);
-        panel.add(personnePrenom);
+        this.personnePrenom.setPreferredSize(new Dimension(150,20));
+        panel2.add(personnePrenom);
 
-        JLabel age = new JLabel("Age");
-        panel.add(age);
+        JLabel age = new JLabel("Age :");
+        panel3.add(age);
         this.personneAge= new JTextField();
-        personneAge.setColumns(10);
-        panel.add(personneAge);
+        this.personneAge.setPreferredSize(new Dimension(150,20));
+        panel3.add(personneAge);
 
+        // ajouter le container qui renvoir le JComboBox de status
+        panel4.add(choixStatut());
+        // création des deux boutton
+        JButton AddBouton = new JButton("Ajouter");
+        JButton CancelBouton = new JButton("Annuler");
 
+        AddAction AddAction = new AddAction();
+        DeleteAction deleteAction = new DeleteAction();
+        AddBouton.addActionListener(AddAction);
+        CancelBouton.addActionListener(deleteAction);
+        panel5.add(AddBouton);
+        panel5.add(CancelBouton);
+        //Ajouter les sous containers au container principale
+        panel.add(panel1);
+        panel.add(panel2);
+        panel.add(panel3);
+        panel.add(panel4);
+        panel.add(panel5);
         return panel;
-        }
+    }
 
     private JPanel choixStatut(){
 
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridLayout(2,1));
+        JPanel panel1 = new JPanel(new FlowLayout());
+        panel.setBackground(Color.white);
+        panel1.setBackground(Color.white);
 
-        JLabel statut = new JLabel("Statut");
-        panel.add(statut);
-        panel.setLayout(new FlowLayout());
-
+        JLabel statut = new JLabel("Statut : ");
+        panel1.add(statut);
         Object[] elements = new Object[]{"ETUDIANT", "PROFESSEUR", "RESPONSABLE_FORMATION"};
 
         listeStatut = new JComboBox(elements);
-
-        panel.add(listeStatut);
-
-        JButton bouton = new JButton("Ajouter");
-        Action action = new Action();
-        bouton.addActionListener(action);
-
-        panel.add(bouton);
-
-
-
+        listeStatut.setPreferredSize(new Dimension(120,20));
+        panel1.add(listeStatut);
+        panel.add(panel1);
         return panel;
     }
 
 
-    class Action implements ActionListener{
+    class AddAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             //On affiche le chiffre en plus dans le label
             String str = ((JButton)e.getSource()).getText();
@@ -118,8 +144,12 @@ public class VueGestionaire extends JFrame {
 
         }
     }
+    class DeleteAction implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            personneNom.setText("");
+            personnePrenom.setText("");
+            personneAge.setText("");
+        }
+    }
 
 }
-
-
-
