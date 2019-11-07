@@ -8,10 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
 
 
 public class VueGestionaire extends JFrame {
-    private Imodele modele;
+    private Modele modele;
     private Icontroleur controleur;
 
     private JTextField personneNom;
@@ -19,22 +23,37 @@ public class VueGestionaire extends JFrame {
     private JTextField personneAge;
     private JTextField personneStatut;
     private JComboBox listeStatut;
+    private JList listePersonnes;
+    private JScrollPane scrollbar;
+    private Jmodel personesEnregistres = new Jmodel();
 
 
-    public VueGestionaire(Icontroleur controleur){
+
+
+
+    public VueGestionaire(Icontroleur controleur, Modele modele){
         super();
+        this.modele = modele;
         Init();//On initialise notre fenêtre
         this.controleur = controleur;
+
+
 
     }
 
     private void Init() {
         setTitle("Gestionaire emploi du temps"); //On donne un titre à l'application
-        setSize(400, 400); //On donne une taille à notre fenêtre
+        setSize(600, 600); //On donne une taille à notre fenêtre
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
         setResizable(false); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
+
+
+
+        this.modele.addObserver(personesEnregistres);
+
         this.getContentPane().add(saisieInfoPersonne());
+
 
 
         //getContentPane().add();
@@ -53,11 +72,14 @@ public class VueGestionaire extends JFrame {
         JPanel panel3 = new JPanel(new FlowLayout());
         JPanel panel4 = new JPanel(new FlowLayout());
         JPanel panel5 = new JPanel(new FlowLayout());
+        JPanel panelAffiche = new JPanel(new FlowLayout());
+
         panel1.setBackground(Color.white);
         panel2.setBackground(Color.white);
         panel3.setBackground(Color.white);
         panel4.setBackground(Color.white);
         panel5.setBackground(Color.white);
+        panelAffiche.setBackground(Color.white);
 
 
         JLabel nom = new JLabel("NOM :");
@@ -91,12 +113,16 @@ public class VueGestionaire extends JFrame {
         CancelBouton.addActionListener(deleteAction);
         panel5.add(AddBouton);
         panel5.add(CancelBouton);
+        //Panel affichage
+        panelAffiche.add(affichePersonnes());
+
         //Ajouter les sous containers au container principale
         panel.add(panel1);
         panel.add(panel2);
         panel.add(panel3);
         panel.add(panel4);
         panel.add(panel5);
+        panel.add(panelAffiche);
         return panel;
     }
 
@@ -117,6 +143,32 @@ public class VueGestionaire extends JFrame {
         panel.add(panel1);
         return panel;
     }
+
+    private JPanel affichePersonnes() {
+        JPanel panel = new JPanel(new GridLayout(1,0));
+        JPanel panel1 = new JPanel(new FlowLayout());
+        panel.setBackground(Color.white);
+        panel1.setBackground(Color.white);
+
+        JLabel p = new JLabel("Personnes : ");
+        panel.add(p);
+        personesEnregistres.add(0,"default");
+        listePersonnes = new JList(personesEnregistres);
+        listePersonnes.setBackground(Color.white);
+
+        listePersonnes.setPreferredSize(new Dimension(400,40));
+
+        scrollbar = new JScrollPane();
+        scrollbar.setViewportView(listePersonnes);
+
+        //listePersonnes.setPreferredSize(new Dimension(440,20));
+        panel.add(scrollbar);
+        panel.add(panel1);
+        return panel;
+
+    }
+
+
 
 
     class AddAction implements ActionListener{
@@ -140,15 +192,36 @@ public class VueGestionaire extends JFrame {
                     statut = Personne.Statut.RESPONSABLE_FORMATION;
             }
             controleur.creerPersonne(nom,prenom,age,statut);
-            controleur.afficherPersonne(new Personne(nom,prenom,age,statut));
+            //controleur.afficherPersonne(new Personne(nom,prenom,age,statut));
+
 
         }
     }
+
     class DeleteAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             personneNom.setText("");
             personnePrenom.setText("");
             personneAge.setText("");
+        }
+    }
+
+
+
+    //Modele de liste permetant de manipuler le contenu d'une Jlist
+    public class Jmodel extends DefaultListModel implements Observer{
+
+        @Override
+        public void update(Observable observable, Object o) {
+            System.out.println(o.toString());
+
+            System.out.println(this);
+            this.add(0,o.toString());
+
+
+
+
+
         }
     }
 

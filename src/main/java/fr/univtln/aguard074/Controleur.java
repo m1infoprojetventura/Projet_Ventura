@@ -3,6 +3,7 @@ package fr.univtln.aguard074;
 public class Controleur implements Icontroleur {
     //private VueGestionaire vueGestionaire;
     private Imodele modele;
+    private VueGestionaire vue;
 
     public Controleur(Imodele modele){
         this.modele = modele;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
- public interface Imodele  {
+ public interface Imodele   {
 
 
 
@@ -12,7 +12,8 @@ import java.util.Observer;
 
     public void afficherPersonne(Personne p);
 
+    public void modifierPersonne(Personne p);
 
 
 
-}
+ }

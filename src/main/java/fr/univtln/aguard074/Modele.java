@@ -6,6 +6,7 @@ import java.util.Observer;
 
 public class Modele extends Observable implements Imodele{
     private ArrayList<Personne> listPersonnes= new ArrayList<Personne>();
+
     //private ArrayList<Observer> listObserver = new ArrayList<Observer>();
 
 
@@ -20,10 +21,18 @@ public class Modele extends Observable implements Imodele{
 
     @Override
     public void afficherPersonne(Personne p) {
+
         System.out.println(p);
 
 
     }
+
+    @Override
+    public void modifierPersonne(Personne p) {
+
+    }
+
+
 
     /*public void addObserver(Observer obs) {
         this.listObserver.add(obs);
