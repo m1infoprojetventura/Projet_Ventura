@@ -14,6 +14,8 @@ import java.util.Observer;
 
     public void modifierPersonne(Personne p);
 
+    public void supprimerPersonne(Personne p);
+
 
 
  }

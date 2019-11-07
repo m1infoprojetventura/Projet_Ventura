@@ -1,6 +1,7 @@
 package fr.univtln.aguard074;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -32,9 +33,25 @@ public class Modele extends Observable implements Imodele{
 
     }
 
+    @Override
+    public void supprimerPersonne(Personne p) {
+        Iterator iterator = listPersonnes.iterator();
+        while (iterator.hasNext()){
+            if(iterator.next().equals(p))
+                listPersonnes.remove(p);
+            System.out.println(iterator.next());
+        }
+        listPersonnes.remove(p);
+        setChanged();
+        notifyObservers(p);
 
+    }
 
-    /*public void addObserver(Observer obs) {
+    public ArrayList<Personne> getListPersonnes() {
+        return listPersonnes;
+    }
+
+/*public void addObserver(Observer obs) {
         this.listObserver.add(obs);
     }*/
 

@@ -11,13 +11,22 @@ public class Controleur implements Icontroleur {
 
     @Override
     public void creerPersonne(String nom, String prenom, int age, Personne.Statut statut) {
-        this.modele.creerPersonne(nom,prenom,age,statut);
+
+            this.modele.creerPersonne(nom, prenom, 0, statut);
+
 
     }
 
     @Override
     public void afficherPersonne(Personne p) {
         this.modele.afficherPersonne(p);
+
+    }
+
+    @Override
+    public void suprimerPersonne(Personne p) {
+
+        this.modele.supprimerPersonne(p);
 
     }
 

@@ -43,7 +43,7 @@ public class VueGestionaire extends JFrame {
 
     private void Init() {
         setTitle("Gestionaire emploi du temps"); //On donne un titre à l'application
-        setSize(600, 600); //On donne une taille à notre fenêtre
+        setSize(600, 700); //On donne une taille à notre fenêtre
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
         setResizable(false); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
@@ -126,6 +126,7 @@ public class VueGestionaire extends JFrame {
         return panel;
     }
 
+
     private JPanel choixStatut(){
 
         JPanel panel = new JPanel(new GridLayout(2,1));
@@ -145,6 +146,7 @@ public class VueGestionaire extends JFrame {
     }
 
     private JPanel affichePersonnes() {
+
         JPanel panel = new JPanel(new GridLayout(1,0));
         JPanel panel1 = new JPanel(new FlowLayout());
         panel.setBackground(Color.white);
@@ -152,7 +154,7 @@ public class VueGestionaire extends JFrame {
 
         JLabel p = new JLabel("Personnes : ");
         panel.add(p);
-        personesEnregistres.add(0,"default");
+        //personesEnregistres.add(0,"default");
         listePersonnes = new JList(personesEnregistres);
         listePersonnes.setBackground(Color.white);
 
@@ -161,14 +163,19 @@ public class VueGestionaire extends JFrame {
         scrollbar = new JScrollPane();
         scrollbar.setViewportView(listePersonnes);
 
+
+        JButton suppBouton = new JButton("Supprimer");
+        SupAction SupAction = new SupAction();
+        suppBouton.addActionListener(SupAction);
+
         //listePersonnes.setPreferredSize(new Dimension(440,20));
+        panel.add(suppBouton);
         panel.add(scrollbar);
+
         panel.add(panel1);
         return panel;
 
     }
-
-
 
 
     class AddAction implements ActionListener{
@@ -178,7 +185,8 @@ public class VueGestionaire extends JFrame {
             //controleur.afficherPersonne(new Personne("michel","ll",45, Personne.Statut.ETUDIANT));
             String nom = personneNom.getText();
             String prenom = personnePrenom.getText();
-            int age = Integer.parseInt(personneAge.getText());
+            int age = 0;
+
             int RecupBox = listeStatut.getSelectedIndex();
             Personne.Statut statut = Personne.Statut.ETUDIANT;
             switch(RecupBox) {
@@ -191,7 +199,16 @@ public class VueGestionaire extends JFrame {
                 case 2:
                     statut = Personne.Statut.RESPONSABLE_FORMATION;
             }
-            controleur.creerPersonne(nom,prenom,age,statut);
+
+            //test validité d'un nombre
+            try {
+                age = Integer.parseInt(personneAge.getText());
+                controleur.creerPersonne(nom,prenom,age,statut);
+            } catch (NumberFormatException ez) {
+                System.out.println("Format Nombre invalide( rentrer un nombre)");
+
+            }
+
             //controleur.afficherPersonne(new Personne(nom,prenom,age,statut));
 
 
@@ -206,6 +223,16 @@ public class VueGestionaire extends JFrame {
         }
     }
 
+    //Marche pas pour l'instant
+    class SupAction implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+
+            personesEnregistres.remove(listePersonnes.getSelectedIndex());
+            //controleur.suprimerPersonne(modele.getListPersonnes().get(listePersonnes.getSelectedIndex()));
+
+        }
+    }
+
 
 
     //Modele de liste permetant de manipuler le contenu d'une Jlist
@@ -213,11 +240,12 @@ public class VueGestionaire extends JFrame {
 
         @Override
         public void update(Observable observable, Object o) {
-            System.out.println(o.toString());
 
-            System.out.println(this);
+            //System.out.println(o.toString());
             this.add(0,o.toString());
 
+            //System.out.println(this);
+            //System.out.println(modele.getListPersonnes());
 
 
 
