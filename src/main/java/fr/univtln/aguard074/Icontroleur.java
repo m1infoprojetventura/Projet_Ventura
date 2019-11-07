@@ -1,10 +1,14 @@
 package fr.univtln.aguard074;
 
+import fr.univtln.group_aha.Parcours;
+import fr.univtln.group_aha.Personne;
+
 public interface Icontroleur {
 
-    void creerPersonne(String nom, String prenom, int age, Personne.Statut statut);
+    public void creerEtudiant(int id, String nom, String prenom, Parcours parcours);
+    public void creerEnseignant(int id, String nom, String prenom);
 
-    void afficherPersonne(Personne p);
+    //void afficherPersonne(Personne p);
     void suprimerPersonne(Personne p);
 
 

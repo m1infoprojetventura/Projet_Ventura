@@ -1,5 +1,6 @@
 package fr.univtln.aguard074;
 
+import fr.univtln.group_aha.Parcours;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -11,7 +12,7 @@ import java.awt.event.ItemListener;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
+
 
 
 public class VueGestionaire extends JFrame {
@@ -19,16 +20,14 @@ public class VueGestionaire extends JFrame {
     private Icontroleur controleur;
 
     private JTextField personneNom;
+    private JTextField personneParcours;
     private JTextField personnePrenom;
-    private JTextField personneAge;
+    private JTextField personneId;
     private JTextField personneStatut;
     private JComboBox listeStatut;
     private JList listePersonnes;
     private JScrollPane scrollbar;
     private Jmodel personesEnregistres = new Jmodel();
-
-
-
 
 
     public VueGestionaire(Icontroleur controleur, Modele modele){
@@ -37,9 +36,8 @@ public class VueGestionaire extends JFrame {
         Init();//On initialise notre fenêtre
         this.controleur = controleur;
 
-
-
     }
+
 
     private void Init() {
         setTitle("Gestionaire emploi du temps"); //On donne un titre à l'application
@@ -95,11 +93,11 @@ public class VueGestionaire extends JFrame {
         this.personnePrenom.setPreferredSize(new Dimension(150,20));
         panel2.add(personnePrenom);
 
-        JLabel age = new JLabel("Age :");
-        panel3.add(age);
-        this.personneAge= new JTextField();
-        this.personneAge.setPreferredSize(new Dimension(150,20));
-        panel3.add(personneAge);
+        JLabel Id = new JLabel("Id :");
+        panel3.add(Id);
+        this.personneId= new JTextField();
+        this.personneId.setPreferredSize(new Dimension(150,20));
+        panel3.add(personneId);
 
         // ajouter le container qui renvoir le JComboBox de status
         panel4.add(choixStatut());
@@ -116,11 +114,22 @@ public class VueGestionaire extends JFrame {
         //Panel affichage
         panelAffiche.add(affichePersonnes());
 
+
+        //marche pas tres bien pour l'instant faut que je m'en occupe
+
+        /*JPanel panelParcours = new JPanel(new FlowLayout());
+        panelParcours.setLayout(new GridLayout(6,1));
+        this.personneParcours = new JTextField();
+        this.personneParcours.setPreferredSize(new Dimension(150,20));
+        //panelParcours.add(personneParcours);*/
+
+
         //Ajouter les sous containers au container principale
         panel.add(panel1);
         panel.add(panel2);
         panel.add(panel3);
         panel.add(panel4);
+        // panel.add(panelParcours);
         panel.add(panel5);
         panel.add(panelAffiche);
         return panel;
@@ -185,29 +194,36 @@ public class VueGestionaire extends JFrame {
             //controleur.afficherPersonne(new Personne("michel","ll",45, Personne.Statut.ETUDIANT));
             String nom = personneNom.getText();
             String prenom = personnePrenom.getText();
-            int age = 0;
+            int id = 0;
 
             int RecupBox = listeStatut.getSelectedIndex();
             Personne.Statut statut = Personne.Statut.ETUDIANT;
             switch(RecupBox) {
                 case 0:
                     statut = Personne.Statut.ETUDIANT;
+                    try {
+                        id = Integer.parseInt(personneId.getText());
+                        controleur.creerEtudiant(id,nom,prenom,new Parcours("random"));
+                    } catch (NumberFormatException ez) {
+                        System.out.println("Format Nombre invalide( rentrer un nombre)");
+
+                    }
                     break;
                 case 1:
                     statut = Personne.Statut.ENSEIGNANT;
+                    try {
+                        id = Integer.parseInt(personneId.getText());
+                        controleur.creerEnseignant(id,nom,prenom);
+                    } catch (NumberFormatException ez) {
+                        System.out.println("Format Nombre invalide( rentrer un nombre)");
+                    }
                     break;
                 case 2:
                     statut = Personne.Statut.RESPONSABLE_FORMATION;
             }
 
             //test validité d'un nombre
-            try {
-                age = Integer.parseInt(personneAge.getText());
-                controleur.creerPersonne(nom,prenom,age,statut);
-            } catch (NumberFormatException ez) {
-                System.out.println("Format Nombre invalide( rentrer un nombre)");
 
-            }
 
             //controleur.afficherPersonne(new Personne(nom,prenom,age,statut));
 
@@ -219,7 +235,7 @@ public class VueGestionaire extends JFrame {
         public void actionPerformed(ActionEvent e) {
             personneNom.setText("");
             personnePrenom.setText("");
-            personneAge.setText("");
+            personneId.setText("");
         }
     }
 
@@ -244,7 +260,7 @@ public class VueGestionaire extends JFrame {
             //System.out.println(o.toString());
             this.add(0,o.toString());
 
-            //System.out.println(this);
+            System.out.println(this);
             //System.out.println(modele.getListPersonnes());
 
 

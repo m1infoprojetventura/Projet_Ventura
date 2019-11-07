@@ -1,5 +1,10 @@
 package fr.univtln.aguard074;
 
+import fr.univtln.group_aha.Etudiant;
+import fr.univtln.group_aha.Parcours;
+import fr.univtln.group_aha.Professeur;
+import fr.univtln.group_aha.Personne;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
@@ -8,15 +13,26 @@ import java.util.Observer;
 public class Modele extends Observable implements Imodele{
     private ArrayList<Personne> listPersonnes= new ArrayList<Personne>();
 
-    //private ArrayList<Observer> listObserver = new ArrayList<Observer>();
+
+
+
 
 
     @Override
-    public void creerPersonne(String nom, String prenom, int age, Personne.Statut statut) {
-       Personne p = new Personne(nom,prenom,age,statut);
-       this.listPersonnes.add(p);
-       setChanged();
-       notifyObservers(p);
+    public void creerEtudiant(int id, String nom, String prenom, Parcours parcours) {
+        Personne etudiant = new Etudiant(id,nom,prenom,new Parcours());
+        this.listPersonnes.add(etudiant);
+        setChanged();
+        notifyObservers(etudiant);
+
+    }
+
+    @Override
+    public void creerEnseignant(int id, String nom, String prenom) {
+        Personne enseignant = new Professeur(id,nom,prenom);
+        this.listPersonnes.add(enseignant);
+        setChanged();
+        notifyObservers(enseignant);
 
     }
 

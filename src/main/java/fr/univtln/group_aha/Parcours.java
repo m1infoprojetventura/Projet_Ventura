@@ -9,11 +9,11 @@ public class Parcours {
     // Donne l'ensemble des parcours possible
     private static List<String> ensembleParcours;
 
-    Parcours() {
+    public Parcours() {
         intitule = "";
     }
 
-    Parcours(String intitule) {
+    public Parcours(String intitule) {
         this.intitule = intitule;
     }
 
