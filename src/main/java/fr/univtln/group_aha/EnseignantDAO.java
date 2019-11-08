@@ -1,34 +1,24 @@
 package fr.univtln.group_aha;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 
-public class EtudiantDAO extends DAO<Etudiant> {
-
-    public EtudiantDAO() {
-        super();
-    }
-
-    /**
-     * Constructeur de la classe générique DAO
-     *
-     * @param connect Objet permettant de se connecter à la base de données
-     */
-    public EtudiantDAO(Connection connect) {
-    }
-
+public class EnseignantDAO extends DAO<Enseignant> {
     @Override
-    public void create(Etudiant obj) {
+    public void create(Enseignant obj) {
         try {
             PersonneDAO personneDAO = new PersonneDAO();
             personneDAO.create(obj);
-            String query = "INSERT INTO Etudiant (id_personne, formation) VALUES(?, ?)";
-            Parcours parcours = obj.getParcours();
+            String query = "INSERT INTO Enseignant (id_personne, departement) VALUES(?, ?)";
+            Departement departement = obj.getDepartement();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
             PreparedStatement state = connect.prepareStatement(query);
             state.setInt(1, obj.getId());
-            state.setString(2, parcours.getIntitule());
+            state.setString(2, departement.getNom());
 
             state.executeUpdate();
         }
@@ -39,11 +29,10 @@ public class EtudiantDAO extends DAO<Etudiant> {
         }
     }
 
-    // Pas sûr pour la gestion des exceptions
     @Override
-    public void delete(Etudiant obj) {
+    public void delete(Enseignant obj) {
         try {
-            String query = "DELETE FROM Etudiant WHERE id_personne = ?";
+            String query = "DELETE FROM Enseignant WHERE id_personne = ?";
 
             PreparedStatement state = connect.prepareStatement(query);
             state.setInt(1, obj.getId());
@@ -51,25 +40,25 @@ public class EtudiantDAO extends DAO<Etudiant> {
             PersonneDAO personneDAO = new PersonneDAO();
             personneDAO.delete(obj);
             state.executeUpdate();
-        }
 
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
-    public void update(Etudiant obj) {
+    public void update(Enseignant obj) {
         try {
             PersonneDAO personneDAO = new PersonneDAO();
             personneDAO.update(obj);
 
-            String query = "UPDATE Etudiant SET id_personne = ?, formation = ?";
+            String query = "UPDATE Enseignant SET id_personne = ?, departement = ?";
             PreparedStatement state = connect.prepareStatement(query);
-            Parcours parcours = obj.getParcours();
+            Departement departement = obj.getDepartement();
 
             state.setInt(1, obj.getId());
-            state.setString(2, parcours.getIntitule());
+            state.setString(2, departement.getNom());
 
             state.executeUpdate();
         }
@@ -79,15 +68,9 @@ public class EtudiantDAO extends DAO<Etudiant> {
         }
     }
 
-    /**
-     *
-     * @param id
-     *      L'identifiant de l'étudiant recherché
-     * @return Un étudiant avec le numero id
-     */
     @Override
-    public Etudiant find(int id) {
-        Etudiant etudiant = new Etudiant();
+    public Enseignant find(int id) {
+        Enseignant enseignant = new Enseignant();
 
         // Très temporaire (le temps d'en apprendre plus sur ces histoires de try... catch)
         try {
@@ -97,18 +80,19 @@ public class EtudiantDAO extends DAO<Etudiant> {
             // la base de données
 
             Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            String query = "SELECT * FROM Personne INNER JOIN Etudiant " +
-                           "ON Etudiant.id_personne = Personne.id " +
-                           "WHERE Personne.id = %d;";
+            String query = "SELECT * FROM Personne INNER JOIN Enseignant" +
+                    "ON Enseignant.id_personne = Personne.id " +
+                    "WHERE Personne.id = %d;";
 
             ResultSet resultat = st.executeQuery(String.format(query, id));
 
             // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
-            Parcours parcours = new Parcours(resultat.getString("formation"));
+            // Departement departement = new Departement(resultat.getString("departement"),);
 
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
+            // new temporaire à remplacer par la ligne au dessus
             if (resultat.first())
-                etudiant = new Etudiant(id, resultat.getString("nom"), resultat.getString("prenom"), parcours);
+                enseignant = new Enseignant(id, resultat.getString("nom"), resultat.getString("prenom"), new Departement());
 
         }
 
@@ -116,7 +100,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
             e.printStackTrace();
 
         } finally {
-            return etudiant;
+            return enseignant;
         }
     }
 }

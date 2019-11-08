@@ -1,8 +1,6 @@
 package fr.univtln.group_aha;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.logging.Logger;
 
 /**
  * Classe "d'interface" entre la base de données (couche d'accès aux données et
@@ -14,18 +12,20 @@ import java.sql.Statement;
  *     Classe de la couche métier
  */
 public abstract class DAO<T> {
-    protected Connection connect = null;
 
-    // throws sera à discuter
-    /**
-     * Constructeur de la classe générique DAO
-     * @param connect
-     *      Objet permettant de se connecter à la base de données
-     */
-    public DAO(Connection connect) {
-        this.connect = connect;
+    Logger lgr = Logger.getLogger(DAO.class.getName());
+    static Connection connect;
+
+    public DAO() {
+        try {
+            String url = "jdbc:mysql://localhost/scolaire";
+            String user = "haribou";
+            String password = "password";
+            this.connect = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-
     // throws sera à discuter
     /**
      * methode de création
@@ -33,7 +33,7 @@ public abstract class DAO<T> {
      *    objet à ajouter à la base de données
      * @throws java.sql.SQLException  echec de la création d'un champ T
      */
-    public abstract void create(T obj) throws java.sql.SQLException;
+    public abstract void create(T obj);
 
     // throws sera à discuter
     /**
@@ -42,7 +42,7 @@ public abstract class DAO<T> {
      *  objet à supprimer de la base de données
      * @throws java.sql.SQLException echec de la destruction d'un champ T
      */
-    public abstract void delete(T obj) throws java.sql.SQLException;
+    public abstract void delete(T obj);
 
     // throws sera à discuter
     /**
@@ -51,7 +51,7 @@ public abstract class DAO<T> {
      *   objet à modifier dans la base de données T
      * @throws java.sql.SQLException echec de la mise à jour d'un champ T
      */
-    public abstract void update(T obj) throws java.sql.SQLException;
+    public abstract void update(T obj);
 
     // Penser à peut-être surchargé find (dans le cas où la clé primaire ne serait pas un nombre, je sais pas encore
     // comment, je veux dire de façon propre).
@@ -59,5 +59,5 @@ public abstract class DAO<T> {
      * méthode de recherche d'un élément T
      * @param id
      */
-    public abstract T find(int id) throws SQLException;
+    public abstract T find(int id);
 }

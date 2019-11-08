@@ -1,13 +1,12 @@
 package fr.univtln.aguard074;
 
+import fr.univtln.group_aha.Departement;
+import fr.univtln.group_aha.Parcours;
+
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 
 public class VueGestionaire extends JFrame {
@@ -78,7 +77,6 @@ public class VueGestionaire extends JFrame {
         Object[] elements = new Object[]{"ETUDIANT", "PROFESSEUR", "RESPONSABLE_FORMATION"};
 
         listeStatut = new JComboBox(elements);
-
         panel.add(listeStatut);
 
         JButton bouton = new JButton("Ajouter");
@@ -102,23 +100,22 @@ public class VueGestionaire extends JFrame {
             String prenom = personnePrenom.getText();
             int age = Integer.parseInt(personneAge.getText());
             int RecupBox = listeStatut.getSelectedIndex();
-            Personne.Statut statut = Personne.Statut.ETUDIANT;
+
             switch(RecupBox) {
                 case 0:
-                    statut = Personne.Statut.ETUDIANT;
+                    // Parcours "Science" est une valeur temporaire
+                    controleur.creerEtudiant(nom, prenom, age, new Parcours("Informatique"));
+
                     break;
                 case 1:
-                    statut = Personne.Statut.ENSEIGNANT;
+                    // 10 correspont à l'enseignant avec l'identifiant 10
+                    controleur.creerEnseignant(nom, prenom, age, new Departement("Sciences", 10));
                     break;
                 case 2:
-                    statut = Personne.Statut.RESPONSABLE_FORMATION;
+                    break;
             }
-            controleur.creerPersonne(nom,prenom,age,statut);
-            controleur.afficherPersonne(new Personne(nom,prenom,age,statut));
-
         }
     }
-
 }
 
 
