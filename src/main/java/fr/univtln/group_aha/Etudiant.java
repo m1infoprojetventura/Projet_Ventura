@@ -1,28 +1,30 @@
 package fr.univtln.group_aha;
 
+import java.util.Date;
+
 public class Etudiant extends Personne {
     // Temporaire à débattre si on crée une classe Parcours ou un String Parcours
-    private Parcours parcours;
+    private Formation formation;
 
     /**
      * @see Personne#Personne()
      */
     public Etudiant() {
         super();
-        parcours = new Parcours();
+        formation = new Formation();
     }
 
     /**
-     * @see Personne#Personne(int, String, String)
-     * @param parcours
+     * @see Personne#Personne(String, String, Date)
+     * @param formation
      *    Donne le parcours (son cursus) d'un etudiant
      */
-    public Etudiant(int id, String nom, String prenom, Parcours parcours) {
-        super(id, nom, prenom);
-        this.parcours = parcours;
+    public Etudiant( String nom, String prenom, Date date, Formation formation) {
+        super(nom, prenom, date);
+        this.formation = formation;
     }
 
-    public Parcours getParcours() {
-        return parcours;
+    public Formation getFormation() {
+        return formation;
     }
 }

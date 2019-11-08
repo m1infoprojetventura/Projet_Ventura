@@ -10,16 +10,22 @@ public class EnseignantDAO extends DAO<Enseignant> {
     @Override
     public void create(Enseignant obj) {
         try {
-            PersonneDAO personneDAO = new PersonneDAO();
-            personneDAO.create(obj);
-            String query = "INSERT INTO Enseignant (id_personne, departement) VALUES(?, ?)";
+            String query = "INSERT INTO Enseignant (nom, prenom,  date_naissance, mdp, login, departement) VALUES(?, ?, ?, ?, ?, ?)";
             Departement departement = obj.getDepartement();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query);
-            state.setInt(1, obj.getId());
-            state.setString(2, departement.getNom());
 
+            PreparedStatement state = connect.prepareStatement(query);
+
+            String motdepasse = obj.generationMpd();
+            java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
+
+            state.setString(1, obj.getNom());
+            state.setString(2, obj.getPrenom());
+            state.setDate(3, d2);
+            state.setInt(4, motdepasse.hashCode());
+            state.setString(5, obj.getLogin());
+            state.setString(6, departement.getNom());
             state.executeUpdate();
         }
 
@@ -35,10 +41,8 @@ public class EnseignantDAO extends DAO<Enseignant> {
             String query = "DELETE FROM Enseignant WHERE id_personne = ?";
 
             PreparedStatement state = connect.prepareStatement(query);
-            state.setInt(1, obj.getId());
+            // state.setInt(1, obj.getId());
 
-            PersonneDAO personneDAO = new PersonneDAO();
-            personneDAO.delete(obj);
             state.executeUpdate();
 
         } catch (SQLException e) {
@@ -50,14 +54,11 @@ public class EnseignantDAO extends DAO<Enseignant> {
     @Override
     public void update(Enseignant obj) {
         try {
-            PersonneDAO personneDAO = new PersonneDAO();
-            personneDAO.update(obj);
-
             String query = "UPDATE Enseignant SET id_personne = ?, departement = ?";
             PreparedStatement state = connect.prepareStatement(query);
             Departement departement = obj.getDepartement();
 
-            state.setInt(1, obj.getId());
+            // state.setInt(1, obj.getId());
             state.setString(2, departement.getNom());
 
             state.executeUpdate();
@@ -92,7 +93,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
             // new temporaire à remplacer par la ligne au dessus
             if (resultat.first())
-                enseignant = new Enseignant(id, resultat.getString("nom"), resultat.getString("prenom"), new Departement());
+                enseignant = new Enseignant(resultat.getString("nom"), resultat.getString("prenom"), resultat.getDate("date_naissance"), new Departement());
 
         }
 

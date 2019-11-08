@@ -1,15 +1,12 @@
 package fr.univtln.aguard074;
 
-import fr.univtln.group_aha.Parcours;
+import fr.univtln.group_aha.Departement;
+import fr.univtln.group_aha.Formation;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.List;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -203,7 +200,7 @@ public class VueGestionaire extends JFrame {
                     statut = Personne.Statut.ETUDIANT;
                     try {
                         id = Integer.parseInt(personneId.getText());
-                        controleur.creerEtudiant(id,nom,prenom,new Parcours("random"));
+                        controleur.creerEtudiant(nom,prenom,new Date(), new Formation("random"));
                     } catch (NumberFormatException ez) {
                         System.out.println("Format Nombre invalide( rentrer un nombre)");
 
@@ -213,7 +210,9 @@ public class VueGestionaire extends JFrame {
                     statut = Personne.Statut.ENSEIGNANT;
                     try {
                         id = Integer.parseInt(personneId.getText());
-                        controleur.creerEnseignant(id,nom,prenom);
+
+                        // A modifier
+                        controleur.creerEnseignant(nom,prenom, new Date(), new Departement());
                     } catch (NumberFormatException ez) {
                         System.out.println("Format Nombre invalide( rentrer un nombre)");
                     }

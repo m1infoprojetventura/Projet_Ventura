@@ -1,37 +1,27 @@
 package fr.univtln.aguard074;
 
+
 import fr.univtln.group_aha.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 public class Modele extends Observable implements Imodele{
     private ArrayList<Personne> listPersonnes= new ArrayList<Personne>();
     //private ArrayList<Observer> listObserver = new ArrayList<Observer>();
 
     // la variable static est temporaire (ou pas)
-    private static EtudiantDAO etudiantDAO;
-
-    public Modele() {
-        etudiantDAO = new EtudiantDAO();
-    }
+    private static EtudiantDAO etudiantDAO = new EtudiantDAO();
+    private static EnseignantDAO enseignantDAO = new EnseignantDAO();
 
     @Override
-    public void creerEtudiant(String nom, String prenom, int age, Parcours parcours) {
-
-        List attribut = new ArrayList();
-        attribut.add(nom);
-        attribut.add(prenom);
-        attribut.add(age);
-        attribut.add(parcours);
+    public void creerEtudiant(String nom, String prenom, Date date, Formation formation) {
 
         // Le hashcode est une solution temporaire pour créer un identifinat
         // Le constructeur parcours
-        Etudiant etudiant = new Etudiant(attribut.hashCode(), nom, prenom, parcours);
+        Etudiant etudiant = new Etudiant(nom, prenom, date, formation);
 
         etudiantDAO.create(etudiant);
 
@@ -41,15 +31,11 @@ public class Modele extends Observable implements Imodele{
     }
 
     @Override
-    public void creerEnseignant(String nom, String prenom, int age, Departement departement) {
-        List attribut = new ArrayList();
-        attribut.add(nom);
-        attribut.add(prenom);
-        attribut.add(age);
-        attribut.add(departement);
+    public void creerEnseignant(String nom, String prenom, Date date, Departement departement) {
 
-        Enseignant enseignant = new Enseignant(attribut.hashCode(), nom, prenom, departement);
+        Enseignant enseignant = new Enseignant(nom, prenom, date, departement);
 
+        enseignantDAO.create(enseignant);
         // Prévision du codage de professeurDAO (plus tard)
         setChanged();
         notifyObservers(enseignant);
