@@ -7,11 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.List;
+import java.util.Observer;
 
-import static fr.univtln.group_aha.DAO.*;
-
-// Modele sert de Factory, c'est-à-dire qu'il permet de créer toutes les personnes à partir de cette classe
 public class Modele extends Observable implements Imodele{
     private ArrayList<Personne> listPersonnes= new ArrayList<Personne>();
     //private ArrayList<Observer> listObserver = new ArrayList<Observer>();
@@ -66,6 +63,8 @@ public class Modele extends Observable implements Imodele{
     @Override
     public void afficherPersonne(Personne p) {
         System.out.println(p);
+
+
     }
 
     /*public void addObserver(Observer obs) {

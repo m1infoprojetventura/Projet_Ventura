@@ -45,4 +45,9 @@ public abstract class Personne {
     public String getPrenom() {
         return prenom;
     }
+
+    public String toString()
+    {
+        return this.nom +" "+ this.prenom + " " + this.id ;
+    }
 }
