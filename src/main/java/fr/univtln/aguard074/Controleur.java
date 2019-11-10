@@ -1,7 +1,8 @@
 package fr.univtln.aguard074;
-import fr.univtln.group_aha.Parcours;
 import fr.univtln.group_aha.Personne;
 import fr.univtln.group_aha.Professeur;
+
+import java.util.Date;
 
 public class Controleur implements Icontroleur {
     //private VueGestionaire vueGestionaire;
@@ -13,13 +14,13 @@ public class Controleur implements Icontroleur {
     }
 
     @Override
-    public void creerEtudiant(int id, String nom, String prenom, Parcours parcours){
-        this.modele.creerEtudiant(id,nom,prenom,parcours);
+    public void creerEtudiant(int id, String nom, String prenom, String intituleParcours, Date dateNaissance){
+        this.modele.creerEtudiant(id,nom,prenom,dateNaissance,intituleParcours);
     }
 
-    public void creerEnseignant(int id, String nom, String prenom) {
-        Personne enseignant = new Professeur(id,nom,prenom);
-        this.modele.creerEnseignant(id,nom,prenom);
+    public void creerEnseignant(int id, String nom, String prenom,Date dateNaissance) {
+        Personne enseignant = new Professeur(id,nom,prenom,dateNaissance);
+        this.modele.creerEnseignant(id,nom,prenom,dateNaissance);
 
     }
 

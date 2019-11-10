@@ -1,7 +1,12 @@
 package fr.univtln.aguard074;
 
+import com.toedter.calendar.JDateChooser;
 import fr.univtln.group_aha.Parcours;
+import fr.univtln.group_aha.Professeur;
+import fr.univtln.group_aha.Personne;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -9,6 +14,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -22,12 +30,15 @@ public class VueGestionaire extends JFrame {
     private JTextField personneNom;
     private JTextField personneParcours;
     private JTextField personnePrenom;
+    JDateChooser personneDateNaissance;
     private JTextField personneId;
     private JTextField personneStatut;
     private JComboBox listeStatut;
+    private JComboBox listeParcours;
+    JComboBox listeDepartements;
     private JList listePersonnes;
-    private JScrollPane scrollbar;
     private Jmodel personesEnregistres = new Jmodel();
+
 
 
     public VueGestionaire(Icontroleur controleur, Modele modele){
@@ -41,151 +52,137 @@ public class VueGestionaire extends JFrame {
 
     private void Init() {
         setTitle("Gestionaire emploi du temps"); //On donne un titre à l'application
-        setSize(600, 700); //On donne une taille à notre fenêtre
-        setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
         setResizable(false); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
-
-
+        this.setBounds(100, 100, 789, 516);
 
         this.modele.addObserver(personesEnregistres);
-
         this.getContentPane().add(saisieInfoPersonne());
-
-
-
-        //getContentPane().add();
         this.setVisible(true);
     }
 
 
 
     private JPanel saisieInfoPersonne(){
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(6,1));
-        panel.setBackground(Color.white);
-        // création des sous containers
-        JPanel panel1 = new JPanel(new FlowLayout());
-        JPanel panel2 = new JPanel(new FlowLayout());
-        JPanel panel3 = new JPanel(new FlowLayout());
-        JPanel panel4 = new JPanel(new FlowLayout());
-        JPanel panel5 = new JPanel(new FlowLayout());
-        JPanel panelAffiche = new JPanel(new FlowLayout());
+        // création de bordure
+        Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
+        // le conteneur global qui contient le formulaire et la liste
+        JPanel container = new JPanel();
+        container.setBackground(Color.white);
+        container.setLayout(null);
 
-        panel1.setBackground(Color.white);
-        panel2.setBackground(Color.white);
-        panel3.setBackground(Color.white);
-        panel4.setBackground(Color.white);
-        panel5.setBackground(Color.white);
-        panelAffiche.setBackground(Color.white);
+        // conteneur du Formulaire
+        JPanel panelFormAddPersonne = new JPanel();
+        panelFormAddPersonne.setBackground(Color.WHITE);
+        panelFormAddPersonne.setBounds(23, 58, 304, 304);
+        panelFormAddPersonne.setBorder(lineborder);
+        // ajouter le formulaire au conteneur principale
+        container.add(panelFormAddPersonne);
+        panelFormAddPersonne.setLayout(null);
 
 
-        JLabel nom = new JLabel("NOM :");
-        panel1.add(nom);
-        this.personneNom = new JTextField();
-        this.personneNom.setPreferredSize(new Dimension(150,20));
-        panel1.add(personneNom);
+        JLabel lblNewLabel = new JLabel("Nom :");
+        lblNewLabel.setBounds(10, 29, 46, 13);
+        panelFormAddPersonne.add(lblNewLabel);
+
+        personneNom = new JTextField();
+        personneNom.setBounds(120, 26, 150, 19);
+        panelFormAddPersonne.add(personneNom);
+        personneNom.setColumns(10);
+
+        JLabel lblNewLabel_1 = new JLabel("Prenom : ");
+        lblNewLabel_1.setBounds(10, 58, 57, 13);
+        panelFormAddPersonne.add(lblNewLabel_1);
+
+        personnePrenom = new JTextField();
+        personnePrenom.setBounds(120, 55, 150, 19);
+        panelFormAddPersonne.add(personnePrenom);
+        personnePrenom.setColumns(10);
+
+        JLabel lblDateDeNaissance = new JLabel("Date de Naissance");
+        lblDateDeNaissance.setBounds(10, 87, 120, 13);
+        panelFormAddPersonne.add(lblDateDeNaissance);
+
+        personneDateNaissance = new JDateChooser();
+        personneDateNaissance.setBounds(120, 84, 150, 19);
+        panelFormAddPersonne.add(personneDateNaissance);
 
 
-        JLabel prenom = new JLabel("Prenom :");
-        panel2.add(prenom);
-        this.personnePrenom = new JTextField();
-        this.personnePrenom.setPreferredSize(new Dimension(150,20));
-        panel2.add(personnePrenom);
+        JLabel lblStatus = new JLabel("Status : ");
+        lblStatus.setBounds(10, 117, 46, 13);
+        panelFormAddPersonne.add(lblStatus);
+        // les elements de la liste status
 
-        JLabel Id = new JLabel("Id :");
-        panel3.add(Id);
-        this.personneId= new JTextField();
-        this.personneId.setPreferredSize(new Dimension(150,20));
-        panel3.add(personneId);
+       // construire notre combobox avec le enum status de la classe personne
+        listeStatut = new JComboBox(Personne.Statut.values());
+        listeStatut.setBounds(120, 113, 150, 21);
+        panelFormAddPersonne.add(listeStatut);
 
-        // ajouter le container qui renvoir le JComboBox de status
-        panel4.add(choixStatut());
-        // création des deux boutton
+
+        JLabel lblParcours = new JLabel("Parcours :");
+        lblParcours.setBounds(10, 148, 86, 13);
+        panelFormAddPersonne.add(lblParcours);
+        listeParcours = new JComboBox(Parcours.getEnsembleParcours().toArray());
+        listeParcours.setBounds(120, 144, 150, 21);
+        panelFormAddPersonne.add(listeParcours);
+
+      /*  personneId = new JTextField();
+        personneId.hide();
+        personneId.setColumns(10);
+        personneId.setBounds(120, 84, 150, 19);
+        panelFormAddPersonne.add(personneId);*/
+
+
+
+        // construire notre combobox avec le enum Departement de la classe prof
+        listeDepartements = new JComboBox(Professeur.Departement.values());
+        listeDepartements.setBounds(120, 181, 150, 21);
+        panelFormAddPersonne.add(listeDepartements);
+
+        JLabel lblDepartement = new JLabel("Departement :");
+        lblDepartement.setBounds(10, 185, 86, 13);
+        panelFormAddPersonne.add(lblDepartement);
+
         JButton AddBouton = new JButton("Ajouter");
-        JButton CancelBouton = new JButton("Annuler");
 
+        AddBouton.setBounds(45, 246, 85, 21);
+        panelFormAddPersonne.add(AddBouton);
+
+        JButton CancelBouton = new JButton("Annuler");
+        CancelBouton.setBounds(152, 246, 85, 21);
+        panelFormAddPersonne.add(CancelBouton);
+
+        JPanel panelListePersonne = new JPanel();
+        panelListePersonne.setBackground(Color.WHITE);
+        panelListePersonne.setBorder(lineborder);
+
+
+
+        panelListePersonne.setBounds(525, 40, 240, 361);
+        container.add(panelListePersonne);
+        panelListePersonne.setLayout(null);
+
+        JButton suppBouton = new JButton("Supprimer");
+        suppBouton.setBounds(0, 330, 240, 31);
+        panelListePersonne.add(suppBouton);
+
+
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(10, 10, 220, 310);
+        panelListePersonne.add(scrollPane);
+        scrollPane.setBorder(null);
+        scrollPane.setBackground(Color.WHITE);
+        JList listePersonnes = new JList(personesEnregistres);
+        scrollPane.setViewportView(listePersonnes);
+        listePersonnes.setBackground(Color.white);
+        listePersonnes.setLayoutOrientation(JList.VERTICAL);
         AddAction AddAction = new AddAction();
         DeleteAction deleteAction = new DeleteAction();
         AddBouton.addActionListener(AddAction);
         CancelBouton.addActionListener(deleteAction);
-        panel5.add(AddBouton);
-        panel5.add(CancelBouton);
-        //Panel affichage
-        panelAffiche.add(affichePersonnes());
-
-
-        //marche pas tres bien pour l'instant faut que je m'en occupe
-
-        /*JPanel panelParcours = new JPanel(new FlowLayout());
-        panelParcours.setLayout(new GridLayout(6,1));
-        this.personneParcours = new JTextField();
-        this.personneParcours.setPreferredSize(new Dimension(150,20));
-        //panelParcours.add(personneParcours);*/
-
-
-        //Ajouter les sous containers au container principale
-        panel.add(panel1);
-        panel.add(panel2);
-        panel.add(panel3);
-        panel.add(panel4);
-        // panel.add(panelParcours);
-        panel.add(panel5);
-        panel.add(panelAffiche);
-        return panel;
+        return container;
     }
-
-
-    private JPanel choixStatut(){
-
-        JPanel panel = new JPanel(new GridLayout(2,1));
-        JPanel panel1 = new JPanel(new FlowLayout());
-        panel.setBackground(Color.white);
-        panel1.setBackground(Color.white);
-
-        JLabel statut = new JLabel("Statut : ");
-        panel1.add(statut);
-        Object[] elements = new Object[]{"ETUDIANT", "PROFESSEUR", "RESPONSABLE_FORMATION"};
-
-        listeStatut = new JComboBox(elements);
-        listeStatut.setPreferredSize(new Dimension(120,20));
-        panel1.add(listeStatut);
-        panel.add(panel1);
-        return panel;
-    }
-
-    private JPanel affichePersonnes() {
-
-        JPanel panel = new JPanel(new GridLayout(1,0));
-        JPanel panel1 = new JPanel(new FlowLayout());
-        panel.setBackground(Color.white);
-        panel1.setBackground(Color.white);
-
-        JLabel p = new JLabel("Personnes : ");
-        panel.add(p);
-        //personesEnregistres.add(0,"default");
-        listePersonnes = new JList(personesEnregistres);
-        listePersonnes.setBackground(Color.white);
-
-        listePersonnes.setPreferredSize(new Dimension(400,40));
-
-        scrollbar = new JScrollPane();
-        scrollbar.setViewportView(listePersonnes);
-
-
-        JButton suppBouton = new JButton("Supprimer");
-        SupAction SupAction = new SupAction();
-        suppBouton.addActionListener(SupAction);
-
-        //listePersonnes.setPreferredSize(new Dimension(440,20));
-        panel.add(suppBouton);
-        panel.add(scrollbar);
-
-        panel.add(panel1);
-        return panel;
-
-    }
-
 
     class AddAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
@@ -194,6 +191,8 @@ public class VueGestionaire extends JFrame {
             //controleur.afficherPersonne(new Personne("michel","ll",45, Personne.Statut.ETUDIANT));
             String nom = personneNom.getText();
             String prenom = personnePrenom.getText();
+            Date dateNaissance = personneDateNaissance.getDate();
+            String intituleParcours = listeParcours.getSelectedItem().toString();
             int id = 0;
 
             int RecupBox = listeStatut.getSelectedIndex();
@@ -201,19 +200,15 @@ public class VueGestionaire extends JFrame {
             switch(RecupBox) {
                 case 0:
                     statut = Personne.Statut.ETUDIANT;
-                    try {
-                        id = Integer.parseInt(personneId.getText());
-                        controleur.creerEtudiant(id,nom,prenom,new Parcours("random"));
-                    } catch (NumberFormatException ez) {
-                        System.out.println("Format Nombre invalide( rentrer un nombre)");
 
-                    }
+                        id = 0;
+                        controleur.creerEtudiant(id,nom,prenom,intituleParcours,dateNaissance);
                     break;
                 case 1:
                     statut = Personne.Statut.ENSEIGNANT;
                     try {
                         id = Integer.parseInt(personneId.getText());
-                        controleur.creerEnseignant(id,nom,prenom);
+                        controleur.creerEnseignant(id,nom,prenom,dateNaissance);
                     } catch (NumberFormatException ez) {
                         System.out.println("Format Nombre invalide( rentrer un nombre)");
                     }
@@ -242,7 +237,6 @@ public class VueGestionaire extends JFrame {
     //Marche pas pour l'instant
     class SupAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-
             personesEnregistres.remove(listePersonnes.getSelectedIndex());
             //controleur.suprimerPersonne(modele.getListPersonnes().get(listePersonnes.getSelectedIndex()));
 
@@ -256,16 +250,12 @@ public class VueGestionaire extends JFrame {
 
         @Override
         public void update(Observable observable, Object o) {
-
             //System.out.println(o.toString());
             this.add(0,o.toString());
 
             System.out.println(this);
+
             //System.out.println(modele.getListPersonnes());
-
-
-
-
         }
     }
 

@@ -99,7 +99,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
             if (resultat.first())
-                etudiant = new Etudiant(id, resultat.getString("nom"), resultat.getString("prenom"), parcours);
+                etudiant = new Etudiant(id, resultat.getString("nom"), resultat.getString("prenom"),resultat.getDate("dateNaissance"), parcours);
 
         }
 
