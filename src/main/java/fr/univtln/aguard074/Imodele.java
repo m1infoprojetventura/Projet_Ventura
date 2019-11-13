@@ -4,6 +4,7 @@ import fr.univtln.group_aha.Departement;
 import fr.univtln.group_aha.Etudiant;
 import fr.univtln.group_aha.Formation;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public interface Imodele  {
@@ -13,4 +14,6 @@ public interface Imodele  {
 
     public Etudiant trouverEtudiant(int id);
     public void afficherPersonne(Personne p);
+
+    ArrayList<Formation> getFormations();
 }

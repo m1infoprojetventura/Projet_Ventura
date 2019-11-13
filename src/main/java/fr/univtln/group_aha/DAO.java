@@ -1,6 +1,7 @@
 package fr.univtln.group_aha;
 import java.sql.*;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  * Classe "d'interface" entre la base de données (couche d'accès aux données et
@@ -60,4 +61,10 @@ public abstract class DAO<T> {
      * @param id
      */
     public abstract T find(int id);
+
+    /**
+     *
+     * @return Une liste de tous les éléments de T contenu dans la base de données
+     */
+    public abstract ArrayList<T> getData();
 }

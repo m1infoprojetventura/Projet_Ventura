@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Formation {
     private String intitule;
+    private Departement departement;
 
     // Temporaire: Peut être défini à l'extèrieur de la classe
     // Donne l'ensemble des parcours possible
@@ -11,10 +12,12 @@ public class Formation {
 
     public Formation() {
         intitule = "";
+        departement = new Departement();
     }
 
-    public Formation(String intitule) {
+    public Formation(String intitule, Departement departement) {
         this.intitule = intitule;
+        this.departement = departement;
     }
 
     @Override

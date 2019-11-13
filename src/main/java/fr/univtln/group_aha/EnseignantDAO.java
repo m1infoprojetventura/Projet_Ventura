@@ -1,9 +1,11 @@
 package fr.univtln.group_aha;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.sun.jmx.remote.internal.ArrayQueue;
+
+import javax.xml.transform.Result;
+import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class EnseignantDAO extends DAO<Enseignant> {
@@ -81,9 +83,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             // la base de données
 
             Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            String query = "SELECT * FROM Personne INNER JOIN Enseignant" +
-                    "ON Enseignant.id_personne = Personne.id " +
-                    "WHERE Personne.id = %d;";
+            String query = "SELECT * FROM  Enseignant WHERE id = %d;";
 
             ResultSet resultat = st.executeQuery(String.format(query, id));
 
@@ -102,6 +102,32 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
         } finally {
             return enseignant;
+        }
+    }
+
+    @Override
+    public ArrayList<Enseignant> getData() {
+
+        ArrayList<Enseignant> resultat = new ArrayList();
+        try {
+            String query = "SELECT * FROM Enseignant";
+            PreparedStatement state = connect.prepareStatement(query);
+            ResultSet result = state.executeQuery();
+            DepartementDAO departementDAO = new DepartementDAO();
+
+            while(result.next()) {
+                Departement departement = departementDAO.find(result.getInt("departement"));
+
+                resultat.add(new Enseignant(result.getString("nom"), result.getString("prenom"),
+                                            result.getDate("date_naissance"), departement));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return resultat;
         }
     }
 }

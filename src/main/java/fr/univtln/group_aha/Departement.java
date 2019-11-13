@@ -3,23 +3,23 @@ package fr.univtln.group_aha;
 
 public class Departement {
     private String nom;
-    private int id;
+    private Enseignant responsable;
 
     /**
      *
      * @param nom
      *    Nom du département
-     * @param id
+     * @param responsable
      *  Il s'agit de l'identifiant du professeur responsble
      */
-    public Departement(String nom, int id) {
+    public Departement(String nom, Enseignant responsable) {
         this.nom = nom;
-        this.id = id;
+        this.responsable = responsable;
     }
 
     public Departement() {
         this.nom = "";
-        this.id = 0;
+        this.responsable = new Enseignant();
     }
 
     public String getNom() {
@@ -27,7 +27,6 @@ public class Departement {
     }
 
     public Enseignant getResponsable() {
-        EnseignantDAO enseignantDAO = new EnseignantDAO();
-        return enseignantDAO.find(id);
+        return responsable;
     }
 }

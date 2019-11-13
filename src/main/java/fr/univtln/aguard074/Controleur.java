@@ -4,6 +4,7 @@ import fr.univtln.group_aha.Departement;
 import fr.univtln.group_aha.Etudiant;
 import fr.univtln.group_aha.Formation;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Controleur implements Icontroleur {
@@ -22,6 +23,11 @@ public class Controleur implements Icontroleur {
     @Override
     public void creerEnseignant(String nom, String prenom, Date date, Departement departement) {
         this.modele.creerEnseignant(nom, prenom, date, departement);
+    }
+
+    @Override
+    public ArrayList<Formation> getFormations() {
+        return this.modele.getFormations();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package fr.univtln.group_aha;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -109,8 +110,11 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
             ResultSet resultat = st.executeQuery(String.format(query, id));
 
+            DepartementDAO departementDAO = new DepartementDAO();
+            Departement departement = departementDAO.find(resultat.getInt("departement"));
+
             // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
-            Formation formation = new Formation(resultat.getString("formation"));
+            Formation formation = new Formation(resultat.getString("formation"), departement);
             java.util.Date date_naissance = resultat.getDate("date_naissance");
 
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
@@ -125,5 +129,10 @@ public class EtudiantDAO extends DAO<Etudiant> {
         } finally {
             return etudiant;
         }
+    }
+
+    @Override
+    public ArrayList<Etudiant> getData() {
+        return null;
     }
 }

@@ -12,9 +12,12 @@ public class Modele extends Observable implements Imodele{
     private ArrayList<Personne> listPersonnes= new ArrayList<Personne>();
     //private ArrayList<Observer> listObserver = new ArrayList<Observer>();
 
+    // Il faut que le modèle puisse accéder à la Vue comme sur le TP de Bibliotheque en ayant en attribut
+    // des modèles des Componant (exemple modèle de JTextField: PlainDocument, ou Combobox: ComboboxModel)
     // la variable static est temporaire (ou pas)
     private static EtudiantDAO etudiantDAO = new EtudiantDAO();
     private static EnseignantDAO enseignantDAO = new EnseignantDAO();
+    private static FormationDAO formationDAO = new FormationDAO();
 
     @Override
     public void creerEtudiant(String nom, String prenom, Date date, Formation formation) {
@@ -51,6 +54,11 @@ public class Modele extends Observable implements Imodele{
         System.out.println(p);
 
 
+    }
+
+    @Override
+    public ArrayList<Formation> getFormations() {
+        return formationDAO.getData();
     }
 
     /*public void addObserver(Observer obs) {
