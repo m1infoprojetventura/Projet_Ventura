@@ -12,12 +12,14 @@ import java.util.GregorianCalendar;
  * @author Haribou
  */
 public abstract class Personne {
+    private int id;
     private String nom;
     private String prenom;
     private Date date_naissance;
     private String login;
 
     public Personne() {
+        id = 0;
         nom = "";
         prenom = "";
         date_naissance = new Date();
@@ -70,5 +72,13 @@ public abstract class Personne {
 
     public String getLogin() {
         return login;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

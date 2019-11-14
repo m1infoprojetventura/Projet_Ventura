@@ -14,8 +14,5 @@ public class App
         Icontroleur controler = new Controleur(modele);
         //Création de notre fenêtre avec le contrôleur en paramètre
         VueGestionaire gestionaire = new VueGestionaire(controler, modele);
-
-
-
     }
 }

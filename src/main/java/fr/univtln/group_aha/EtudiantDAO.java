@@ -26,11 +26,11 @@ public class EtudiantDAO extends DAO<Etudiant> {
     @Override
     public void create(Etudiant obj) {
         try {
-            String query = "INSERT INTO Etudiant (nom, prenom,  date_naissance, mdp, login, formation) VALUES(?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Etudiant (nom, prenom,  date_naissance, mdp, login, id_formation) VALUES(?, ?, ?, ?, ?, ?)";
             Formation formation = obj.getFormation();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             String motdepasse = obj.generationMpd();
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
@@ -39,9 +39,15 @@ public class EtudiantDAO extends DAO<Etudiant> {
             state.setDate(3, d2);
             state.setInt(4, motdepasse.hashCode());
             state.setString(5, obj.getLogin());
-            state.setString(6, formation.getIntitule());
+            state.setInt(6, formation.getId());
             state.executeUpdate();
 
+            // Obtenir la clé autogénéré par INSERT
+            ResultSet key = state.getGeneratedKeys();
+            if(key.first())
+                obj.setId(key.getInt(1));
+
+            System.out.println(obj.getId());
         }
 
         catch (SQLException e) {
@@ -54,10 +60,10 @@ public class EtudiantDAO extends DAO<Etudiant> {
     @Override
     public void delete(Etudiant obj) {
         try {
-            String query = "DELETE FROM Etudiant WHERE login = ?";
+            String query = "DELETE FROM Etudiant WHERE id = ?";
 
             PreparedStatement state = connect.prepareStatement(query);
-            state.setString(1, obj.getLogin());
+            state.setInt(1, obj.getId());
 
             state.executeUpdate();
         }
@@ -96,7 +102,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
      */
     @Override
     public Etudiant find(int id) {
-        Etudiant etudiant = new Etudiant();
+        Etudiant etudiant = null;
 
         // Très temporaire (le temps d'en apprendre plus sur ces histoires de try... catch)
         try {
@@ -110,17 +116,15 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
             ResultSet resultat = st.executeQuery(String.format(query, id));
 
-            DepartementDAO departementDAO = new DepartementDAO();
-            Departement departement = departementDAO.find(resultat.getInt("departement"));
-
-            // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
-            Formation formation = new Formation(resultat.getString("formation"), departement);
-            java.util.Date date_naissance = resultat.getDate("date_naissance");
 
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
-            if (resultat.first())
+            if (resultat.first()) {
+                FormationDAO formationDAO = new FormationDAO();
+                // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
+                Formation formation = formationDAO.find(resultat.getInt("id_formation"));
+                java.util.Date date_naissance = resultat.getDate("date_naissance");
                 etudiant = new Etudiant(resultat.getString("nom"), resultat.getString("prenom"), date_naissance, formation);
-
+            }
         }
 
         catch (SQLException e) {

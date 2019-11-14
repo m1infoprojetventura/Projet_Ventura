@@ -2,6 +2,7 @@ package fr.univtln.group_aha;
 
 
 public class Departement {
+    private int id;
     private String nom;
     private Enseignant responsable;
 
@@ -12,12 +13,14 @@ public class Departement {
      * @param responsable
      *  Il s'agit de l'identifiant du professeur responsble
      */
-    public Departement(String nom, Enseignant responsable) {
+    public Departement(int id, String nom, Enseignant responsable) {
+        this.id = id;
         this.nom = nom;
         this.responsable = responsable;
     }
 
     public Departement() {
+        this.id = 0;
         this.nom = "";
         this.responsable = new Enseignant();
     }
@@ -26,7 +29,16 @@ public class Departement {
         return nom;
     }
 
+    @Override
+    public String toString() {
+        return nom;
+    }
+
     public Enseignant getResponsable() {
         return responsable;
+    }
+
+    public int getId() {
+        return id;
     }
 }

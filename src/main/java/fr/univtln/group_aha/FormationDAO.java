@@ -30,7 +30,8 @@ public class FormationDAO extends DAO<Formation> {
 
     @Override
     public ArrayList<Formation> getData() {
-        List<Formation> resultat = new ArrayList();
+        ArrayList<Formation> resultat = new ArrayList();
+
         try {
             String query = "SELECT * FROM Formation";
             PreparedStatement state = connect.prepareStatement(query);
@@ -38,9 +39,9 @@ public class FormationDAO extends DAO<Formation> {
             DepartementDAO departementDAO = new DepartementDAO();
 
             while(result.next()) {
-                Departement departement = departementDAO.find(result.getInt("departement"));
+                Departement departement = departementDAO.find(result.getInt("id_departement"));
 
-                resultat.add(new Formation(result.getString("intitule") , departement));
+                resultat.add(new Formation(result.getInt("id"), result.getString("intitule") , departement));
             }
 
         } catch (SQLException e) {
@@ -50,5 +51,6 @@ public class FormationDAO extends DAO<Formation> {
         finally {
             return resultat;
         }
+
     }
 }

@@ -17,8 +17,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
 
-            PreparedStatement state = connect.prepareStatement(query);
-
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             String motdepasse = obj.generationMpd();
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
@@ -27,9 +26,16 @@ public class EnseignantDAO extends DAO<Enseignant> {
             state.setDate(3, d2);
             state.setInt(4, motdepasse.hashCode());
             state.setString(5, obj.getLogin());
-            state.setString(6, departement.getNom());
+            state.setInt(6, departement.getId());
             state.executeUpdate();
+            // Obtenir la clé autogénéré par INSERT
+            ResultSet key = state.getGeneratedKeys();
+            if(key.first())
+                obj.setId(key.getInt(1));
+
+            System.out.println(obj.getId());
         }
+
 
         catch (SQLException e) {
             lgr.log(Level.WARNING, e.getMessage(), e);
@@ -40,10 +46,10 @@ public class EnseignantDAO extends DAO<Enseignant> {
     @Override
     public void delete(Enseignant obj) {
         try {
-            String query = "DELETE FROM Enseignant WHERE id_personne = ?";
+            String query = "DELETE FROM Enseignant WHERE id = ?";
 
             PreparedStatement state = connect.prepareStatement(query);
-            // state.setInt(1, obj.getId());
+            state.setInt(1, obj.getId());
 
             state.executeUpdate();
 
@@ -73,7 +79,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
     @Override
     public Enseignant find(int id) {
-        Enseignant enseignant = new Enseignant();
+        Enseignant enseignant = null;
 
         // Très temporaire (le temps d'en apprendre plus sur ces histoires de try... catch)
         try {
@@ -106,7 +112,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
     }
 
     @Override
-    public ArrayList<Enseignant> getData() {
+      public ArrayList<Enseignant> getData() {
 
         ArrayList<Enseignant> resultat = new ArrayList();
         try {

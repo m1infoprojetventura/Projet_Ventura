@@ -40,7 +40,7 @@ public class DepartementDAO extends DAO<Departement> {
             // new temporaire à remplacer par la ligne au dessus
             if (resultat.first()) {
                 Enseignant enseignant = enseignantDAO.find(resultat.getInt("id_responsable"));
-                departement = new Departement(resultat.getString("nom"), enseignant);
+                departement = new Departement(resultat.getInt("id"), resultat.getString("nom"), enseignant);
 
             }
 
@@ -60,15 +60,15 @@ public class DepartementDAO extends DAO<Departement> {
         ArrayList<Departement> resultat = new ArrayList();
 
         try {
-            String query = "SELECT * FROM Enseignant";
+            String query = "SELECT * FROM Departement";
             PreparedStatement state = connect.prepareStatement(query);
             ResultSet result = state.executeQuery();
             EnseignantDAO enseignantDAO = new EnseignantDAO();
 
             while(result.next()) {
-                Enseignant enseignant = enseignantDAO.find(result.getInt("departement"));
+                Enseignant enseignant = enseignantDAO.find(result.getInt("id_responsable"));
 
-                resultat.add(new Departement(result.getString("nom"), enseignant));
+                resultat.add(new Departement(result.getInt("id"), result.getString("nom"), enseignant));
             }
 
         } catch (SQLException e) {

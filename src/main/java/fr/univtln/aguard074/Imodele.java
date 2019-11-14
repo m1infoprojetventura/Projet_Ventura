@@ -12,7 +12,9 @@ public interface Imodele  {
     public void creerEtudiant(String nom, String prenom, Date date, Formation formation);
     public void creerEnseignant(String nom, String prenom, Date date, Departement departement);
 
-    public Etudiant trouverEtudiant(int id);
+    boolean trouverEtudiant(int id);
+    boolean trouverEnseignant(int id);
+
     public void afficherPersonne(Personne p);
 
     ArrayList<Formation> getFormations();

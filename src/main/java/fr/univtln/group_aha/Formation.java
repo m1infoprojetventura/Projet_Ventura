@@ -5,6 +5,7 @@ import java.util.List;
 public class Formation {
     private String intitule;
     private Departement departement;
+    private int id = 0;
 
     // Temporaire: Peut être défini à l'extèrieur de la classe
     // Donne l'ensemble des parcours possible
@@ -25,6 +26,12 @@ public class Formation {
         this.departement = departement;
     }
 
+    public Formation(int id, String intitule, Departement departement) {
+        this.id = id;
+        this.intitule = intitule;
+        this.departement = departement;
+    }
+
     @Override
     public String toString() {
         return getIntitule();
@@ -32,5 +39,9 @@ public class Formation {
 
     public String getIntitule() {
         return intitule;
+    }
+
+    public int getId() {
+        return id;
     }
 }

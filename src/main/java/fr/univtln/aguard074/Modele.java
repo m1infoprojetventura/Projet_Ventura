@@ -46,11 +46,6 @@ public class Modele extends Observable implements Imodele{
     }
 
     @Override
-    public Etudiant trouverEtudiant(int id) {
-        return etudiantDAO.find(id);
-    }
-
-    @Override
     public void afficherPersonne(Personne p) {
         System.out.println(p);
 
@@ -67,6 +62,18 @@ public class Modele extends Observable implements Imodele{
         return departementDAO.getData();
     }
 
+    // Vaut mieux créer une classe abstraite Modele étendu par deux classes EtudiantModele et EnseignantModele
+    @Override
+    public boolean trouverEtudiant(int id) {
+        return (etudiantDAO.find(id) != null);
+    }
+
+    @Override
+    public boolean trouverEnseignant(int id) {
+       return (enseignantDAO.find(id) != null) ;
+    }
+
+
     @Override
     public void suppprimerEtudiant(Etudiant etudiant) {
         etudiantDAO.delete(etudiant);
@@ -74,6 +81,9 @@ public class Modele extends Observable implements Imodele{
         setChanged();
         notifyObservers();
     }
+
+
+    // Temporaire le mieus serait de faire des étudiants modèles et des enseignants modèle
 
     /*public void addObserver(Observer obs) {
         this.listObserver.add(obs);

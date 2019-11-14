@@ -1,24 +1,15 @@
 package fr.univtln.aguard074;
 
 import com.toedter.calendar.JDateChooser;
-import fr.univtln.group_aha.Departement;
-import fr.univtln.group_aha.Enseignant;
-import fr.univtln.group_aha.Formation;
-import fr.univtln.group_aha.Personne;
+import fr.univtln.group_aha.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,7 +26,7 @@ public class VueGestionaire extends JFrame {
     private JTextField personneId;
     private JTextField personneStatut;
     private JComboBox listeStatut;
-    private JComboBox listeParcours;
+    private JComboBox listeFormation;
     JComboBox listeDepartements;
     private JList listePersonnes;
     private Jmodel personesEnregistres = new Jmodel();
@@ -45,8 +36,8 @@ public class VueGestionaire extends JFrame {
     public VueGestionaire(Icontroleur controleur, Modele modele){
         super();
         this.modele = modele;
-        Init();//On initialise notre fenêtre
         this.controleur = controleur;
+        Init();//On initialise notre fenêtre
 
     }
 
@@ -116,17 +107,18 @@ public class VueGestionaire extends JFrame {
 
        // construire notre combobox avec le enum status de la classe personne
 
-        listeStatut = new JComboBox(new String[]{"Enseignant", "Étudiant"});
+        listeStatut = new JComboBox(new String[]{ "Étudiant", "Enseignant"});
         listeStatut.setBounds(120, 113, 150, 21);
         panelFormAddPersonne.add(listeStatut);
 
 
-        JLabel lblParcours = new JLabel("Parcours :");
-        lblParcours.setBounds(10, 148, 86, 13);
-        panelFormAddPersonne.add(lblParcours);
-        listeParcours = new JComboBox(controleur.getFormations().toArray());
-        listeParcours.setBounds(120, 144, 150, 21);
-        panelFormAddPersonne.add(listeParcours);
+        JLabel lblFormation = new JLabel("Formation:");
+        lblFormation.setBounds(10, 148, 86, 13);
+        panelFormAddPersonne.add(lblFormation);
+
+        listeFormation = new JComboBox(this.controleur.getFormations().toArray());
+        listeFormation.setBounds(120, 144, 150, 21);
+        panelFormAddPersonne.add(listeFormation);
 
       /*  personneId = new JTextField();
         personneId.hide();
@@ -194,20 +186,19 @@ public class VueGestionaire extends JFrame {
             String nom = personneNom.getText();
             String prenom = personnePrenom.getText();
             Date dateNaissance = personneDateNaissance.getDate();
-            String intituleParcours = listeParcours.getSelectedItem().toString();
+            Formation formation = (Formation) listeFormation.getSelectedItem();
             Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();
             int id = 0;
 
             int RecupBox = listeStatut.getSelectedIndex();
+            System.out.println(RecupBox);
             switch(RecupBox) {
                 case 0:
-
                         id = 0;
-                        controleur.creerEtudiant(nom,prenom,dateNaissance,new Formation(intituleParcours));
+                        controleur.creerEtudiant(nom,prenom,dateNaissance, formation);
                     break;
                 case 1:
                     try {
-                        id = Integer.parseInt(personneId.getText());
                         controleur.creerEnseignant(nom,prenom,dateNaissance, departementEnseignant);
                     } catch (NumberFormatException ez) {
                         System.out.println("Format Nombre invalide( rentrer un nombre)");
@@ -237,24 +228,37 @@ public class VueGestionaire extends JFrame {
     class SupAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             // personesEnregistres.remove(listePersonnes.getSelectedIndex());
-
         }
     }
 
 
 
     //Modele de liste permetant de manipuler le contenu d'une Jlist
-    public class Jmodel extends DefaultListModel implements Observer {
+        public class Jmodel extends DefaultListModel  implements Observer {
 
         @Override
         public void update(Observable observable, Object o) {
             //System.out.println(o.toString());
-            this.add(0,o.toString());
+
+            // Vaut mieux utilisuer le polymorphisme ici
+            if(o instanceof Etudiant) {
+                if(modele.trouverEtudiant(((Etudiant) o).getId())) {
+                    addElement( o);
+                }
+            }
+
+            else if(o instanceof Enseignant) {
+                if(modele.trouverEtudiant(((Enseignant) o).getId())) {
+                    addElement((Etudiant) o);
+                }
+
+                else
+                    removeElement(o);
+            }
 
             System.out.println(this);
 
             //System.out.println(modele.getListPersonnes());
         }
     }
-
 }
