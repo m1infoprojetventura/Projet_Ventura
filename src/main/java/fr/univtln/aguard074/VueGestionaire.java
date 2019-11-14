@@ -29,14 +29,14 @@ public class VueGestionaire extends JFrame {
     private JComboBox listeFormation;
     JComboBox listeDepartements;
     private JList listePersonnes;
-    private Jmodel personesEnregistres = new Jmodel();
+    private Jmodel personesEnregistres;
 
 
 
     public VueGestionaire(Icontroleur controleur, Modele modele){
         super();
-        this.modele = modele;
         this.controleur = controleur;
+        this.modele = modele;
         Init();//On initialise notre fenêtre
 
     }
@@ -47,6 +47,17 @@ public class VueGestionaire extends JFrame {
         setResizable(false); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
         this.setBounds(100, 100, 789, 516);
+
+        personesEnregistres = new Jmodel();
+
+        ArrayList<Etudiant> etudiants = controleur.getEtudiants();
+        ArrayList<Enseignant> enseignants = controleur.getEnseignants();
+
+        for(Etudiant etudiant: etudiants)
+            personesEnregistres.addElement(etudiant);
+
+        for(Enseignant enseignant: enseignants)
+            personesEnregistres.addElement(enseignant);
 
         this.modele.addObserver(personesEnregistres);
         this.getContentPane().add(saisieInfoPersonne());
@@ -160,21 +171,21 @@ public class VueGestionaire extends JFrame {
         suppBouton.setBounds(0, 330, 240, 31);
         panelListePersonne.add(suppBouton);
 
-
-
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBounds(10, 10, 220, 310);
         panelListePersonne.add(scrollPane);
         scrollPane.setBorder(null);
         scrollPane.setBackground(Color.WHITE);
-        JList listePersonnes = new JList(personesEnregistres);
+        listePersonnes = new JList(personesEnregistres);
         scrollPane.setViewportView(listePersonnes);
         listePersonnes.setBackground(Color.white);
         listePersonnes.setLayoutOrientation(JList.VERTICAL);
         AddAction AddAction = new AddAction();
         DeleteAction deleteAction = new DeleteAction();
+        SupAction supAction = new SupAction();
         AddBouton.addActionListener(AddAction);
         CancelBouton.addActionListener(deleteAction);
+        suppBouton.addActionListener(supAction);
         return container;
     }
 
@@ -227,6 +238,15 @@ public class VueGestionaire extends JFrame {
     //Marche pas pour l'instant
     class SupAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
+            Object object = listePersonnes.getSelectedValue();
+            if(object instanceof Etudiant) {
+                controleur.suprimerEtudiant((Etudiant) object);
+            }
+
+            if(object instanceof Enseignant) {
+                controleur.suprimerEnseignant((Enseignant) object);
+            }
+
             // personesEnregistres.remove(listePersonnes.getSelectedIndex());
         }
     }
@@ -236,6 +256,10 @@ public class VueGestionaire extends JFrame {
     //Modele de liste permetant de manipuler le contenu d'une Jlist
         public class Jmodel extends DefaultListModel  implements Observer {
 
+        public Jmodel() {
+            super();
+        }
+
         @Override
         public void update(Observable observable, Object o) {
             //System.out.println(o.toString());
@@ -243,17 +267,24 @@ public class VueGestionaire extends JFrame {
             // Vaut mieux utilisuer le polymorphisme ici
             if(o instanceof Etudiant) {
                 if(modele.trouverEtudiant(((Etudiant) o).getId())) {
+                    System.out.println("Etudiant ajouté dans liste");
                     addElement( o);
+                }
+
+                else {
+                    System.out.println("Etudiantsupprimé dans liste");
+                    removeElement(o);
                 }
             }
 
             else if(o instanceof Enseignant) {
-                if(modele.trouverEtudiant(((Enseignant) o).getId())) {
-                    addElement((Etudiant) o);
+                if(modele.trouverEnseignant(((Enseignant) o).getId())) {
+                    addElement( o);
                 }
 
-                else
+                else {
                     removeElement(o);
+                }
             }
 
             System.out.println(this);

@@ -79,7 +79,25 @@ public class Modele extends Observable implements Imodele{
         etudiantDAO.delete(etudiant);
 
         setChanged();
-        notifyObservers();
+        notifyObservers(etudiant);
+    }
+
+    @Override
+    public void suppprimerEnseignant(Enseignant enseignant) {
+        enseignantDAO.delete(enseignant);
+
+        setChanged();
+        notifyObservers(enseignant);
+    }
+
+    @Override
+    public ArrayList<Etudiant> getEtudiants() {
+        return etudiantDAO.getData();
+    }
+
+    @Override
+    public ArrayList<Enseignant> getEnseignants() {
+        return enseignantDAO.getData();
     }
 
 

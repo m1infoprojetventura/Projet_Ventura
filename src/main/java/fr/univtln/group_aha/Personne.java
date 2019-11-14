@@ -32,8 +32,15 @@ public abstract class Personne {
      * @param prenom
      *    Prénom d'une personne
      */
+    public Personne(int id, String nom, String prenom, Date date_naissance) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.date_naissance = date_naissance;
+        this.login = generationLogin();
+    }
 
-    public Personne(String nom, String prenom, Date date_naissance) {
+    public Personne( String nom, String prenom, Date date_naissance) {
         this.nom = nom;
         this.prenom = prenom;
         this.date_naissance = date_naissance;

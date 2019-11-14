@@ -1,6 +1,7 @@
 package fr.univtln.aguard074;
 
 import fr.univtln.group_aha.Departement;
+import fr.univtln.group_aha.Enseignant;
 import fr.univtln.group_aha.Etudiant;
 import fr.univtln.group_aha.Formation;
 
@@ -20,5 +21,10 @@ public interface Icontroleur {
     void afficherPersonne(Personne p);
 
 
+    ArrayList<Etudiant> getEtudiants();
+    ArrayList<Enseignant> getEnseignants();
+
     void suprimerEtudiant(Etudiant etudiant);
+
+    void suprimerEnseignant(Enseignant enseignant);
 }

@@ -1,6 +1,7 @@
 package fr.univtln.aguard074;
 
 import fr.univtln.group_aha.Departement;
+import fr.univtln.group_aha.Enseignant;
 import fr.univtln.group_aha.Etudiant;
 import fr.univtln.group_aha.Formation;
 
@@ -44,11 +45,26 @@ public class Controleur implements Icontroleur {
     @Override
     public void afficherPersonne(Personne p) {
         this.modele.afficherPersonne(p);
-
     }
+
+    @Override
+    public ArrayList<Etudiant> getEtudiants() {
+        return modele.getEtudiants();
+    }
+
+    @Override
+    public ArrayList<Enseignant> getEnseignants() {
+        return modele.getEnseignants();
+    }
+
 
     @Override
     public void suprimerEtudiant(Etudiant etudiant) {
         this.modele.suppprimerEtudiant(etudiant);
+    }
+
+    @Override
+    public void suprimerEnseignant(Enseignant enseignant) {
+        this.modele.suppprimerEnseignant(enseignant);
     }
 }

@@ -9,8 +9,14 @@ public class Enseignant extends Personne {
         super();
     }
 
-    public Enseignant(String nom, String prenom, Date date, Departement departement) {
+    public Enseignant( String nom, String prenom, Date date, Departement departement) {
         super(nom, prenom, date);
+        this.departement = departement;
+
+    }
+
+    public Enseignant(int id, String nom, String prenom, Date date, Departement departement) {
+        super(id, nom, prenom, date);
         this.departement = departement;
     }
 
