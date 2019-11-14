@@ -15,6 +15,11 @@ public class Formation {
         departement = new Departement();
     }
 
+    public Formation(String intitule) {
+        this.intitule = intitule;
+        this.departement = new Departement();
+        // ou this.departement = null;
+    }
     public Formation(String intitule, Departement departement) {
         this.intitule = intitule;
         this.departement = departement;

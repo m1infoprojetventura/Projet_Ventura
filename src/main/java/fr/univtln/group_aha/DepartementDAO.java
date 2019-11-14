@@ -57,6 +57,26 @@ public class DepartementDAO extends DAO<Departement> {
 
     @Override
     public ArrayList<Departement> getData() {
-        return null;
+        ArrayList<Departement> resultat = new ArrayList();
+
+        try {
+            String query = "SELECT * FROM Enseignant";
+            PreparedStatement state = connect.prepareStatement(query);
+            ResultSet result = state.executeQuery();
+            EnseignantDAO enseignantDAO = new EnseignantDAO();
+
+            while(result.next()) {
+                Enseignant enseignant = enseignantDAO.find(result.getInt("departement"));
+
+                resultat.add(new Departement(result.getString("nom"), enseignant));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return resultat;
+        }
     }
 }

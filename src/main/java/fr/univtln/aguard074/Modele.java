@@ -18,6 +18,7 @@ public class Modele extends Observable implements Imodele{
     private static EtudiantDAO etudiantDAO = new EtudiantDAO();
     private static EnseignantDAO enseignantDAO = new EnseignantDAO();
     private static FormationDAO formationDAO = new FormationDAO();
+    private static DepartementDAO departementDAO = new DepartementDAO();
 
     @Override
     public void creerEtudiant(String nom, String prenom, Date date, Formation formation) {
@@ -59,6 +60,19 @@ public class Modele extends Observable implements Imodele{
     @Override
     public ArrayList<Formation> getFormations() {
         return formationDAO.getData();
+    }
+
+    @Override
+    public ArrayList<Departement> getDepartements() {
+        return departementDAO.getData();
+    }
+
+    @Override
+    public void suppprimerEtudiant(Etudiant etudiant) {
+        etudiantDAO.delete(etudiant);
+
+        setChanged();
+        notifyObservers();
     }
 
     /*public void addObserver(Observer obs) {

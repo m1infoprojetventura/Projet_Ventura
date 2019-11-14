@@ -15,8 +15,10 @@ public interface Icontroleur {
 
     // J'ignore s'il faut une methode générique ou pas (c'est à dire un getData comme dans la DAO
     public ArrayList<Formation> getFormations();
+    public ArrayList<Departement> getDepartements();
     public Etudiant afficherEtudiant(int id);
     void afficherPersonne(Personne p);
 
 
+    void suprimerEtudiant(Etudiant etudiant);
 }

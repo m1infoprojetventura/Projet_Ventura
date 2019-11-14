@@ -31,6 +31,11 @@ public class Controleur implements Icontroleur {
     }
 
     @Override
+    public ArrayList<Departement> getDepartements() {
+        return this.modele.getDepartements();
+    }
+
+    @Override
     public Etudiant afficherEtudiant(int id) {
         return null;
     }
@@ -40,5 +45,10 @@ public class Controleur implements Icontroleur {
     public void afficherPersonne(Personne p) {
         this.modele.afficherPersonne(p);
 
+    }
+
+    @Override
+    public void suprimerEtudiant(Etudiant etudiant) {
+        this.modele.suppprimerEtudiant(etudiant);
     }
 }

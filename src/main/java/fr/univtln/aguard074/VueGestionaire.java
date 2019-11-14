@@ -1,10 +1,9 @@
 package fr.univtln.aguard074;
 
 import com.toedter.calendar.JDateChooser;
+import fr.univtln.group_aha.Departement;
 import fr.univtln.group_aha.Enseignant;
 import fr.univtln.group_aha.Formation;
-import fr.univtln.group_aha.Parcours;
-import fr.univtln.group_aha.Professeur;
 import fr.univtln.group_aha.Personne;
 
 import javax.swing.*;
@@ -125,7 +124,7 @@ public class VueGestionaire extends JFrame {
         JLabel lblParcours = new JLabel("Parcours :");
         lblParcours.setBounds(10, 148, 86, 13);
         panelFormAddPersonne.add(lblParcours);
-        listeParcours = new JComboBox(Parcours.getEnsembleParcours().toArray());
+        listeParcours = new JComboBox(controleur.getFormations().toArray());
         listeParcours.setBounds(120, 144, 150, 21);
         panelFormAddPersonne.add(listeParcours);
 
@@ -138,7 +137,7 @@ public class VueGestionaire extends JFrame {
 
 
         // construire notre combobox avec le enum Departement de la classe prof
-        listeDepartements = new JComboBox(Enseignant.Departement.values());
+        listeDepartements = new JComboBox(controleur.getDepartements().toArray());
         listeDepartements.setBounds(120, 181, 150, 21);
         panelFormAddPersonne.add(listeDepartements);
 
@@ -196,7 +195,7 @@ public class VueGestionaire extends JFrame {
             String prenom = personnePrenom.getText();
             Date dateNaissance = personneDateNaissance.getDate();
             String intituleParcours = listeParcours.getSelectedItem().toString();
-            Enseignant.Departement departementEnseignant = (Enseignant.Departement) listeDepartements.getSelectedItem();
+            Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();
             int id = 0;
 
             int RecupBox = listeStatut.getSelectedIndex();
@@ -237,8 +236,7 @@ public class VueGestionaire extends JFrame {
     //Marche pas pour l'instant
     class SupAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            personesEnregistres.remove(listePersonnes.getSelectedIndex());
-            //controleur.suprimerPersonne(modele.getListPersonnes().get(listePersonnes.getSelectedIndex()));
+            // personesEnregistres.remove(listePersonnes.getSelectedIndex());
 
         }
     }
@@ -246,7 +244,7 @@ public class VueGestionaire extends JFrame {
 
 
     //Modele de liste permetant de manipuler le contenu d'une Jlist
-    public class Jmodel extends DefaultListModel implements Observer{
+    public class Jmodel extends DefaultListModel implements Observer {
 
         @Override
         public void update(Observable observable, Object o) {

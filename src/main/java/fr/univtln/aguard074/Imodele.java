@@ -16,4 +16,8 @@ public interface Imodele  {
     public void afficherPersonne(Personne p);
 
     ArrayList<Formation> getFormations();
+
+    ArrayList<Departement> getDepartements();
+
+    void suppprimerEtudiant(Etudiant etudiant);
 }
