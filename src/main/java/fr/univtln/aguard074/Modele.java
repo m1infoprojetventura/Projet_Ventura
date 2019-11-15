@@ -26,9 +26,7 @@ public class Modele extends Observable implements Imodele{
         // Le hashcode est une solution temporaire pour créer un identifinat
         // Le constructeur parcours
         Etudiant etudiant = new Etudiant(nom, prenom, date, formation);
-
         etudiantDAO.create(etudiant);
-
         setChanged();
         notifyObservers(etudiant);
 
