@@ -11,7 +11,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
     @Override
     public void create(Enseignant obj) {
         try {
-            String query = "INSERT INTO Enseignant (nom, prenom,  date_naissance, mdp, login, departement) VALUES(?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Enseignant (nom, prenom,  date_naissance, mdp, login, id_departement) VALUES(?, ?, ?, ?, ?, ?)";
             Departement departement = obj.getDepartement();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
@@ -97,8 +97,12 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
             // new temporaire à remplacer par la ligne au dessus
-            if (resultat.first())
-                enseignant = new Enseignant(resultat.getString("nom"), resultat.getString("prenom"), resultat.getDate("date_naissance"), new Departement());
+            if (resultat.first()) {
+                DepartementDAO departementDAO = new DepartementDAO();
+                // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
+                Departement departement = departementDAO.find(resultat.getInt("id_departement"));
+                enseignant = new Enseignant(resultat.getInt("id"), resultat.getString("nom"), resultat.getString("prenom"), resultat.getDate("date_naissance"), departement);
+            }
 
         }
 
@@ -121,9 +125,9 @@ public class EnseignantDAO extends DAO<Enseignant> {
             DepartementDAO departementDAO = new DepartementDAO();
 
             while(result.next()) {
-                Departement departement = departementDAO.find(result.getInt("departement"));
+                Departement departement = departementDAO.find(result.getInt("id_departement"));
 
-                resultat.add(new Enseignant(result.getString("nom"), result.getString("prenom"),
+                resultat.add(new Enseignant(result.getInt("id"), result.getString("nom"), result.getString("prenom"),
                                             result.getDate("date_naissance"), departement));
             }
 

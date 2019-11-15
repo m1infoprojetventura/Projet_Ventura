@@ -1,6 +1,8 @@
 package fr.univtln.aguard074;
 
+import com.sun.org.apache.xalan.internal.xsltc.dom.ArrayNodeListIterator;
 import fr.univtln.group_aha.Departement;
+import fr.univtln.group_aha.Enseignant;
 import fr.univtln.group_aha.Etudiant;
 import fr.univtln.group_aha.Formation;
 
@@ -22,4 +24,10 @@ public interface Imodele  {
     ArrayList<Departement> getDepartements();
 
     void suppprimerEtudiant(Etudiant etudiant);
+
+    void suppprimerEnseignant(Enseignant enseignant);
+
+    ArrayList<Etudiant> getEtudiants();
+
+    ArrayList<Enseignant> getEnseignants();
 }

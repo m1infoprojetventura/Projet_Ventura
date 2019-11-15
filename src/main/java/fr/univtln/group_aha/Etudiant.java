@@ -15,12 +15,17 @@ public class Etudiant extends Personne {
     }
 
     /**
-     * @see Personne#Personne(String, String, Date)
+     * @see Personne#Personne(int, String, String, Date)
      * @param formation
      *    Donne le parcours (son cursus) d'un etudiant
      */
-    public Etudiant( String nom, String prenom, Date date, Formation formation) {
+    public Etudiant(String nom, String prenom, Date date, Formation formation) {
         super(nom, prenom, date);
+        this.formation = formation;
+    }
+
+    public Etudiant(int id, String nom, String prenom, Date date, Formation formation) {
+        super(id, nom, prenom, date);
         this.formation = formation;
     }
 

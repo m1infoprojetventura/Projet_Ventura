@@ -1,6 +1,7 @@
 package fr.univtln.group_aha;
 
 import java.sql.*;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
@@ -123,7 +124,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
                 // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
                 Formation formation = formationDAO.find(resultat.getInt("id_formation"));
                 java.util.Date date_naissance = resultat.getDate("date_naissance");
-                etudiant = new Etudiant(resultat.getString("nom"), resultat.getString("prenom"), date_naissance, formation);
+                etudiant = new Etudiant(resultat.getInt("id"), resultat.getString("nom"), resultat.getString("prenom"), date_naissance, formation);
             }
         }
 
@@ -137,6 +138,27 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
     @Override
     public ArrayList<Etudiant> getData() {
-        return null;
+
+        ArrayList<Etudiant> resultat = new ArrayList();
+
+        try {
+            String query = "SELECT * FROM Etudiant";
+            PreparedStatement state = connect.prepareStatement(query);
+            ResultSet result = state.executeQuery();
+            FormationDAO formationDAO = new FormationDAO();
+
+            while(result.next()) { Formation formation = formationDAO.find(result.getInt("id_formation"));
+
+                resultat.add(new Etudiant(result.getInt("id"), result.getString("nom"), result.getString("prenom"),
+                        result.getDate("date_naissance"), formation));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return resultat;
+        }
     }
 }

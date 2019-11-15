@@ -30,14 +30,14 @@ public class VueGestionaire extends JFrame {
     private JComboBox listeFormation;
     JComboBox listeDepartements;
     private JList listePersonnes;
-    private Jmodel personesEnregistres = new Jmodel();
+    private Jmodel personesEnregistres;
 
 
 
     public VueGestionaire(Icontroleur controleur, Modele modele){
         super();
-        this.modele = modele;
         this.controleur = controleur;
+        this.modele = modele;
         Init();//On initialise notre fenêtre
 
     }
@@ -48,6 +48,17 @@ public class VueGestionaire extends JFrame {
         setResizable(false); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
         this.setBounds(100, 100, 789, 516);
+
+        personesEnregistres = new Jmodel();
+
+        ArrayList<Etudiant> etudiants = controleur.getEtudiants();
+        ArrayList<Enseignant> enseignants = controleur.getEnseignants();
+
+        for(Etudiant etudiant: etudiants)
+            personesEnregistres.addElement(etudiant);
+
+        for(Enseignant enseignant: enseignants)
+            personesEnregistres.addElement(enseignant);
 
         this.modele.addObserver(personesEnregistres);
         this.setContentPane(saisieInfoPersonne());
@@ -213,8 +224,11 @@ public class VueGestionaire extends JFrame {
         mnNewMenu.add(itemListsalles);
         AddAction AddAction = new AddAction();
         DeleteAction deleteAction = new DeleteAction();
+        SupAction supAction = new SupAction();
         AddBouton.addActionListener(AddAction);
         CancelBouton.addActionListener(deleteAction);
+        suppBouton.addActionListener(supAction);
+
         return contentPane;
 
     }
@@ -302,6 +316,9 @@ public class VueGestionaire extends JFrame {
         panelListeSalles.add(scrollPane_1);
 
         return panel2;
+
+
+
     }
 
     class AddAction implements ActionListener{
@@ -353,6 +370,15 @@ public class VueGestionaire extends JFrame {
     //Marche pas pour l'instant
     class SupAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
+            Object object = listePersonnes.getSelectedValue();
+            if(object instanceof Etudiant) {
+                controleur.suprimerEtudiant((Etudiant) object);
+            }
+
+            if(object instanceof Enseignant) {
+                controleur.suprimerEnseignant((Enseignant) object);
+            }
+
             // personesEnregistres.remove(listePersonnes.getSelectedIndex());
         }
     }
@@ -361,6 +387,7 @@ public class VueGestionaire extends JFrame {
 
     //Modele de liste permetant de manipuler le contenu d'une Jlist
         public class Jmodel extends DefaultListModel  implements Observer {
+
         @Override
         public void update(Observable observable, Object o) {
             //System.out.println(o.toString());
@@ -368,17 +395,24 @@ public class VueGestionaire extends JFrame {
             // Vaut mieux utilisuer le polymorphisme ici
             if(o instanceof Etudiant) {
                 if(modele.trouverEtudiant(((Etudiant) o).getId())) {
+                    System.out.println("Etudiant ajouté dans liste");
                     addElement( o);
+                }
+
+                else {
+                    System.out.println("Etudiantsupprimé dans liste");
+                    removeElement(o);
                 }
             }
 
             else if(o instanceof Enseignant) {
-                if(modele.trouverEtudiant(((Enseignant) o).getId())) {
-                    addElement((Etudiant) o);
+                if(modele.trouverEnseignant(((Enseignant) o).getId())) {
+                    addElement( o);
                 }
 
-                else
+                else {
                     removeElement(o);
+                }
             }
 
             System.out.println(this);
