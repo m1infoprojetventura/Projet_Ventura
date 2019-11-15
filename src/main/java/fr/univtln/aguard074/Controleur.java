@@ -67,4 +67,6 @@ public class Controleur implements Icontroleur {
     public void suprimerEnseignant(Enseignant enseignant) {
         this.modele.suppprimerEnseignant(enseignant);
     }
+
+
 }

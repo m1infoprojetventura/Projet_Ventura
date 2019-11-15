@@ -1,6 +1,8 @@
 package fr.univtln.group_aha;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Etudiant extends Personne {
     // Temporaire à débattre si on crée une classe Parcours ou un String Parcours
@@ -31,5 +33,12 @@ public class Etudiant extends Personne {
 
     public Formation getFormation() {
         return formation;
+    }
+
+    public List getAttributs(){
+        List resultat = super.getAttributs();
+        resultat.add(this.formation);
+
+        return resultat;
     }
 }

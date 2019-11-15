@@ -1,9 +1,7 @@
 package fr.univtln.group_aha;
 // Il faudra mettre tout ça dans des packages spécifique du genre fr.univtln.group_aha.model
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * Classe représentant une Personne du corps universitaire
@@ -87,5 +85,30 @@ public abstract class Personne {
 
     public int getId() {
         return id;
+    }
+
+    public List getAttributs(){
+
+        List resultat= new ArrayList();
+        resultat.add(this.id);
+        resultat.add(this.nom);
+        resultat.add(this.prenom);
+        resultat.add(this.date_naissance);
+        resultat.add(this.login);
+
+        return resultat;
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Personne personne = (Personne) o;
+
+        if (id != personne.id) return false;
+
+        return true;
     }
 }

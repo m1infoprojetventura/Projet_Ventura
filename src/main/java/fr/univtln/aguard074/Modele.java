@@ -19,7 +19,17 @@ public class Modele extends Observable implements Imodele{
     private static EnseignantDAO enseignantDAO = new EnseignantDAO();
     private static FormationDAO formationDAO = new FormationDAO();
     private static DepartementDAO departementDAO = new DepartementDAO();
+    final List<Etudiant> etudiants = new ArrayList<>() ;
+    final List<Enseignant> enseignants = new ArrayList<>();
 
+    public Modele() {
+        super();
+        for(Etudiant etudiant: etudiantDAO.getData())
+            etudiants.add(etudiant);
+
+        for(Enseignant enseignant: enseignantDAO.getData())
+            enseignants.add(enseignant);
+    }
     @Override
     public void creerEtudiant(String nom, String prenom, Date date, Formation formation) {
 
@@ -27,6 +37,8 @@ public class Modele extends Observable implements Imodele{
         // Le constructeur parcours
         Etudiant etudiant = new Etudiant(nom, prenom, date, formation);
         etudiantDAO.create(etudiant);
+
+        etudiants.add(etudiant);
         setChanged();
         notifyObservers(etudiant);
 
@@ -38,6 +50,7 @@ public class Modele extends Observable implements Imodele{
         Enseignant enseignant = new Enseignant(nom, prenom, date, departement);
 
         enseignantDAO.create(enseignant);
+        enseignants.add(enseignant);
         // Prévision du codage de professeurDAO (plus tard)
         setChanged();
         notifyObservers(enseignant);
@@ -75,7 +88,7 @@ public class Modele extends Observable implements Imodele{
     @Override
     public void suppprimerEtudiant(Etudiant etudiant) {
         etudiantDAO.delete(etudiant);
-
+        etudiants.remove(etudiant);
         setChanged();
         notifyObservers(etudiant);
     }
@@ -83,7 +96,7 @@ public class Modele extends Observable implements Imodele{
     @Override
     public void suppprimerEnseignant(Enseignant enseignant) {
         enseignantDAO.delete(enseignant);
-
+        enseignants.remove(enseignant);
         setChanged();
         notifyObservers(enseignant);
     }
@@ -92,6 +105,10 @@ public class Modele extends Observable implements Imodele{
     public ArrayList<Etudiant> getEtudiants() {
         return etudiantDAO.getData();
     }
+    public List<Etudiant> getEtudiantsList() {
+        return etudiants;
+    }
+    public List<Enseignant>getEnseignantsList(){return enseignants;}
 
     @Override
     public ArrayList<Enseignant> getEnseignants() {

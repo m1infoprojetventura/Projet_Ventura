@@ -43,7 +43,6 @@ public class DepartementDAO extends DAO<Departement> {
                 departement = new Departement(resultat.getInt("id"), resultat.getString("nom"), enseignant);
 
             }
-
         }
 
         catch (SQLException e) {

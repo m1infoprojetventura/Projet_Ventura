@@ -6,11 +6,14 @@ import fr.univtln.group_aha.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,7 +34,14 @@ public class VueGestionaire extends JFrame {
     JComboBox listeDepartements;
     private JList listePersonnes;
     private Jmodel personesEnregistres;
+    private TmodelEtudiant tmodelEtudiant;
+    private TmodelEnseignant tmodelEnseignant;
 
+    private JPanel jp1 = new JPanel();
+    private JPanel jp2 = new JPanel();
+    private JLabel jl1 = new JLabel("un label pour le panel1");
+    private JLabel jl2 = new JLabel("un label pour le panel2");
+    JTabbedPane panelOnglet = new JTabbedPane();
 
 
     public VueGestionaire(Icontroleur controleur, Modele modele){
@@ -50,26 +60,39 @@ public class VueGestionaire extends JFrame {
         this.setBounds(100, 100, 789, 516);
 
         personesEnregistres = new Jmodel();
+        tmodelEtudiant = new TmodelEtudiant(modele.getEtudiantsList());
+        tmodelEnseignant = new TmodelEnseignant(modele.getEnseignantsList());
+
 
         ArrayList<Etudiant> etudiants = controleur.getEtudiants();
         ArrayList<Enseignant> enseignants = controleur.getEnseignants();
 
-        for(Etudiant etudiant: etudiants)
-            personesEnregistres.addElement(etudiant);
+        personesEnregistres.ajouter(controleur.getEtudiants());
+        personesEnregistres.ajouter(controleur.getEnseignants());
 
-        for(Enseignant enseignant: enseignants)
-            personesEnregistres.addElement(enseignant);
+        //tmodelEtudiant.ajouter(controleur.getEtudiants());
+        //tmodelEtudiant.ajouter(controleur.getEnseignants());
+
+
 
         this.modele.addObserver(personesEnregistres);
+        this.modele.addObserver(tmodelEtudiant);
+        this.modele.addObserver(tmodelEnseignant);
+
         this.setContentPane(saisieInfoPersonne());
+
+
+        //this.setContentPane(panelOnglet);
         this.setVisible(true);
     }
 
 
 
     private JPanel saisieInfoPersonne(){
+
         JPanel contentPane;
         JPanel panel2;
+
         /**
          * @wbp.nonvisual location=-39,254
          */
@@ -198,6 +221,27 @@ public class VueGestionaire extends JFrame {
 
         panel2 = formSalle();
         panel2.setBackground(Color.white);
+
+        /// Ici on gere les onglets et les TAB /////////
+
+        JTable tableEtudiants = new JTable(tmodelEtudiant);
+        JTable tableEnseignants = new JTable(tmodelEnseignant);
+        updateBouton.setBounds(117, 330, 123, 31);
+        JPanel panelTabEtudiant = new JPanel();
+        JPanel panelTabEnseignant = new JPanel();
+        panelTabEtudiant.add(tableEtudiants.getTableHeader());
+        panelTabEtudiant.add(tableEtudiants);
+        panelTabEnseignant.add(tableEnseignants.getTableHeader());
+        panelTabEnseignant.add(tableEnseignants);
+        panelOnglet.addTab("Enseignants", null, panelTabEnseignant);
+        panelOnglet.addTab("Etudiants", null, panelTabEtudiant);
+        panelOnglet.addTab("Panel 3", null, panelListePersonne);
+
+        panel1.add(panelOnglet);
+        panelOnglet.setBounds(400,50,500,380);
+
+        ///////////////////////////////////////////////////////
+
         parentPanel.add(panel2, "panel2");
 
         JMenuBar menuBar = new JMenuBar();
@@ -388,29 +432,29 @@ public class VueGestionaire extends JFrame {
     //Modele de liste permetant de manipuler le contenu d'une Jlist
         public class Jmodel extends DefaultListModel  implements Observer {
 
+        public void ajouter(List list) {
+            for (Object object : list) {
+                addElement(object);
+            }
+        }
+
         @Override
         public void update(Observable observable, Object o) {
             //System.out.println(o.toString());
 
             // Vaut mieux utilisuer le polymorphisme ici
-            if(o instanceof Etudiant) {
-                if(modele.trouverEtudiant(((Etudiant) o).getId())) {
+            if (o instanceof Etudiant) {
+                if (modele.trouverEtudiant(((Etudiant) o).getId())) {
                     System.out.println("Etudiant ajouté dans liste");
-                    addElement( o);
-                }
-
-                else {
+                    addElement(o);
+                } else {
                     System.out.println("Etudiantsupprimé dans liste");
                     removeElement(o);
                 }
-            }
-
-            else if(o instanceof Enseignant) {
-                if(modele.trouverEnseignant(((Enseignant) o).getId())) {
-                    addElement( o);
-                }
-
-                else {
+            } else if (o instanceof Enseignant) {
+                if (modele.trouverEnseignant(((Enseignant) o).getId())) {
+                    addElement(o);
+                } else {
                     removeElement(o);
                 }
             }
@@ -420,4 +464,110 @@ public class VueGestionaire extends JFrame {
             //System.out.println(modele.getListPersonnes());
         }
     }
-}
+        //Jtabmodel etudiant
+        public class TmodelEtudiant extends DefaultTableModel implements Observer{
+
+            private final String[] entetes = {"id", "nom", "prenom", "date naissance", "login","Formation"};
+            private final List<Etudiant> etudiants;
+
+            public TmodelEtudiant() {
+                super();
+                this.etudiants = null;
+            }
+
+            public TmodelEtudiant(List<Etudiant> etudiants) {
+                this.etudiants = etudiants;
+            }
+
+            public void ajouter(List<Etudiant> list) {
+                for (Etudiant etudiant : list) {
+                    addRow(etudiant.getAttributs().toArray());
+                }
+            }
+
+            @Override
+            public void update(Observable observable, Object o) {
+
+                fireTableDataChanged();
+            }
+
+            @Override
+            public String getColumnName(int i) {
+                return entetes[i];
+            }
+
+            @Override
+            public int getColumnCount() {
+                return entetes.length;
+            }
+
+            @Override
+            public int getRowCount() {
+                if(etudiants != null)
+                    return etudiants.size();
+                else
+                    return 0;
+            }
+
+            @Override
+            public Object getValueAt(int i, int i1) {
+                Etudiant etudiant = etudiants.get(i);
+                Object[] o = etudiant.getAttributs().toArray();
+                return o[i1];
+            }
+        }
+
+
+        public class TmodelEnseignant extends DefaultTableModel implements Observer{
+            private final String[] entetes = {"id", "nom", "prenom", "date naissance", "login", "departement"};
+            private final List<Enseignant> enseignants;
+
+            public TmodelEnseignant() {
+                super();
+                this.enseignants = null;
+            }
+
+            public TmodelEnseignant(List<Enseignant> enseignants) {
+                this.enseignants = enseignants;
+            }
+
+            public void ajouter(List<Enseignant> list) {
+                for (Enseignant enseignant : list) {
+                    addRow(enseignant.getAttributs().toArray());
+                }
+            }
+
+            @Override
+            public void update(Observable observable, Object o) {
+
+                fireTableDataChanged();
+            }
+
+            @Override
+            public String getColumnName(int i) {
+                return entetes[i];
+            }
+
+            @Override
+            public int getColumnCount() {
+                return entetes.length;
+            }
+
+            @Override
+            public int getRowCount() {
+                if(enseignants != null)
+                    return enseignants.size();
+                else
+                    return 0;
+            }
+
+            @Override
+            public Object getValueAt(int i, int i1) {
+                Enseignant enseignant = enseignants.get(i);
+                Object[] o = enseignant.getAttributs().toArray();
+                return o[i1];
+            }
+        }
+
+    }
+

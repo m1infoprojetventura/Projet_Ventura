@@ -1,6 +1,7 @@
 package fr.univtln.group_aha;
 
 import java.util.Date;
+import java.util.List;
 
 public class Enseignant extends Personne {
     private Departement departement;
@@ -9,7 +10,7 @@ public class Enseignant extends Personne {
         super();
     }
 
-    public Enseignant( String nom, String prenom, Date date, Departement departement) {
+    public Enseignant(String nom, String prenom, Date date, Departement departement) {
         super(nom, prenom, date);
         this.departement = departement;
 
@@ -22,5 +23,12 @@ public class Enseignant extends Personne {
 
     public Departement getDepartement() {
         return departement;
+    }
+
+    public List getAttributs() {
+        List resultat = super.getAttributs();
+        resultat.add(this.departement);
+
+        return resultat;
     }
 }
