@@ -6,8 +6,9 @@ import fr.univtln.group_aha.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +43,14 @@ public class VueGestionaire extends JFrame {
     private JLabel jl1 = new JLabel("un label pour le panel1");
     private JLabel jl2 = new JLabel("un label pour le panel2");
     JTabbedPane panelOnglet = new JTabbedPane();
+
+    private JTextField salleNumero;
+    private JTextField salleNbrPlaces;
+    private JCheckBox video_Materiel;
+    private JCheckBox ordi_Materiel;
+    private JCheckBox tableau_Materiel;
+    private JCheckBox imprimante_Materiel;
+
 
 
     public VueGestionaire(Icontroleur controleur, Modele modele){
@@ -79,79 +88,108 @@ public class VueGestionaire extends JFrame {
         this.modele.addObserver(tmodelEtudiant);
         this.modele.addObserver(tmodelEnseignant);
 
-        this.setContentPane(saisieInfoPersonne());
+        this.setContentPane(globalPane());
 
 
         //this.setContentPane(panelOnglet);
         this.setVisible(true);
     }
 
-
-
-    private JPanel saisieInfoPersonne(){
-
-        JPanel contentPane;
-        JPanel panel2;
-
-        /**
-         * @wbp.nonvisual location=-39,254
-         */
-        JTextField textField = new JTextField();
-
-        textField.setColumns(10);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private JPanel globalPane(){
+        JPanel globalPane = new JPanel();
+        // le panel qui contient le cardlayout
+        JPanel parentPane = new JPanel();
+        JPanel childPane1 =getFormStudentPanel() ;
+        JPanel childPane2 = getformSallePanel();
+        JMenuBar menuBar = new JMenuBar();
+        childPane2.setBackground(Color.white);
+        globalPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        //setContentPane(globalPane);
+        globalPane.setLayout(null);
         setBounds(100, 100, 976, 727);
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
 
-        JPanel parentPanel = new JPanel();
-        parentPanel.setBounds(0, 28, 962, 662);
-        contentPane.add(parentPanel);
+        // le parentPane est le panel qui englobe tous les autres , cardlayout
+        parentPane.setBounds(0, 28, 962, 662);
         CardLayout c1 = new CardLayout();
-        parentPanel.setLayout(c1);
+        parentPane.setLayout(c1);
 
-        JPanel panel1 = new JPanel();
-        Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
-        panel1.setBackground(Color.WHITE);
-        parentPanel.add(panel1, "panel1");
-        panel1.setLayout(null);
+        // le Menu bar de navigation
+        menuBar.setBounds(0, 0, 962, 22);
 
+        JMenu mnNewMenu = new JMenu("Ressources");
+        menuBar.add(mnNewMenu);
+
+        JMenuItem itemListPersonne = new JMenuItem("Liste des Personnes");
+        itemListPersonne.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                c1.show(parentPane, "childPane1");
+            }
+        });
+        mnNewMenu.add(itemListPersonne);
+
+        JMenuItem itemListsalles = new JMenuItem("Liste des salles");
+        itemListsalles.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                c1.show(parentPane, "childPane2");
+            }
+        });
+        mnNewMenu.add(itemListsalles);
+
+        // on rajoute les différents containers dans le parent , on associe un nom pour pouvoir les trouver aprés .
+        parentPane.add(childPane1, "childPane1");
+        parentPane.add(childPane2, "childPane2");
+        // le content pane est le panel principale de l'application , qui englobe le parentPane et le Menu de navigation
+        globalPane.add(parentPane);
+        // on rajoute le menuBar
+        globalPane.add(menuBar);
+
+        return globalPane;
+    }
+
+    private JPanel getFormStudentPanel(){
+        JPanel container = new JPanel();
         JPanel panelFormAddPersonne = new JPanel();
-        panelFormAddPersonne.setBorder(lineborder);
+        // ici on rajouter le tabbedPane
+        JTabbedPane paneltableStudent = getListStudenttable();
+        Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
+        container.setBackground(Color.WHITE);
+        container.setLayout(null);
 
+        panelFormAddPersonne.setBorder(lineborder);
         panelFormAddPersonne.setLayout(null);
         panelFormAddPersonne.setBackground(Color.WHITE);
         panelFormAddPersonne.setBounds(46, 60, 304, 304);
-        panel1.add(panelFormAddPersonne);
+
+
+
+        JLabel label = new JLabel("Nom :");
+        label.setBounds(10, 29, 46, 13);
+        panelFormAddPersonne.add(label);
 
         personneNom = new JTextField();
         personneNom.setColumns(10);
         personneNom.setBounds(120, 26, 132, 19);
         panelFormAddPersonne.add(personneNom);
 
+        JLabel label_1 = new JLabel("Prenom : ");
+        label_1.setBounds(10, 58, 57, 13);
+        panelFormAddPersonne.add(label_1);
         personnePrenom = new JTextField();
         personnePrenom.setColumns(10);
         personnePrenom.setBounds(120, 55, 132, 19);
         panelFormAddPersonne.add(personnePrenom);
 
-        listeStatut = new JComboBox(new String[]{ "Étudiant", "Enseignant"});
-        listeStatut.setBounds(120, 113, 132, 21);
-        panelFormAddPersonne.add(listeStatut);
-
-        JLabel label = new JLabel("Nom :");
-        label.setBounds(10, 29, 46, 13);
-        panelFormAddPersonne.add(label);
-
-        JLabel label_1 = new JLabel("Prenom : ");
-        label_1.setBounds(10, 58, 57, 13);
-        panelFormAddPersonne.add(label_1);
 
         JLabel label_2 = new JLabel("Status : ");
         label_2.setBounds(10, 117, 46, 13);
         panelFormAddPersonne.add(label_2);
+        listeStatut = new JComboBox(new String[]{ "Étudiant", "Enseignant"});
+        listeStatut.setBounds(120, 113, 132, 21);
+        panelFormAddPersonne.add(listeStatut);
 
+        JLabel label_4 = new JLabel("Parcours :");
+        label_4.setBounds(10, 148, 86, 13);
+        panelFormAddPersonne.add(label_4);
         listeFormation = new JComboBox(this.controleur.getFormations().toArray());
         listeFormation.setBounds(120, 144, 132, 21);
         panelFormAddPersonne.add(listeFormation);
@@ -159,19 +197,16 @@ public class VueGestionaire extends JFrame {
         JLabel label_3 = new JLabel("Date de Naissance");
         label_3.setBounds(10, 87, 120, 13);
         panelFormAddPersonne.add(label_3);
-
-        JLabel label_4 = new JLabel("Parcours :");
-        label_4.setBounds(10, 148, 86, 13);
-        panelFormAddPersonne.add(label_4);
+        personneDateNaissance = new JDateChooser();
+        personneDateNaissance.setBounds(120, 84, 132, 19);
+        panelFormAddPersonne.add(personneDateNaissance);
 
         JLabel label_5 = new JLabel("Departement :");
         label_5.setBounds(10, 185, 86, 13);
         panelFormAddPersonne.add(label_5);
-
         listeDepartements = new JComboBox(controleur.getDepartements().toArray());
         listeDepartements.setBounds(120, 181, 132, 21);
         panelFormAddPersonne.add(listeDepartements);
-
 
 
         JButton AddBouton = new JButton("Ajouter");
@@ -182,19 +217,32 @@ public class VueGestionaire extends JFrame {
         CancelBouton.setBounds(152, 246, 85, 21);
         panelFormAddPersonne.add(CancelBouton);
 
-        personneDateNaissance = new JDateChooser();
-        personneDateNaissance.setBounds(120, 84, 132, 19);
-        panelFormAddPersonne.add(personneDateNaissance);
+        AddAction AddAction = new AddAction();
+        AddBouton.addActionListener(AddAction);
+        ResetAction resetAction = new ResetAction();
+        CancelBouton.addActionListener(resetAction);
 
+        // on rajoute la liste des étudiant
+        container.add(paneltableStudent);
+        //on rajoute le formulaire des étudiant
+        container.add(panelFormAddPersonne);
 
+        return container;
+    }
+    // revoir la liste des étudiants
+    /*private JPanel getListStudentPanel(){
         JPanel panelListePersonne = new JPanel();
+        JButton updateBouton = new JButton("Modifier");
+        JButton suppBouton = new JButton("Supprimer");
+        Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
+
+
         panelListePersonne.setBackground(Color.WHITE);
         panelListePersonne.setBorder(lineborder);
         panelListePersonne.setLayout(null);
         panelListePersonne.setBounds(570, 60, 240, 361);
-        panel1.add(panelListePersonne);
 
-        JButton suppBouton = new JButton("Supprimer");
+
         suppBouton.setBounds(0, 330, 128, 31);
         panelListePersonne.add(suppBouton);
 
@@ -210,78 +258,68 @@ public class VueGestionaire extends JFrame {
         listePersonnes.setLayoutOrientation(JList.VERTICAL);
         panelListePersonne.add(scrollPane);
 
-        JButton updateBouton = new JButton("Modifier");
+        updateBouton.setBounds(117, 330, 123, 31);
+        panelListePersonne.add(updateBouton);
+
+        SupAction supAction = new SupAction();
+        suppBouton.addActionListener(supAction);
+
         updateBouton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        updateBouton.setBounds(117, 330, 123, 31);
-        panelListePersonne.add(updateBouton);
 
+        return  panelListePersonne;
+    }*/
 
-        panel2 = formSalle();
-        panel2.setBackground(Color.white);
-
-        /// Ici on gere les onglets et les TAB /////////
-
+    // renvoir un JTabbedPane étudiant pour le moment
+    private JTabbedPane getListStudenttable(){
         JTable tableEtudiants = new JTable(tmodelEtudiant);
-        JTable tableEnseignants = new JTable(tmodelEnseignant);
-        updateBouton.setBounds(117, 330, 123, 31);
+        //JTable tableEnseignants = new JTable(tmodelEnseignant);
+        JTabbedPane panelOnglet = new JTabbedPane(JTabbedPane.TOP);
+        //celui la le panel qui regroupe la JTable et son header
+        JPanel panelTableEtudiant = new JPanel();
+        // englobe le Jtable avec son header avec les bouton car le premier est un flowLayout , il va mettre tous mettre a coté
         JPanel panelTabEtudiant = new JPanel();
-        JPanel panelTabEnseignant = new JPanel();
-        panelTabEtudiant.add(tableEtudiants.getTableHeader());
-        panelTabEtudiant.add(tableEtudiants);
-        panelTabEnseignant.add(tableEnseignants.getTableHeader());
-        panelTabEnseignant.add(tableEnseignants);
-        panelOnglet.addTab("Enseignants", null, panelTabEnseignant);
+        //JPanel panelTabEnseignant = new JPanel();
+
+
+        panelTabEtudiant.setBackground(Color.WHITE);
+        panelTableEtudiant.setBackground(Color.WHITE);
+        panelOnglet.setBounds(372, 48, 580, 415);
+
+        panelTabEtudiant.setLayout(null);
+
+
+        panelTableEtudiant .setBounds(0, 32, 575, 290);
+        panelTableEtudiant.add(tableEtudiants.getTableHeader());
+        panelTableEtudiant.add(tableEtudiants );
+        panelTabEtudiant.add(panelTableEtudiant);
+
+        JButton suppBouton = new JButton("Supprimer");
+        suppBouton.setBounds(104, 346, 126, 32);
+        panelTabEtudiant.add(suppBouton);
+
+        JButton updateBouton = new JButton("Modifier");
+        updateBouton.setBounds(267, 346, 126, 32);
+        panelTabEtudiant.add(updateBouton);
+
+        //panelOnglet.addTab("Enseignants", null, panelTabEnseignant);
         panelOnglet.addTab("Etudiants", null, panelTabEtudiant);
-        panelOnglet.addTab("Panel 3", null, panelListePersonne);
 
-        panel1.add(panelOnglet);
-        panelOnglet.setBounds(400,50,500,380);
-
-        ///////////////////////////////////////////////////////
-
-        parentPanel.add(panel2, "panel2");
-
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(0, 0, 962, 22);
-        contentPane.add(menuBar);
-
-        JMenu mnNewMenu = new JMenu("Ressources");
-        menuBar.add(mnNewMenu);
-
-        JMenuItem itemListPersonne = new JMenuItem("Liste des Personnes");
-        itemListPersonne.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                c1.show(parentPanel, "panel1");
-            }
-        });
-        mnNewMenu.add(itemListPersonne);
-
-        JMenuItem itemListsalles = new JMenuItem("Liste des salles");
-        itemListsalles.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                c1.show(parentPanel, "panel2");
-            }
-        });
-        mnNewMenu.add(itemListsalles);
-        AddAction AddAction = new AddAction();
-        DeleteAction deleteAction = new DeleteAction();
         SupAction supAction = new SupAction();
-        AddBouton.addActionListener(AddAction);
-        CancelBouton.addActionListener(deleteAction);
         suppBouton.addActionListener(supAction);
 
-        return contentPane;
+        return panelOnglet;
 
     }
-    private JPanel formSalle(){
+
+
+    private JPanel getformSallePanel(){
         JPanel panel2 = new JPanel();
         panel2.setLayout(null);
         Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
-        JTextField textField_1;
-        JTextField textField_2;
+
         JPanel panelFormAddSalle = new JPanel();
         panelFormAddSalle.setBorder(lineborder);
         panelFormAddSalle.setBackground(Color.WHITE);
@@ -304,31 +342,31 @@ public class VueGestionaire extends JFrame {
         lblS.setBounds(10, 132, 114, 18);
         panelFormAddSalle.add(lblS);
 
-        textField_1 = new JTextField();
-        textField_1.setColumns(10);
-        textField_1.setBounds(137, 44, 132, 19);
-        panelFormAddSalle.add(textField_1);
+        salleNumero = new JTextField();
+        salleNumero .setColumns(10);
+        salleNumero .setBounds(137, 44, 132, 19);
+        panelFormAddSalle.add(salleNumero );
 
-        textField_2 = new JTextField();
-        textField_2.setColumns(10);
-        textField_2.setBounds(137, 89, 132, 19);
-        panelFormAddSalle.add(textField_2);
+        salleNbrPlaces= new JTextField();
+        salleNbrPlaces.setColumns(10);
+        salleNbrPlaces.setBounds(137, 89, 132, 19);
+        panelFormAddSalle.add(salleNbrPlaces);
 
-        JCheckBox chckbxVideoProjecteur = new JCheckBox("video projecteur");
-        chckbxVideoProjecteur.setBounds(137, 145, 132, 21);
-        panelFormAddSalle.add(chckbxVideoProjecteur);
+        video_Materiel = new JCheckBox("video projecteur");
+        video_Materiel.setBounds(137, 145, 132, 21);
+        panelFormAddSalle.add(video_Materiel);
 
-        JCheckBox chckbxPc = new JCheckBox("ordinateurs");
-        chckbxPc.setBounds(137, 169, 132, 21);
-        panelFormAddSalle.add(chckbxPc);
+        ordi_Materiel = new JCheckBox("ordinateurs");
+        ordi_Materiel.setBounds(137, 169, 132, 21);
+        panelFormAddSalle.add(ordi_Materiel);
 
-        JCheckBox chckbxImprimante = new JCheckBox("Tableau tactile");
-        chckbxImprimante.setBounds(137, 192, 132, 21);
-        panelFormAddSalle.add(chckbxImprimante);
+        tableau_Materiel = new JCheckBox("Tableau tactile");
+        tableau_Materiel.setBounds(137, 192, 132, 21);
+        panelFormAddSalle.add(tableau_Materiel);
 
-        JCheckBox checkBox = new JCheckBox("imprimante");
-        checkBox.setBounds(137, 215, 132, 21);
-        panelFormAddSalle.add(checkBox);
+        imprimante_Materiel = new JCheckBox("imprimante");
+        imprimante_Materiel.setBounds(137, 215, 132, 21);
+        panelFormAddSalle.add(imprimante_Materiel);
 
         JButton button = new JButton("Ajouter");
         button.setBounds(39, 285, 85, 21);
@@ -360,10 +398,10 @@ public class VueGestionaire extends JFrame {
         panelListeSalles.add(scrollPane_1);
 
         return panel2;
-
-
-
     }
+
+
+
 
     class AddAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
@@ -403,7 +441,7 @@ public class VueGestionaire extends JFrame {
         }
     }
 
-    class DeleteAction implements ActionListener{
+    class ResetAction implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             personneNom.setText("");
             personnePrenom.setText("");
