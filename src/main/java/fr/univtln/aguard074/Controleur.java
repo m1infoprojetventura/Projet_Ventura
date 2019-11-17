@@ -57,7 +57,6 @@ public class Controleur implements Icontroleur {
         return modele.getEnseignants();
     }
 
-
     @Override
     public void suprimerEtudiant(Etudiant etudiant) {
         this.modele.suppprimerEtudiant(etudiant);
@@ -67,6 +66,5 @@ public class Controleur implements Icontroleur {
     public void suprimerEnseignant(Enseignant enseignant) {
         this.modele.suppprimerEnseignant(enseignant);
     }
-
 
 }

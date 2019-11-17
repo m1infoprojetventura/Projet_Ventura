@@ -1,9 +1,6 @@
 package fr.univtln.group_aha;
 
-import java.sql.Array;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,30 @@ public class FormationDAO extends DAO<Formation> {
 
     @Override
     public Formation find(int id) {
-        return null;
+        Formation formation = new Formation();
+        DepartementDAO departementDAO = new DepartementDAO();
+
+        try {
+
+            Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            String query = "SELECT * FROM Formation WHERE id = %d;";
+
+            ResultSet resultat = st.executeQuery(String.format(query, id));
+
+            if (resultat.first()) {
+                Departement departement = departementDAO.find(resultat.getInt("id_departement"));
+                formation = new Formation(resultat.getInt("id"), resultat.getString("intitule"), departement);
+
+            }
+        }
+
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            return formation;
+        }
+
     }
 
     @Override

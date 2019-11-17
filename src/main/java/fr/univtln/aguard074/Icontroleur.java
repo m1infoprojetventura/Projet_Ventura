@@ -27,5 +27,4 @@ public interface Icontroleur {
     void suprimerEtudiant(Etudiant etudiant);
 
     void suprimerEnseignant(Enseignant enseignant);
-
 }

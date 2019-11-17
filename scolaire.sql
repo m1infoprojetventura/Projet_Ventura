@@ -1,6 +1,6 @@
 -- MariaDB dump 10.17  Distrib 10.4.10-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: scolaire
+-- Host: localhost    Database: planning_db
 -- ------------------------------------------------------
 -- Server version	10.4.10-MariaDB
 

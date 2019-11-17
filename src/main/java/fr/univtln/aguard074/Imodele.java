@@ -29,4 +29,5 @@ public interface Imodele  {
     ArrayList<Etudiant> getEtudiants();
 
     ArrayList<Enseignant> getEnseignants();
+
 }
