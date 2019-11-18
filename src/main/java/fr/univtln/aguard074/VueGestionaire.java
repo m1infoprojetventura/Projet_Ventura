@@ -162,14 +162,14 @@ public class VueGestionaire extends JFrame {
         panelFormAddPersonne.add(personnePrenom);
 
 
-        JLabel label_2 = new JLabel("Status : ");
-        label_2.setBounds(10, 117, 46, 13);
+        JLabel label_2 = new JLabel("Statut : ");
+        label_2.setBounds(10, 117, 86, 13);
         panelFormAddPersonne.add(label_2);
         listeStatut = new JComboBox(new String[]{ "Étudiant", "Enseignant"});
         listeStatut.setBounds(120, 113, 132, 21);
         panelFormAddPersonne.add(listeStatut);
 
-        JLabel label_4 = new JLabel("Parcours :");
+        JLabel label_4 = new JLabel("Formation:");
         label_4.setBounds(10, 148, 86, 13);
         panelFormAddPersonne.add(label_4);
         listeFormation = new JComboBox(this.controleur.getFormations().toArray());
@@ -246,6 +246,16 @@ public class VueGestionaire extends JFrame {
             int i = tableEtudiants.getSelectedRow();
             Etudiant etudiant = tmodelEtudiant.getRowValue(i);
             controleur.suprimerEtudiant(etudiant);
+        });
+
+        updateBouton.addActionListener(actionEvent -> {
+            int i = tableEtudiants.getSelectedRow();
+            Etudiant etudiant = tmodelEtudiant.getRowValue(i);
+
+            personneNom.setText(etudiant.getNom());
+            personnePrenom.setText(etudiant.getPrenom());
+            personneDateNaissance.setDate(etudiant.getDate_naissance());
+            listeFormation.setSelectedItem(etudiant.getFormation());
         });
 
         return panelTabEtudiant;
@@ -389,31 +399,43 @@ public class VueGestionaire extends JFrame {
 
     class AddAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //On affiche le chiffre en plus dans le label
-            String str = ((JButton)e.getSource()).getText();
             //controleur.afficherPersonne(new Personne("michel","ll",45, Personne.Statut.ETUDIANT));
             String nom = personneNom.getText();
             String prenom = personnePrenom.getText();
-            Date dateNaissance = personneDateNaissance.getDate();
-            Formation formation = (Formation) listeFormation.getSelectedItem();
-            Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();
-            int id = 0;
 
-            int RecupBox = listeStatut.getSelectedIndex();
-            System.out.println(RecupBox);
-            switch(RecupBox) {
-                case 0:
-                    id = 0;
-                    controleur.creerEtudiant(nom,prenom,dateNaissance, formation);
-                    break;
-                case 1:
-                    try {
-                        controleur.creerEnseignant(nom,prenom,dateNaissance, departementEnseignant);
-                    } catch (NumberFormatException ez) {
-                        System.out.println("Format Nombre invalide( rentrer un nombre)");
-                    }
-                    break;
-                case 2:
+            personneNom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            personnePrenom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+            if (nom.equals("")) {
+                personneNom.setBorder(BorderFactory.createLineBorder(Color.RED));
+            }
+
+            if (prenom.equals("")) {
+                personnePrenom.setBorder(BorderFactory.createLineBorder(Color.RED));
+            }
+
+            if (!(prenom.equals("") || nom.equals(""))) {
+                Date dateNaissance = personneDateNaissance.getDate();
+                Formation formation = (Formation) listeFormation.getSelectedItem();
+                Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();
+                int id = 0;
+
+                int RecupBox = listeStatut.getSelectedIndex();
+                System.out.println(RecupBox);
+                switch (RecupBox) {
+                    case 0:
+                        id = 0;
+                        controleur.creerEtudiant(nom, prenom, dateNaissance, formation);
+                        break;
+                    case 1:
+                        try {
+                            controleur.creerEnseignant(nom, prenom, dateNaissance, departementEnseignant);
+                        } catch (NumberFormatException ez) {
+                            System.out.println("Format Nombre invalide( rentrer un nombre)");
+                        }
+                        break;
+                    case 2:
+                }
             }
 
             //test validité d'un nombre
@@ -428,6 +450,7 @@ public class VueGestionaire extends JFrame {
             personneId.setText("");
         }
     }
+
     //Jtabmodel etudiant
     public class TmodelEtudiant extends AbstractTableModel implements Observer{
 

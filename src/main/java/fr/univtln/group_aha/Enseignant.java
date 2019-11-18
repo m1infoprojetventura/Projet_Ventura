@@ -2,6 +2,7 @@ package fr.univtln.group_aha;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Enseignant extends Personne {
     private Departement departement;
