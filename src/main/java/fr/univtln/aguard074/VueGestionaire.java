@@ -217,6 +217,10 @@ public class VueGestionaire extends JFrame {
 
         //celui la le panel qui regroupe la JTable et son header
         JPanel panelTableEtudiant = new JPanel();
+        //scrollPane pour le JTable
+        JScrollPane scroll = new JScrollPane();
+        scroll.getViewport().add(tableEtudiants);
+
         // englobe le Jtable avec son header avec les bouton car le premier est un flowLayout , il va mettre tous mettre a coté
         JPanel panelTabEtudiant = new JPanel();
         //JPanel panelTabEnseignant = new JPanel();
@@ -231,7 +235,7 @@ public class VueGestionaire extends JFrame {
 
         panelTableEtudiant .setBounds(0, 0, 575, 320);
         panelTableEtudiant.add(tableEtudiants.getTableHeader());
-        panelTableEtudiant.add(tableEtudiants );
+        panelTableEtudiant.add(scroll );
         panelTabEtudiant.add(panelTableEtudiant);
 
         JButton suppBouton = new JButton("Supprimer");
@@ -264,7 +268,7 @@ public class VueGestionaire extends JFrame {
 
     private JPanel getListTeacher() {
         JTable tableEnseignant = new JTable(tmodelEnseignant);
-
+        JScrollPane scroll = new JScrollPane(tableEnseignant);
         //celui la le panel qui regroupe la JTable et son header
         JPanel panelTableEnseignant = new JPanel();
         // englobe le Jtable avec son header avec les bouton car le premier est un flowLayout , il va mettre tous mettre a coté
@@ -281,7 +285,7 @@ public class VueGestionaire extends JFrame {
 
         panelTableEnseignant.setBounds(0, 0, 575, 320);
         panelTableEnseignant.add(tableEnseignant.getTableHeader());
-        panelTableEnseignant.add(tableEnseignant);
+        panelTableEnseignant.add(scroll);
         panelTabEnseignant.add(panelTableEnseignant);
 
         JButton suppBouton = new JButton("Supprimer");
