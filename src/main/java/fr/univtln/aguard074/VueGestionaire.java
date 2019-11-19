@@ -6,6 +6,8 @@ import fr.univtln.group_aha.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -13,6 +15,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -215,6 +219,7 @@ public class VueGestionaire extends JFrame {
     private JPanel getListStudent() {
         JTable tableEtudiants = new JTable(tmodelEtudiant);
 
+
         //celui la le panel qui regroupe la JTable et son header
         JPanel panelTableEtudiant = new JPanel();
         //scrollPane pour le JTable
@@ -243,6 +248,7 @@ public class VueGestionaire extends JFrame {
         panelTabEtudiant.add(suppBouton);
 
         JButton updateBouton = new JButton("Modifier");
+        updateBouton.setEnabled(false);
         updateBouton.setBounds(267, 346, 126, 32);
         panelTabEtudiant.add(updateBouton);
 
@@ -261,6 +267,20 @@ public class VueGestionaire extends JFrame {
             personneDateNaissance.setDate(etudiant.getDate_naissance());
             listeFormation.setSelectedItem(etudiant.getFormation());
         });
+
+        // ListSlectionModel c'est un modele qui surveille la selectionne sur les listes
+        ListSelectionModel model = tableEtudiants.getSelectionModel();
+        model.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (model.isSelectionEmpty()){
+                    updateBouton.setEnabled(false);
+                }else {
+                    updateBouton.setEnabled(true);
+                }
+            }
+        });
+
 
         return panelTabEtudiant;
 
@@ -293,6 +313,7 @@ public class VueGestionaire extends JFrame {
         panelTabEnseignant.add(suppBouton);
 
         JButton updateBouton = new JButton("Modifier");
+        updateBouton.setEnabled(false);
         updateBouton.setBounds(267, 346, 126, 32);
         panelTabEnseignant.add(updateBouton);
 
@@ -300,6 +321,17 @@ public class VueGestionaire extends JFrame {
             int i = tableEnseignant.getSelectedRow();
             Enseignant enseignant = tmodelEnseignant.getRowValue(i);
             controleur.suprimerEnseignant(enseignant);
+        });
+        ListSelectionModel model = tableEnseignant.getSelectionModel();
+        model.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (model.isSelectionEmpty()){
+                    updateBouton.setEnabled(false);
+                }else {
+                    updateBouton.setEnabled(true);
+                }
+            }
         });
 
         return panelTabEnseignant;
