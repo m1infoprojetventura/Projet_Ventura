@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Arrays;
 
 public class VueGestionaire extends JFrame {
     private Modele modele;
@@ -47,6 +48,11 @@ public class VueGestionaire extends JFrame {
     private JCheckBox ordi_Materiel;
     private JCheckBox tableau_Materiel;
     private JCheckBox imprimante_Materiel;
+    private JButton addBoutonFormulaire;
+    private JButton cancelBoutonFormulaire;
+    private JButton updateBoutonFormulaire;
+    // En attendant de trouver autre chose
+    private int identifiantPersonne;
 
     public VueGestionaire(Icontroleur controleur, Modele modele){
         super();
@@ -133,6 +139,11 @@ public class VueGestionaire extends JFrame {
     private JPanel getFormStudentPanel() {
         JPanel container = new JPanel();
         JPanel panelFormAddPersonne = new JPanel();
+        JPanel panelBouton = new JPanel();
+        panelBouton.setLayout(new BoxLayout(panelBouton, BoxLayout.X_AXIS));
+
+        panelBouton.setBounds(7, 246, 290, 41);
+        panelBouton.setBackground(Color.WHITE);
         // ici on rajouter le tabbedPane
         JTabbedPane paneltableStudent = getListTable();
         Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
@@ -140,9 +151,9 @@ public class VueGestionaire extends JFrame {
         container.setLayout(null);
 
         panelFormAddPersonne.setBorder(lineborder);
-        panelFormAddPersonne.setLayout(null);
         panelFormAddPersonne.setBackground(Color.WHITE);
         panelFormAddPersonne.setBounds(46, 60, 304, 304);
+        panelFormAddPersonne.setLayout(null);
 
         JLabel label = new JLabel("Nom :");
         label.setBounds(10, 29, 46, 13);
@@ -153,7 +164,7 @@ public class VueGestionaire extends JFrame {
         personneNom.setBounds(120, 26, 132, 19);
         panelFormAddPersonne.add(personneNom);
 
-        JLabel label_1 = new JLabel("Prenom : ");
+        JLabel label_1 = new JLabel("Prénom : ");
         label_1.setBounds(10, 58, 57, 13);
         panelFormAddPersonne.add(label_1);
         personnePrenom = new JTextField();
@@ -191,18 +202,27 @@ public class VueGestionaire extends JFrame {
         panelFormAddPersonne.add(listeDepartements);
 
 
-        JButton AddBouton = new JButton("Ajouter");
-        AddBouton.setBounds(45, 246, 85, 21);
-        panelFormAddPersonne.add(AddBouton);
+        addBoutonFormulaire = new JButton("Ajouter");
+        // addBouton.setBounds(23, 246, 85, 21);
+        panelBouton.add(addBoutonFormulaire);
+        panelBouton.add(Box.createHorizontalStrut(10));
 
-        JButton CancelBouton = new JButton("Annuler");
-        CancelBouton.setBounds(152, 246, 85, 21);
-        panelFormAddPersonne.add(CancelBouton);
+        cancelBoutonFormulaire = new JButton("Annuler");
+        //cancelBouton.setBounds(69, 246, 85, 38);
+        panelBouton.add(cancelBoutonFormulaire);
+        panelBouton.add(Box.createHorizontalStrut(10));
 
-        AddAction AddAction = new AddAction();
-        AddBouton.addActionListener(AddAction);
+        updateBoutonFormulaire = new JButton("Modifier");
+        panelBouton.add(updateBoutonFormulaire);
+        updateBoutonFormulaire.setEnabled(false);
+
+        panelFormAddPersonne.add(panelBouton);
+        AddAction addAction = new AddAction();
+        addBoutonFormulaire.addActionListener(addAction);
         ResetAction resetAction = new ResetAction();
-        CancelBouton.addActionListener(resetAction);
+        cancelBoutonFormulaire.addActionListener(resetAction);
+        UpdAction updAction = new UpdAction();
+        updateBoutonFormulaire.addActionListener(updAction);
 
         // on rajoute la liste des étudiant
         container.add(paneltableStudent);
@@ -243,19 +263,33 @@ public class VueGestionaire extends JFrame {
         panelTabEtudiant.add(updateBouton);
 
         suppBouton.addActionListener(actionEvent -> {
-            int i = tableEtudiants.getSelectedRow();
-            Etudiant etudiant = tmodelEtudiant.getRowValue(i);
-            controleur.suprimerEtudiant(etudiant);
+            int ints[] = tableEtudiants.getSelectedRows();
+
+            // C'est pourri, à corriger (fait pour la frime) Marche pas
+            //Etudiant etudiants[] = (Etudiant[]) ints.stream().map(tmodelEtudiant::getRowValue).toArray();
+            List<Etudiant> etudiants = new ArrayList();
+
+            for(int i: ints) {
+                etudiants.add(tmodelEtudiant.getRowValue(i));
+            }
+
+            for(Etudiant etudiant: etudiants) {
+                controleur.suprimerEtudiant(etudiant);
+            }
         });
 
         updateBouton.addActionListener(actionEvent -> {
             int i = tableEtudiants.getSelectedRow();
             Etudiant etudiant = tmodelEtudiant.getRowValue(i);
-
+            identifiantPersonne = etudiant.getId();
             personneNom.setText(etudiant.getNom());
             personnePrenom.setText(etudiant.getPrenom());
             personneDateNaissance.setDate(etudiant.getDate_naissance());
             listeFormation.setSelectedItem(etudiant.getFormation());
+            listeStatut.setSelectedIndex(0);
+            addBoutonFormulaire.setEnabled(false);
+            updateBoutonFormulaire.setEnabled(true);
+            listeStatut.setEnabled(false);
         });
 
         return panelTabEtudiant;
@@ -293,9 +327,30 @@ public class VueGestionaire extends JFrame {
         panelTabEnseignant.add(updateBouton);
 
         suppBouton.addActionListener(actionEvent -> {
+            int ints[] = tableEnseignant.getSelectedRows();
+            List<Enseignant> enseignants = new ArrayList();
+            for(int i: ints) {
+                enseignants.add(tmodelEnseignant.getRowValue(i));
+            }
+
+            for(Enseignant enseignant: enseignants) {
+                controleur.suprimerEnseignant(enseignant);
+            }
+        });
+
+        updateBouton.addActionListener(actionEvent -> {
             int i = tableEnseignant.getSelectedRow();
             Enseignant enseignant = tmodelEnseignant.getRowValue(i);
-            controleur.suprimerEnseignant(enseignant);
+            identifiantPersonne = enseignant.getId();
+
+            personneNom.setText(enseignant.getNom());
+            personnePrenom.setText(enseignant.getPrenom());
+            personneDateNaissance.setDate(enseignant.getDate_naissance());
+            listeDepartements.setSelectedItem(enseignant.getDepartement());
+            listeStatut.setSelectedIndex(1);
+            addBoutonFormulaire.setEnabled(false);
+            updateBoutonFormulaire.setEnabled(true);
+            listeStatut.setEnabled(false);
         });
 
         return panelTabEnseignant;
@@ -312,7 +367,7 @@ public class VueGestionaire extends JFrame {
         return panelOnglet;
     }
 
-    private JPanel getformSallePanel(){
+    private JPanel getformSallePanel() {
         JPanel panel2 = new JPanel();
         panel2.setLayout(null);
         Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
@@ -421,7 +476,6 @@ public class VueGestionaire extends JFrame {
                 int id = 0;
 
                 int RecupBox = listeStatut.getSelectedIndex();
-                System.out.println(RecupBox);
                 switch (RecupBox) {
                     case 0:
                         id = 0;
@@ -438,6 +492,61 @@ public class VueGestionaire extends JFrame {
                 }
             }
 
+            //test validité d'un nombre
+            //controleur.afficherPersonne(new Personne(nom,prenom,age,statut));
+        }
+    }
+
+    class UpdAction implements ActionListener {
+        // Trouver une méthode pour généraliser tout ça (je parle de AddAcrion et UpdAction
+        // ils font la même chose à quelques détails près
+
+        public void actionPerformed(ActionEvent e) {
+            //controleur.afficherPersonne(new Personne("michel","ll",45, Personne.Statut.ETUDIANT));
+            String nom = personneNom.getText();
+            String prenom = personnePrenom.getText();
+
+            personneNom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            personnePrenom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+            if (nom.equals("")) {
+                personneNom.setBorder(BorderFactory.createLineBorder(Color.RED));
+            }
+
+            if (prenom.equals("")) {
+                personnePrenom.setBorder(BorderFactory.createLineBorder(Color.RED));
+            }
+
+            if (!(prenom.equals("") || nom.equals(""))) {
+                Date dateNaissance = personneDateNaissance.getDate();
+                Formation formation = (Formation) listeFormation.getSelectedItem();
+                Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();
+                int id = 0;
+
+                int RecupBox = listeStatut.getSelectedIndex();
+                switch (RecupBox) {
+                    case 0:
+                        id = 0;
+                        Etudiant etudiant = new Etudiant(identifiantPersonne, nom, prenom, dateNaissance, formation);
+                        controleur.modifierEtudiant(etudiant);
+                        break;
+                    case 1:
+                        try {
+                            Enseignant enseignant = new Enseignant(identifiantPersonne, nom, prenom,
+                                                                    dateNaissance, departementEnseignant);
+
+                            controleur.modifierEnseignant(enseignant);
+                        } catch (NumberFormatException ez) {
+                            System.out.println("Format Nombre invalide( rentrer un nombre)");
+                        }
+                        break;
+                    case 2:
+                }
+            }
+
+            updateBoutonFormulaire.setEnabled(false);
+            listeStatut.setEnabled(true);
+            addBoutonFormulaire.setEnabled(true);
             //test validité d'un nombre
             //controleur.afficherPersonne(new Personne(nom,prenom,age,statut));
         }
@@ -498,9 +607,9 @@ public class VueGestionaire extends JFrame {
             return o[i1];
         }
 
-    }
+}
 
-    public class TmodelEnseignant extends AbstractTableModel implements Observer{
+    public class TmodelEnseignant extends  AbstractTableModel implements Observer {
         private final String[] entetes = {"id", "nom", "prenom", "date naissance", "login", "departement"};
         private final List<Enseignant> enseignants;
 

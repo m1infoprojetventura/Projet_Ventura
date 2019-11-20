@@ -1,9 +1,6 @@
 package fr.univtln.group_aha;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -61,12 +58,20 @@ public class EnseignantDAO extends DAO<Enseignant> {
     @Override
     public void update(Enseignant obj) {
         try {
-            String query = "UPDATE Enseignant SET id_personne = ?, departement = ?";
+            String query = "UPDATE Enseignant SET nom=?, prenom=?, date_naissance=?," +
+                            "id_departement=?, login=?, mdp=? WHERE id=?;";
             PreparedStatement state = connect.prepareStatement(query);
             Departement departement = obj.getDepartement();
 
-            // state.setInt(1, obj.getId());
-            state.setString(2, departement.getNom());
+            java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
+            state.setString(1, obj.getNom());
+            state.setString(2, obj.getPrenom());
+            state.setDate(3,  d2);
+
+            state.setInt(4, departement.getId());
+            state.setString(5, obj.generationLogin());
+            state.setInt(6, obj.generationMpd().hashCode());
+            state.setInt(7, obj.getId());
 
             state.executeUpdate();
         }

@@ -13,21 +13,18 @@ public interface Imodele  {
     public void creerEtudiant(String nom, String prenom, Date date, Formation formation);
     public void creerEnseignant(String nom, String prenom, Date date, Departement departement);
 
-    boolean trouverEtudiant(int id);
-    boolean trouverEnseignant(int id);
-
     public void afficherPersonne(Personne p);
 
     ArrayList<Formation> getFormations();
-
     ArrayList<Departement> getDepartements();
 
     void suppprimerEtudiant(Etudiant etudiant);
-
     void suppprimerEnseignant(Enseignant enseignant);
 
     ArrayList<Etudiant> getEtudiants();
 
     ArrayList<Enseignant> getEnseignants();
 
+    void modifierEtudiant(Etudiant etudiant);
+    void modifierEnseignant(Enseignant enseignant);
 }

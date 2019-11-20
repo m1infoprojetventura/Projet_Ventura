@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 
-public class Modele extends Observable implements Imodele{
+public class Modele extends Observable implements Imodele {
     private ArrayList<Personne> listPersonnes= new ArrayList<Personne>();
     //private ArrayList<Observer> listObserver = new ArrayList<Observer>();
 
@@ -73,18 +73,6 @@ public class Modele extends Observable implements Imodele{
         return departementDAO.getData();
     }
 
-    // Vaut mieux créer une classe abstraite Modele étendu par deux classes EtudiantModele et EnseignantModele
-    @Override
-    public boolean trouverEtudiant(int id) {
-        return (etudiantDAO.find(id) != null);
-    }
-
-    @Override
-    public boolean trouverEnseignant(int id) {
-       return (enseignantDAO.find(id) != null) ;
-    }
-
-
     @Override
     public void suppprimerEtudiant(Etudiant etudiant) {
         etudiantDAO.delete(etudiant);
@@ -113,6 +101,24 @@ public class Modele extends Observable implements Imodele{
     @Override
     public ArrayList<Enseignant> getEnseignants() {
         return enseignantDAO.getData();
+    }
+
+    @Override
+    public void modifierEtudiant(Etudiant etudiant) {
+        int i = etudiants.indexOf(etudiant);
+        etudiants.set(i, etudiant);
+        etudiantDAO.update(etudiant);
+        setChanged();
+        notifyObservers();
+    }
+
+    @Override
+    public void modifierEnseignant(Enseignant enseignant) {
+        int i = enseignants.indexOf(enseignant);
+        enseignants.set(i, enseignant);
+        enseignantDAO.update(enseignant);
+        setChanged();
+        notifyObservers();
     }
 
 

@@ -76,23 +76,26 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
     @Override
     public void update(Etudiant obj) {
-      //  try {
+        try {
+            String query = "UPDATE Etudiant SET nom =?, prenom =?, date_naissance =?, id_formation =?," +
+                    "mdp = ?, login = ? WHERE id = ?";
+            PreparedStatement state = connect.prepareStatement(query);
+            Formation formation = obj.getFormation();
+            java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
-      //      String query = "UPDATE Etudiant SET nom = ?, prenom = ?, date_naissance = ?, formation = ? WHERE login = ?";
-      //      PreparedStatement state = connect.prepareStatement(query);
-      //      Formation formation = obj.getFormation();
+            state.setString(1, obj.getNom());
+            state.setString(2, obj.getPrenom());
+            state.setDate(3,  d2);
+            state.setInt(4, formation.getId());
+            state.setInt(5, obj.generationMpd().hashCode());
+            state.setString(6, obj.getLogin());
+            state.setInt(7, obj.getId());
+            state.executeUpdate();
+        }
 
-      //      state.setString(1, obj.getNom());
-      //      state.setString(2, obj.getPrenom());
-      //      state.setDate(3, (java.sql.Date) obj.getDate_naissance());
-      //      state.setString(4, formation.getIntitule());
-      //      state.setString(5,  login);
-      //      state.executeUpdate();
-      //  }
-
-      //  catch (SQLException e) {
-      //      e.printStackTrace();
-      //  }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

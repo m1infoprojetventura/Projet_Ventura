@@ -67,4 +67,14 @@ public class Controleur implements Icontroleur {
         this.modele.suppprimerEnseignant(enseignant);
     }
 
+    @Override
+    public void modifierEtudiant(Etudiant etudiant) {
+        this.modele.modifierEtudiant(etudiant);
+    }
+
+    @Override
+    public void modifierEnseignant(Enseignant enseignant) {
+        this.modele.modifierEnseignant(enseignant);
+    }
+
 }
