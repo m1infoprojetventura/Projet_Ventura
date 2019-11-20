@@ -6,6 +6,8 @@ import fr.univtln.group_aha.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -13,6 +15,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -235,8 +239,13 @@ public class VueGestionaire extends JFrame {
     private JPanel getListStudent() {
         JTable tableEtudiants = new JTable(tmodelEtudiant);
 
+
         //celui la le panel qui regroupe la JTable et son header
         JPanel panelTableEtudiant = new JPanel();
+        //scrollPane pour le JTable
+        JScrollPane scroll = new JScrollPane();
+        scroll.getViewport().add(tableEtudiants);
+
         // englobe le Jtable avec son header avec les bouton car le premier est un flowLayout , il va mettre tous mettre a coté
         JPanel panelTabEtudiant = new JPanel();
         //JPanel panelTabEnseignant = new JPanel();
@@ -251,7 +260,7 @@ public class VueGestionaire extends JFrame {
 
         panelTableEtudiant .setBounds(0, 0, 575, 320);
         panelTableEtudiant.add(tableEtudiants.getTableHeader());
-        panelTableEtudiant.add(tableEtudiants );
+        panelTableEtudiant.add(scroll );
         panelTabEtudiant.add(panelTableEtudiant);
 
         JButton suppBouton = new JButton("Supprimer");
@@ -259,6 +268,7 @@ public class VueGestionaire extends JFrame {
         panelTabEtudiant.add(suppBouton);
 
         JButton updateBouton = new JButton("Modifier");
+        updateBouton.setEnabled(false);
         updateBouton.setBounds(267, 346, 126, 32);
         panelTabEtudiant.add(updateBouton);
 
@@ -292,13 +302,27 @@ public class VueGestionaire extends JFrame {
             listeStatut.setEnabled(false);
         });
 
+        // ListSlectionModel c'est un modele qui surveille la selectionne sur les listes
+        ListSelectionModel model = tableEtudiants.getSelectionModel();
+        model.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (model.isSelectionEmpty()){
+                    updateBouton.setEnabled(false);
+                }else {
+                    updateBouton.setEnabled(true);
+                }
+            }
+        });
+
+
         return panelTabEtudiant;
 
     }
 
     private JPanel getListTeacher() {
         JTable tableEnseignant = new JTable(tmodelEnseignant);
-
+        JScrollPane scroll = new JScrollPane(tableEnseignant);
         //celui la le panel qui regroupe la JTable et son header
         JPanel panelTableEnseignant = new JPanel();
         // englobe le Jtable avec son header avec les bouton car le premier est un flowLayout , il va mettre tous mettre a coté
@@ -315,7 +339,7 @@ public class VueGestionaire extends JFrame {
 
         panelTableEnseignant.setBounds(0, 0, 575, 320);
         panelTableEnseignant.add(tableEnseignant.getTableHeader());
-        panelTableEnseignant.add(tableEnseignant);
+        panelTableEnseignant.add(scroll);
         panelTabEnseignant.add(panelTableEnseignant);
 
         JButton suppBouton = new JButton("Supprimer");
@@ -323,6 +347,7 @@ public class VueGestionaire extends JFrame {
         panelTabEnseignant.add(suppBouton);
 
         JButton updateBouton = new JButton("Modifier");
+        updateBouton.setEnabled(false);
         updateBouton.setBounds(267, 346, 126, 32);
         panelTabEnseignant.add(updateBouton);
 
@@ -351,6 +376,17 @@ public class VueGestionaire extends JFrame {
             addBoutonFormulaire.setEnabled(false);
             updateBoutonFormulaire.setEnabled(true);
             listeStatut.setEnabled(false);
+        });
+        ListSelectionModel model = tableEnseignant.getSelectionModel();
+        model.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (model.isSelectionEmpty()){
+                    updateBouton.setEnabled(false);
+                }else {
+                    updateBouton.setEnabled(true);
+                }
+            }
         });
 
         return panelTabEnseignant;

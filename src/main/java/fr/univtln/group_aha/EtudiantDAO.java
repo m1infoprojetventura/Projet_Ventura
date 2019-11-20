@@ -150,7 +150,8 @@ public class EtudiantDAO extends DAO<Etudiant> {
             ResultSet result = state.executeQuery();
             FormationDAO formationDAO = new FormationDAO();
 
-            while(result.next()) { Formation formation = formationDAO.find(result.getInt("id_formation"));
+            while(result.next()) {
+                Formation formation = formationDAO.find(result.getInt("id_formation"));
 
                 resultat.add(new Etudiant(result.getInt("id"), result.getString("nom"), result.getString("prenom"),
                         result.getDate("date_naissance"), formation));
