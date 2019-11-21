@@ -1,4 +1,4 @@
-package fr.univtln.aguard074;
+package fr.univtln.aguard074.FenetreAdmin;
 
 
 import fr.univtln.group_aha.*;

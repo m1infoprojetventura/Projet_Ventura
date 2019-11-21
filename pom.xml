@@ -45,7 +45,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainclass>fr.univtln.aguard074.App</mainclass>
+                <mainclass>fr.univtln.aguard074.FenetreAdmin.App</mainclass>
               </manifest>
             </archive>
           </configuration>

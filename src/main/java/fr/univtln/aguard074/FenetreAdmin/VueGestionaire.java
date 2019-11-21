@@ -1,6 +1,8 @@
-package fr.univtln.aguard074;
+package fr.univtln.aguard074.FenetreAdmin;
 
 import com.toedter.calendar.JDateChooser;
+import fr.univtln.aguard074.FenetreAdmin.Icontroleur;
+import fr.univtln.aguard074.FenetreAdmin.Modele;
 import fr.univtln.group_aha.*;
 
 import javax.swing.*;
@@ -9,20 +11,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Arrays;
 
 public class VueGestionaire extends JFrame {
     private Modele modele;

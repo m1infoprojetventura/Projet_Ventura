@@ -1,4 +1,4 @@
-package fr.univtln.aguard074;
+package fr.univtln.aguard074.FenetreAdmin;
 
 public class Personne {
     private String nom;
