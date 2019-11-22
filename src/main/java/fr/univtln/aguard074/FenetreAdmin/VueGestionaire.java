@@ -14,6 +14,8 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +35,10 @@ public class VueGestionaire extends JFrame {
     private JComboBox listeStatut;
     private JComboBox listeFormation;
     JComboBox listeDepartements;
+    //Tmodels
     private TmodelEtudiant tmodelEtudiant;
     private TmodelEnseignant tmodelEnseignant;
+    private TmodelSalle tmodelSalle;
 
     private JPanel jp1 = new JPanel();
     private JPanel jp2 = new JPanel();
@@ -54,6 +58,8 @@ public class VueGestionaire extends JFrame {
     // En attendant de trouver autre chose
     private int identifiantPersonne;
 
+
+
     public VueGestionaire(Icontroleur controleur, Modele modele){
         super();
         this.controleur = controleur;
@@ -70,6 +76,7 @@ public class VueGestionaire extends JFrame {
 
         tmodelEtudiant = new TmodelEtudiant(modele.getEtudiantsList());
         tmodelEnseignant = new TmodelEnseignant(modele.getEnseignantsList());
+        tmodelSalle = new TmodelSalle(modele.getSallesList());
 
 
         ArrayList<Etudiant> etudiants = controleur.getEtudiants();
@@ -77,6 +84,7 @@ public class VueGestionaire extends JFrame {
 
         this.modele.addObserver(tmodelEtudiant);
         this.modele.addObserver(tmodelEnseignant);
+        this.modele.addObserver(tmodelSalle);
 
         this.setContentPane(globalPane());
 
@@ -452,9 +460,39 @@ public class VueGestionaire extends JFrame {
         imprimante_Materiel.setBounds(137, 215, 132, 21);
         panelFormAddSalle.add(imprimante_Materiel);
 
-        JButton button = new JButton("Ajouter");
-        button.setBounds(39, 285, 85, 21);
-        panelFormAddSalle.add(button);
+        JButton addSalleBouton = new JButton("Ajouter");
+        addSalleBouton.setBounds(39, 285, 85, 21);
+        panelFormAddSalle.add(addSalleBouton);
+
+
+
+        addSalleBouton.addActionListener(actionEvent -> {
+            List<Materiel.TypeMateriel> listMateriel = new ArrayList<>();
+            String nom = salleNumero.getText();
+            int capacite = Integer.parseInt(salleNbrPlaces.getText());
+            if (ordi_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.ORDINATEUR);
+            if (imprimante_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.IMPRIMANTE);
+            if (tableau_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.TABLEAU_TACTIL);
+            if (video_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.VIDEO_PROJECTEUR);
+
+            System.out.println(nom);
+            System.out.println(capacite);
+            controleur.creerSalle(nom,capacite,listMateriel);
+
+        });
+
+
+
+
+
+
+
+
+
 
         JButton button_1 = new JButton("Annuler");
         button_1.setBounds(155, 285, 85, 21);
@@ -465,21 +503,62 @@ public class VueGestionaire extends JFrame {
         panelListeSalles.setBackground(Color.WHITE);
         panelListeSalles.setBorder(lineborder);
 
-        panelListeSalles.setBounds(627, 39, 240, 361);
+        panelListeSalles.setBounds(325, 39, 620, 361);
         panel2.add(panelListeSalles);
 
-        JButton button_2 = new JButton("Supprimer");
-        button_2.setBounds(0, 330, 240, 31);
-        panelListeSalles.add(button_2);
+        JButton supSalleBouton = new JButton("Supprimer");
+        supSalleBouton.setBounds(0, 330, 240, 31);
+        panelListeSalles.add(supSalleBouton);
         String[] data = {"salle 101","salle 102","salle 103","salle 104","salle 105","salle 106"};
-        JList listeSalles = new JList(data);
-        JScrollPane scrollPane_1 = new JScrollPane();
-        scrollPane_1.setViewportView(listeSalles);
-        listeSalles.setLayoutOrientation(JList.VERTICAL);
-        scrollPane_1.setBorder(null);
-        scrollPane_1.setBackground(Color.WHITE);
-        scrollPane_1.setBounds(10, 10, 220, 310);
-        panelListeSalles.add(scrollPane_1);
+
+
+
+
+
+
+        JTable tableSalles = new JTable(tmodelSalle);
+        //celui la le panel qui regroupe la JTable et son header
+        JPanel panelTabSalles = new JPanel();
+        //scrollPane pour le JTable
+        JScrollPane scroll = new JScrollPane();
+        scroll.getViewport().add(tableSalles);
+
+
+        //JPanel panelTabEnseignant = new JPanel();
+
+        panelTabSalles.setLayout(new BoxLayout(panelTabSalles, BoxLayout.Y_AXIS));
+
+        panelTabSalles.setBackground(Color.white);
+        panelListeSalles.setBackground(Color.white);
+
+        //panelTabSalles.setLayout(null);
+
+
+        panelTabSalles.setBounds(0, 0, 590, 320);
+        panelTabSalles.add(tableSalles.getTableHeader());
+        panelTabSalles.add(scroll );
+        panelListeSalles.add(panelTabSalles);
+
+
+
+        supSalleBouton.addActionListener(actionEvent -> {
+            int ints[] = tableSalles.getSelectedRows();
+
+            // C'est pourri, à corriger (fait pour la frime) Marche pas
+            //Etudiant etudiants[] = (Etudiant[]) ints.stream().map(tmodelEtudiant::getRowValue).toArray();
+            List<Salle> salles = new ArrayList();
+
+            for(int i: ints) {
+                salles.add(tmodelSalle.getRowValue(i));
+            }
+
+            for(Salle salle: salles) {
+                controleur.suprimerSalle(salle);
+            }
+        });
+
+
+
 
         return panel2;
     }
@@ -681,6 +760,50 @@ public class VueGestionaire extends JFrame {
         public Object getValueAt(int i, int i1) {
             Enseignant enseignant = getRowValue(i);
             Object[] o = enseignant.getAttributs().toArray();
+            return o[i1];
+        }
+    }
+    public class TmodelSalle extends  AbstractTableModel implements Observer {
+        private final String[] entetes = {"id","salle", "capacite", "Matos"};
+        private final List<Salle> salles;
+
+        public TmodelSalle(List<Salle> salles) {
+            this.salles = salles;
+        }
+
+        @Override
+        public void update(Observable observable, Object o) {
+
+            fireTableDataChanged();
+        }
+
+        @Override
+        public String getColumnName(int i) {
+            return entetes[i];
+        }
+
+        @Override
+        public int getColumnCount() {
+            return entetes.length;
+        }
+
+        @Override
+        public int getRowCount() {
+            if(salles != null)
+                return salles.size();
+            else
+                return 0;
+        }
+
+        public Salle getRowValue(int i) {
+            return salles.get(i);
+        }
+
+        @Override
+        public Object getValueAt(int i, int i1) {
+            Salle salle = getRowValue(i);
+            //System.out.println(salle);
+            Object[] o = salle.getAttributs().toArray();
             return o[i1];
         }
     }

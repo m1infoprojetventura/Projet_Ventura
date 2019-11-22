@@ -1,12 +1,10 @@
 package fr.univtln.aguard074.FenetreAdmin;
 
-import fr.univtln.group_aha.Departement;
-import fr.univtln.group_aha.Enseignant;
-import fr.univtln.group_aha.Etudiant;
-import fr.univtln.group_aha.Formation;
+import fr.univtln.group_aha.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Controleur implements Icontroleur {
     //private VueGestionaire vueGestionaire;
@@ -77,4 +75,14 @@ public class Controleur implements Icontroleur {
         this.modele.modifierEnseignant(enseignant);
     }
 
+    @Override
+    public void creerSalle(String nom, int capacite, List<Materiel.TypeMateriel> listMateriel) {
+        this.modele.creerSalle(nom, capacite, listMateriel);
+    }
+
+    @Override
+    public void suprimerSalle(Salle salle) {
+        this.modele.suppprimerSalle(salle);
+
+    }
 }

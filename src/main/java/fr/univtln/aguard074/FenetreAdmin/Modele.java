@@ -19,8 +19,10 @@ public class Modele extends Observable implements Imodele {
     private static EnseignantDAO enseignantDAO = new EnseignantDAO();
     private static FormationDAO formationDAO = new FormationDAO();
     private static DepartementDAO departementDAO = new DepartementDAO();
+    private static SalleDAO salleDAO = new SalleDAO();
     final List<Etudiant> etudiants = new ArrayList<>() ;
     final List<Enseignant> enseignants = new ArrayList<>();
+    final List<Salle> salles = new ArrayList<>();
 
     public Modele() {
         super();
@@ -29,6 +31,9 @@ public class Modele extends Observable implements Imodele {
 
         for(Enseignant enseignant: enseignantDAO.getData())
             enseignants.add(enseignant);
+        for(Salle salle: salleDAO.getData())
+            salles.add(salle);
+
     }
     @Override
     public void creerEtudiant(String nom, String prenom, Date date, Formation formation) {
@@ -97,6 +102,7 @@ public class Modele extends Observable implements Imodele {
         return etudiants;
     }
     public List<Enseignant>getEnseignantsList(){return enseignants;}
+    public List<Salle>getSallesList(){return salles;}
 
     @Override
     public ArrayList<Enseignant> getEnseignants() {
@@ -119,6 +125,25 @@ public class Modele extends Observable implements Imodele {
         enseignantDAO.update(enseignant);
         setChanged();
         notifyObservers();
+    }
+    @Override
+    public void creerSalle(String nom, int capacite, List<Materiel.TypeMateriel> listMateriel){
+
+        Salle salle = new Salle(nom,listMateriel,capacite);
+        salleDAO.create(salle);
+        salles.add(salle);
+        setChanged();
+        notifyObservers();
+
+    }
+
+    @Override
+    public void suppprimerSalle(Salle salle) {
+        salleDAO.delete(salle);
+        salles.remove(salle);
+        setChanged();
+        notifyObservers(salle);
+
     }
 
 

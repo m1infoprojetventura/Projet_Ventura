@@ -1,12 +1,10 @@
 package fr.univtln.aguard074.FenetreAdmin;
 
-import fr.univtln.group_aha.Departement;
-import fr.univtln.group_aha.Enseignant;
-import fr.univtln.group_aha.Etudiant;
-import fr.univtln.group_aha.Formation;
+import fr.univtln.group_aha.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public interface Imodele  {
 
@@ -27,4 +25,8 @@ public interface Imodele  {
 
     void modifierEtudiant(Etudiant etudiant);
     void modifierEnseignant(Enseignant enseignant);
+
+    void creerSalle(String nom, int capacite, List<Materiel.TypeMateriel> listMateriel);
+
+    void suppprimerSalle(Salle salle);
 }
