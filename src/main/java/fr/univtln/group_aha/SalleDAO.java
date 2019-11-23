@@ -111,8 +111,6 @@ public class SalleDAO extends DAO<Salle> {
                 ArrayList<Materiel.TypeMateriel> resultat2 = new ArrayList<>();
 
                 String query2 = "SELECT * FROM Materiel WHERE id_salle = ?";
-
-
                 PreparedStatement state2 = connect.prepareStatement(query2);
 
                 state2.setInt(1,result.getInt("id"));
@@ -125,7 +123,6 @@ public class SalleDAO extends DAO<Salle> {
                     //System.out.println(result.getInt("id")+result2.getString("type"));
 
                 }
-
                 resultat.add(new Salle(result.getString("nom"),resultat2,result.getInt("capacite"),result.getInt("id")
                 ));
             }

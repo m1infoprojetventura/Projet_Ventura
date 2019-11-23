@@ -1,8 +1,6 @@
 package fr.univtln.aguard074.FenetreAdmin;
 
 import com.toedter.calendar.JDateChooser;
-import fr.univtln.aguard074.FenetreAdmin.Icontroleur;
-import fr.univtln.aguard074.FenetreAdmin.Modele;
 import fr.univtln.group_aha.*;
 
 import javax.swing.*;
@@ -14,8 +12,6 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +42,7 @@ public class VueGestionaire extends JFrame {
     private JLabel jl2 = new JLabel("un label pour le panel2");
     JTabbedPane panelOnglet = new JTabbedPane();
 
-    private JTextField salleNumero;
+    private JTextField salleNom;
     private JTextField salleNbrPlaces;
     private JCheckBox video_Materiel;
     private JCheckBox ordi_Materiel;
@@ -57,6 +53,7 @@ public class VueGestionaire extends JFrame {
     private JButton updateBoutonFormulaire;
     // En attendant de trouver autre chose
     private int identifiantPersonne;
+    private int identifiantSalle;
 
 
 
@@ -411,6 +408,12 @@ public class VueGestionaire extends JFrame {
         JPanel panel2 = new JPanel();
         panel2.setLayout(null);
         Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
+        JPanel panelListSalle = getListSalle();
+        panelListSalle.setLayout(null);
+        panelListSalle.setBounds(372, 48, 580, 415);
+        //on rajoute la liste des salles
+
+        panel2.add(panelListSalle);
 
         JPanel panelFormAddSalle = new JPanel();
         panelFormAddSalle.setBorder(lineborder);
@@ -434,10 +437,10 @@ public class VueGestionaire extends JFrame {
         lblS.setBounds(10, 132, 114, 18);
         panelFormAddSalle.add(lblS);
 
-        salleNumero = new JTextField();
-        salleNumero .setColumns(10);
-        salleNumero .setBounds(137, 44, 132, 19);
-        panelFormAddSalle.add(salleNumero );
+        salleNom = new JTextField();
+        salleNom.setColumns(10);
+        salleNom.setBounds(137, 44, 132, 19);
+        panelFormAddSalle.add(salleNom);
 
         salleNbrPlaces= new JTextField();
         salleNbrPlaces.setColumns(10);
@@ -464,11 +467,9 @@ public class VueGestionaire extends JFrame {
         addSalleBouton.setBounds(39, 285, 85, 21);
         panelFormAddSalle.add(addSalleBouton);
 
-
-
         addSalleBouton.addActionListener(actionEvent -> {
             List<Materiel.TypeMateriel> listMateriel = new ArrayList<>();
-            String nom = salleNumero.getText();
+            String nom = salleNom.getText();
             int capacite = Integer.parseInt(salleNbrPlaces.getText());
             if (ordi_Materiel.isSelected())
                 listMateriel.add(Materiel.TypeMateriel.ORDINATEUR);
@@ -484,72 +485,48 @@ public class VueGestionaire extends JFrame {
             controleur.creerSalle(nom,capacite,listMateriel);
 
         });
-
-
-
-
-
-
-
-
-
-
         JButton button_1 = new JButton("Annuler");
         button_1.setBounds(155, 285, 85, 21);
         panelFormAddSalle.add(button_1);
 
-        JPanel panelListeSalles = new JPanel();
-        panelListeSalles.setLayout(null);
-        panelListeSalles.setBackground(Color.WHITE);
-        panelListeSalles.setBorder(lineborder);
+        return panel2;
+    }
 
-        panelListeSalles.setBounds(325, 39, 620, 361);
-        panel2.add(panelListeSalles);
-
-        JButton supSalleBouton = new JButton("Supprimer");
-        supSalleBouton.setBounds(0, 330, 240, 31);
-        panelListeSalles.add(supSalleBouton);
-        String[] data = {"salle 101","salle 102","salle 103","salle 104","salle 105","salle 106"};
-
-
-
-
-
-
+    private JPanel getListSalle() {
         JTable tableSalles = new JTable(tmodelSalle);
+        JScrollPane scroll = new JScrollPane(tableSalles);
         //celui la le panel qui regroupe la JTable et son header
-        JPanel panelTabSalles = new JPanel();
-        //scrollPane pour le JTable
-        JScrollPane scroll = new JScrollPane();
-        scroll.getViewport().add(tableSalles);
+        JPanel panelTableSalles = new JPanel();
+        // englobe le Jtable avec son header avec les bouton car le premier est un flowLayout , il va mettre tous mettre a coté
+        JPanel panelTabSalle = new JPanel();
+
+        panelTableSalles.setLayout(new BoxLayout(panelTableSalles, BoxLayout.Y_AXIS));
+
+        panelTabSalle.setBackground(Color.WHITE);
+        panelTableSalles.setBackground(Color.WHITE);
+
+        panelTabSalle.setLayout(null);
 
 
-        //JPanel panelTabEnseignant = new JPanel();
+        panelTableSalles.setBounds(0, 0, 575, 320);
+        panelTableSalles.add(tableSalles.getTableHeader());
+        panelTableSalles.add(scroll);
+        panelTabSalle.add(panelTableSalles);
 
-        panelTabSalles.setLayout(new BoxLayout(panelTabSalles, BoxLayout.Y_AXIS));
+        JButton suppBouton = new JButton("Supprimer");
+        suppBouton.setBounds(104, 346, 126, 32);
+        panelTabSalle.add(suppBouton);
 
-        panelTabSalles.setBackground(Color.white);
-        panelListeSalles.setBackground(Color.white);
+        JButton updateBouton = new JButton("Modifier");
+        updateBouton.setEnabled(false);
+        updateBouton.setBounds(267, 346, 126, 32);
+        panelTabSalle.add(updateBouton);
 
-        //panelTabSalles.setLayout(null);
-
-
-        panelTabSalles.setBounds(0, 0, 590, 320);
-        panelTabSalles.add(tableSalles.getTableHeader());
-        panelTabSalles.add(scroll );
-        panelListeSalles.add(panelTabSalles);
-
-
-
-        supSalleBouton.addActionListener(actionEvent -> {
+        suppBouton.addActionListener(actionEvent -> {
             int ints[] = tableSalles.getSelectedRows();
-
-            // C'est pourri, à corriger (fait pour la frime) Marche pas
-            //Etudiant etudiants[] = (Etudiant[]) ints.stream().map(tmodelEtudiant::getRowValue).toArray();
             List<Salle> salles = new ArrayList();
-
             for(int i: ints) {
-                salles.add(tmodelSalle.getRowValue(i));
+                salles .add(tmodelSalle.getRowValue(i));
             }
 
             for(Salle salle: salles) {
@@ -557,10 +534,37 @@ public class VueGestionaire extends JFrame {
             }
         });
 
+       updateBouton.addActionListener(actionEvent -> {
+            int i = tableSalles.getSelectedRow();
+            Salle salle = tmodelSalle.getRowValue(i);
+            List<Materiel.TypeMateriel> materiels = salle.getMateriels();
+            identifiantSalle = salle.getId();
+
+            salleNom.setText(salle.getNom());
+            salleNbrPlaces.setText(salle.getCapacite()+"");
+            if (materiels.contains(Materiel.TypeMateriel.ORDINATEUR)) ordi_Materiel.setSelected(true);
+            if (materiels.contains(Materiel.TypeMateriel.VIDEO_PROJECTEUR)) video_Materiel.setSelected(true);
+            if (materiels.contains(Materiel.TypeMateriel.IMPRIMANTE)) imprimante_Materiel.setSelected(true);
+            if (materiels.contains(Materiel.TypeMateriel.TABLEAU_TACTIL)) tableau_Materiel.setSelected(true);
 
 
+           addBoutonFormulaire.setEnabled(false);
+            updateBoutonFormulaire.setEnabled(true);
+            listeStatut.setEnabled(false);
+        });
+        ListSelectionModel model = tableSalles.getSelectionModel();
+        model.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (model.isSelectionEmpty()){
+                    updateBouton.setEnabled(false);
+                }else {
+                    updateBouton.setEnabled(true);
+                }
+            }
+        });
 
-        return panel2;
+        return panelTabSalle;
     }
 
     class AddAction implements ActionListener {
