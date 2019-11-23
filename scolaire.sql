@@ -94,7 +94,7 @@ CREATE TABLE `Enseignant` (
 
 LOCK TABLES `Enseignant` WRITE;
 /*!40000 ALTER TABLE `Enseignant` DISABLE KEYS */;
-INSERT INTO `Enseignant` VALUES (4,'Jack','Jean','2019-11-14',-1499813715,'JJack788',1),(18,'miss','mister','2013-02-15',2134782028,'mmiss-28',1),(20,'peter','parker','2016-11-19',-166493559,'ppeter482',1),(21,'Adrienbg','Guard','2019-01-15',1563063939,'GAdrienbg288',1),(26,'zaad','adazdy','2019-11-09',-721703263,'azaad277',1),(32,'ezrt','azeaze','2022-11-06',-1056429475,'aezrt999',1);
+INSERT INTO `Enseignant` VALUES (4,'Jack','Jean','2019-11-14',-1499813715,'JJack788',1),(18,'miss','mister','2013-02-15',2134782028,'mmiss-28',1),(20,'peter','parker','2016-11-19',-166493559,'ppeter482',1),(21,'Adrienbg','Guard','2019-01-15',1563063939,'GAdrienbg288',1),(26,'zaada','adazdyttt','2019-11-09',1686191058,'azaada518',1),(32,'ezrt','azeaze','2022-11-06',-1056429475,'aezrt772',1);
 /*!40000 ALTER TABLE `Enseignant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +169,7 @@ CREATE TABLE `Materiel` (
   PRIMARY KEY (`id`),
   KEY `fk_id_salle` (`id_salle`),
   CONSTRAINT `fk_id_salle` FOREIGN KEY (`id_salle`) REFERENCES `Salle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +178,7 @@ CREATE TABLE `Materiel` (
 
 LOCK TABLES `Materiel` WRITE;
 /*!40000 ALTER TABLE `Materiel` DISABLE KEYS */;
-INSERT INTO `Materiel` VALUES (1,1,'ORDINATEUR'),(2,1,'VIDEO_PROJECTEUR'),(3,2,'IMPRIMANTE'),(4,2,'VIDEO_PROJECTEUR'),(5,3,'TABLEAU_TACTIL'),(7,5,'ORDINATEUR'),(8,5,'IMPRIMANTE'),(9,5,'TABLEAU_TACTIL'),(10,5,'VIDEO_PROJECTEUR');
+INSERT INTO `Materiel` VALUES (1,1,'ORDINATEUR'),(2,1,'VIDEO_PROJECTEUR'),(3,2,'IMPRIMANTE'),(4,2,'VIDEO_PROJECTEUR'),(5,3,'TABLEAU_TACTIL'),(16,8,'IMPRIMANTE'),(17,8,'TABLEAU_TACTIL'),(18,9,'ORDINATEUR'),(29,11,'VIDEO_PROJECTEUR');
 /*!40000 ALTER TABLE `Materiel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +219,7 @@ CREATE TABLE `Salle` (
   `capacite` tinyint(3) unsigned DEFAULT NULL,
   `nom` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +228,7 @@ CREATE TABLE `Salle` (
 
 LOCK TABLES `Salle` WRITE;
 /*!40000 ALTER TABLE `Salle` DISABLE KEYS */;
-INSERT INTO `Salle` VALUES (1,10,'lebellegou'),(2,42,'salle a bourboul'),(3,1,'bac a asable'),(5,6,'aazdze');
+INSERT INTO `Salle` VALUES (1,10,'lebellegou'),(2,42,'salle a bourboul'),(3,1,'bac a asable'),(8,87,'pekin'),(9,66,'salle vide'),(11,99,'masalleouPas');
 /*!40000 ALTER TABLE `Salle` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -241,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-22 20:37:19
+-- Dump completed on 2019-11-23 18:51:38

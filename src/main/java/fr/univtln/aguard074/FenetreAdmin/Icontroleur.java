@@ -29,4 +29,6 @@ public interface Icontroleur {
     void creerSalle(String nom, int capacite, List<Materiel.TypeMateriel> listMateriel);
 
     void suprimerSalle(Salle salle);
+
+    void modifierSalle(Salle salle);
 }

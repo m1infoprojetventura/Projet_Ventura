@@ -59,4 +59,16 @@ public class Salle {
         return resultat;
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Salle salle = (Salle)o;
+
+        if (id != salle.id) return false;
+
+        return true;
+    }
 }

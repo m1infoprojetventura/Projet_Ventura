@@ -85,4 +85,10 @@ public class Controleur implements Icontroleur {
         this.modele.suppprimerSalle(salle);
 
     }
+
+    @Override
+    public void modifierSalle(Salle salle) {
+        this.modele.modifierSalle(salle);
+
+    }
 }

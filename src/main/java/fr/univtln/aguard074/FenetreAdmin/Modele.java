@@ -146,6 +146,18 @@ public class Modele extends Observable implements Imodele {
 
     }
 
+    @Override
+    public void modifierSalle(Salle salle) {
+        int i = salles.indexOf(salle);
+        System.out.println(salles);
+        System.out.println(salle);
+        salles.set(i, salle);
+        salleDAO.update(salle);
+        setChanged();
+        notifyObservers();
+
+    }
+
 
     // Temporaire le mieus serait de faire des étudiants modèles et des enseignants modèle
 

@@ -29,4 +29,6 @@ public interface Imodele  {
     void creerSalle(String nom, int capacite, List<Materiel.TypeMateriel> listMateriel);
 
     void suppprimerSalle(Salle salle);
+
+    void modifierSalle(Salle salle);
 }

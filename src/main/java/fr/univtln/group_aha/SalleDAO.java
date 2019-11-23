@@ -76,21 +76,46 @@ public class SalleDAO extends DAO<Salle> {
     @Override
     public void update(Salle obj) {
         try {
-            String query = "UPDATE Salle SET nom=?, capacite=? WHERE id=?;";
+            String query = "UPDATE Salle SET capacite=?, nom=? WHERE id=?;";
             PreparedStatement state = connect.prepareStatement(query);
 
             String nom = obj.getNom();
+            int id = obj.getId();
             int capacite = obj.getCapacite();
-            state.setString(1, nom);
-            state.setInt(2,capacite );
+            state.setInt(1, capacite);
+            state.setString(2, nom);
+            state.setInt(3, id);
             state.executeUpdate();
-        }
 
-        catch (SQLException e) {
+
+            query = "DELETE FROM Materiel WHERE id_salle = ?";
+            state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            state.setInt(1, id);
+            state.executeUpdate();
+
+
+            List<String> listemateriel = new ArrayList<>();
+            Iterator it = obj.getMateriels().iterator();
+            while (it.hasNext()) {
+                listemateriel.add(it.next().toString());
+            }
+
+            query = "INSERT INTO Materiel (id_salle,type) VALUES(?, ?)";
+            state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            state.setInt(1, id);
+            for (String item : listemateriel) {
+                state.setString(2, item);
+                state.executeUpdate();
+
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
+
+
+
 
     @Override
     public Salle find(int id) {

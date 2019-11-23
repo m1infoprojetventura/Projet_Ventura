@@ -1,8 +1,6 @@
 package fr.univtln.aguard074.FenetreAdmin;
 
 import com.toedter.calendar.JDateChooser;
-import fr.univtln.aguard074.FenetreAdmin.Icontroleur;
-import fr.univtln.aguard074.FenetreAdmin.Modele;
 import fr.univtln.group_aha.*;
 
 import javax.swing.*;
@@ -14,8 +12,6 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +53,7 @@ public class VueGestionaire extends JFrame {
     private JButton updateBoutonFormulaire;
     // En attendant de trouver autre chose
     private int identifiantPersonne;
+    private int identifiantSalle;
 
 
 
@@ -461,8 +458,13 @@ public class VueGestionaire extends JFrame {
         panelFormAddSalle.add(imprimante_Materiel);
 
         JButton addSalleBouton = new JButton("Ajouter");
-        addSalleBouton.setBounds(39, 285, 85, 21);
+        addSalleBouton.setBounds(3, 285, 85, 21);
         panelFormAddSalle.add(addSalleBouton);
+
+        JButton modificationSalleBouton = new JButton("modifier");
+        modificationSalleBouton.setBounds(190, 285, 85, 21);
+        modificationSalleBouton.setEnabled(false);
+        panelFormAddSalle.add(modificationSalleBouton);
 
 
 
@@ -490,12 +492,8 @@ public class VueGestionaire extends JFrame {
 
 
 
-
-
-
-
         JButton button_1 = new JButton("Annuler");
-        button_1.setBounds(155, 285, 85, 21);
+        button_1.setBounds(95, 285, 85, 21);
         panelFormAddSalle.add(button_1);
 
         JPanel panelListeSalles = new JPanel();
@@ -509,7 +507,11 @@ public class VueGestionaire extends JFrame {
         JButton supSalleBouton = new JButton("Supprimer");
         supSalleBouton.setBounds(0, 330, 240, 31);
         panelListeSalles.add(supSalleBouton);
-        String[] data = {"salle 101","salle 102","salle 103","salle 104","salle 105","salle 106"};
+
+        JButton modifSalleBouton = new JButton("Modifier");
+        modifSalleBouton.setBounds(330, 330, 240, 31);
+        panelListeSalles.add(modifSalleBouton);
+
 
 
 
@@ -524,17 +526,17 @@ public class VueGestionaire extends JFrame {
         scroll.getViewport().add(tableSalles);
 
 
-        //JPanel panelTabEnseignant = new JPanel();
+
 
         panelTabSalles.setLayout(new BoxLayout(panelTabSalles, BoxLayout.Y_AXIS));
 
         panelTabSalles.setBackground(Color.white);
         panelListeSalles.setBackground(Color.white);
 
-        //panelTabSalles.setLayout(null);
 
 
-        panelTabSalles.setBounds(0, 0, 590, 320);
+
+        panelTabSalles.setBounds(0, 0, 600, 320);
         panelTabSalles.add(tableSalles.getTableHeader());
         panelTabSalles.add(scroll );
         panelListeSalles.add(panelTabSalles);
@@ -543,21 +545,65 @@ public class VueGestionaire extends JFrame {
 
         supSalleBouton.addActionListener(actionEvent -> {
             int ints[] = tableSalles.getSelectedRows();
-
-            // C'est pourri, à corriger (fait pour la frime) Marche pas
-            //Etudiant etudiants[] = (Etudiant[]) ints.stream().map(tmodelEtudiant::getRowValue).toArray();
             List<Salle> salles = new ArrayList();
-
             for(int i: ints) {
                 salles.add(tmodelSalle.getRowValue(i));
             }
-
             for(Salle salle: salles) {
                 controleur.suprimerSalle(salle);
             }
         });
 
 
+        //BOUTON EN DESSOUS DE LA TABLE
+        modifSalleBouton.addActionListener(actionEvent -> {
+            int i = tableSalles.getSelectedRow();
+            Salle salle = tmodelSalle.getRowValue(i);
+            for (Materiel.TypeMateriel mat: salle.getMateriels()) {
+                if (mat.equals(Materiel.TypeMateriel.IMPRIMANTE)) {imprimante_Materiel.setSelected(true); }
+                if (mat.equals(Materiel.TypeMateriel.ORDINATEUR)) {ordi_Materiel.setSelected(true); }
+                if (mat.equals(Materiel.TypeMateriel.TABLEAU_TACTIL)) {tableau_Materiel.setSelected(true); }
+                if (mat.equals(Materiel.TypeMateriel.VIDEO_PROJECTEUR)) {video_Materiel.setSelected(true); }
+            }
+
+            identifiantSalle = salle.getId();
+            salleNumero.setText(salle.getNom());
+            salleNbrPlaces.setText(Integer.toString(salle.getCapacite()));
+            addSalleBouton.setEnabled(false);
+            modificationSalleBouton.setEnabled(true);
+        });
+
+        modificationSalleBouton.addActionListener(actionEvent -> {
+            String nom = salleNumero.getText();
+            String capacite = salleNbrPlaces.getText();
+            List<Materiel.TypeMateriel> listMateriel = new ArrayList<>();
+            if (ordi_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.ORDINATEUR);
+            if (imprimante_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.IMPRIMANTE);
+            if (tableau_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.TABLEAU_TACTIL);
+            if (video_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.VIDEO_PROJECTEUR);
+
+            salleNumero.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            salleNbrPlaces.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+            if (nom.equals("")) {
+                salleNumero.setBorder(BorderFactory.createLineBorder(Color.RED));
+            }
+            if (capacite.equals("")) {
+                salleNbrPlaces.setBorder(BorderFactory.createLineBorder(Color.RED));
+            }
+            if (!(capacite.equals("") || nom.equals(""))) {
+                Salle salle = new Salle(nom,listMateriel,Integer.parseInt(capacite),identifiantSalle);
+                controleur.modifierSalle(salle);
+            }
+            modificationSalleBouton.setEnabled(false);
+
+            addSalleBouton.setEnabled(true);
+
+        });
 
 
         return panel2;
@@ -796,7 +842,9 @@ public class VueGestionaire extends JFrame {
         }
 
         public Salle getRowValue(int i) {
-            return salles.get(i);
+            Salle salle = salles.get(i);
+
+            return salle;
         }
 
         @Override
