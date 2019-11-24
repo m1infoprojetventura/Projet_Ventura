@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.regex.Pattern;
 
 public class VueGestionaire extends JFrame {
     private Modele modele;
@@ -170,7 +171,7 @@ public class VueGestionaire extends JFrame {
         panelFormAddPersonne.add(personneNom);
 
         JLabel label_1 = new JLabel("Prénom : ");
-        label_1.setBounds(10, 58, 57, 13);
+        label_1.setBounds(10, 58, 70, 13);
         panelFormAddPersonne.add(label_1);
         personnePrenom = new JTextField();
         personnePrenom.setColumns(10);
@@ -200,7 +201,7 @@ public class VueGestionaire extends JFrame {
         panelFormAddPersonne.add(personneDateNaissance);
 
         JLabel label_5 = new JLabel("Departement :");
-        label_5.setBounds(10, 185, 86, 13);
+        label_5.setBounds(10, 185, 110, 13);
         panelFormAddPersonne.add(label_5);
         listeDepartements = new JComboBox(controleur.getDepartements().toArray());
         listeDepartements.setBounds(120, 181, 132, 21);
@@ -264,14 +265,25 @@ public class VueGestionaire extends JFrame {
         panelTableEtudiant.add(scroll );
         panelTabEtudiant.add(panelTableEtudiant);
 
+        JPanel panelBouton = new JPanel();
+        panelBouton.setBounds(160, 335, 260, 32);
+        panelBouton.setBackground(Color.WHITE);
+
         JButton suppBouton = new JButton("Supprimer");
-        suppBouton.setBounds(104, 346, 126, 32);
-        panelTabEtudiant.add(suppBouton);
+        // suppBouton.setBounds(104, 346, 126, 32);
+        // On peut redimensionner la taille des bouton avec
+        // panelBouton.setSize(new Dimension());
+
+        panelBouton.add(suppBouton);
+
+        panelBouton.add(Box.createHorizontalStrut(10));
 
         JButton updateBouton = new JButton("Modifier");
         updateBouton.setEnabled(false);
-        updateBouton.setBounds(267, 346, 126, 32);
-        panelTabEtudiant.add(updateBouton);
+        // updateBouton.setBounds(267, 346, 126, 32);
+        panelBouton.add(updateBouton);
+
+        panelTabEtudiant.add(panelBouton);
 
         suppBouton.addActionListener(actionEvent -> {
             int ints[] = tableEtudiants.getSelectedRows();
@@ -305,14 +317,11 @@ public class VueGestionaire extends JFrame {
 
         // ListSlectionModel c'est un modele qui surveille la selectionne sur les listes
         ListSelectionModel model = tableEtudiants.getSelectionModel();
-        model.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (model.isSelectionEmpty()){
-                    updateBouton.setEnabled(false);
-                }else {
-                    updateBouton.setEnabled(true);
-                }
+        model.addListSelectionListener(e -> {
+            if (model.isSelectionEmpty()){
+                updateBouton.setEnabled(false);
+            }else {
+                updateBouton.setEnabled(true);
             }
         });
 
@@ -343,14 +352,25 @@ public class VueGestionaire extends JFrame {
         panelTableEnseignant.add(scroll);
         panelTabEnseignant.add(panelTableEnseignant);
 
+        JPanel panelBouton = new JPanel();
+        panelBouton.setBounds(160, 335, 260, 32);
+        panelBouton.setBackground(Color.WHITE);
+
         JButton suppBouton = new JButton("Supprimer");
-        suppBouton.setBounds(104, 346, 126, 32);
-        panelTabEnseignant.add(suppBouton);
+        // suppBouton.setBounds(104, 346, 126, 32);
+        // On peut redimensionner la taille des bouton avec
+        // panelBouton.setSize(new Dimension());
+
+        panelBouton.add(suppBouton);
+
+        panelBouton.add(Box.createHorizontalStrut(10));
 
         JButton updateBouton = new JButton("Modifier");
         updateBouton.setEnabled(false);
-        updateBouton.setBounds(267, 346, 126, 32);
-        panelTabEnseignant.add(updateBouton);
+        // updateBouton.setBounds(267, 346, 126, 32);
+        panelBouton.add(updateBouton);
+
+        panelTabEnseignant.add(panelBouton);
 
         suppBouton.addActionListener(actionEvent -> {
             int ints[] = tableEnseignant.getSelectedRows();
@@ -416,14 +436,14 @@ public class VueGestionaire extends JFrame {
         panel2.add(panelFormAddSalle);
         panelFormAddSalle.setLayout(null);
 
-        JLabel lblNum = new JLabel("Num :");
+        JLabel lblNum = new JLabel("Nom de la salle:");
         lblNum.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lblNum.setBounds(10, 42, 93, 18);
+        lblNum.setBounds(10, 42, 120, 19);
         panelFormAddSalle.add(lblNum);
 
-        JLabel lblNbrDePlaces = new JLabel("nbr de places :");
+        JLabel lblNbrDePlaces = new JLabel("Capacité de la salle:");
         lblNbrDePlaces.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lblNbrDePlaces.setBounds(10, 87, 114, 18);
+        lblNbrDePlaces.setBounds(10, 87, 120, 19);
         panelFormAddSalle.add(lblNbrDePlaces);
 
         JLabel lblS = new JLabel("Mat\u00E9riels :");
@@ -432,8 +452,8 @@ public class VueGestionaire extends JFrame {
         panelFormAddSalle.add(lblS);
 
         salleNumero = new JTextField();
-        salleNumero .setColumns(10);
-        salleNumero .setBounds(137, 44, 132, 19);
+        salleNumero.setColumns(10);
+        salleNumero.setBounds(137, 44, 132, 19);
         panelFormAddSalle.add(salleNumero );
 
         salleNbrPlaces= new JTextField();
@@ -441,60 +461,58 @@ public class VueGestionaire extends JFrame {
         salleNbrPlaces.setBounds(137, 89, 132, 19);
         panelFormAddSalle.add(salleNbrPlaces);
 
-        video_Materiel = new JCheckBox("video projecteur");
-        video_Materiel.setBounds(137, 145, 132, 21);
+        JLabel messageNumero = new JLabel("[ex: U110]");
+        messageNumero.setBounds(137, 60, 132, 19);
+        messageNumero.setForeground(Color.GRAY);
+        messageNumero.setFont(new Font("Dialog", Font.PLAIN, 11));
+        panelFormAddSalle.add(messageNumero);
+
+        JLabel messageNbrPlaces = new JLabel("Infèrieur à 128");
+        messageNbrPlaces.setBounds(137, 105, 132, 19);
+        messageNbrPlaces.setForeground(Color.GRAY);
+        messageNbrPlaces.setFont(new Font("Dialog", Font.PLAIN, 11));
+
+        panelFormAddSalle.add(messageNbrPlaces);
+
+        video_Materiel = new JCheckBox("Video projecteur");
+        video_Materiel.setBounds(10, 150, 150, 21);
+        video_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(video_Materiel);
 
-        ordi_Materiel = new JCheckBox("ordinateurs");
-        ordi_Materiel.setBounds(137, 169, 132, 21);
+        ordi_Materiel = new JCheckBox("Ordinateur");
+        ordi_Materiel.setBounds(10, 174, 150, 21);
+        ordi_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(ordi_Materiel);
 
         tableau_Materiel = new JCheckBox("Tableau tactile");
-        tableau_Materiel.setBounds(137, 192, 132, 21);
+        tableau_Materiel.setBounds(10, 198, 150, 21);
+        tableau_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(tableau_Materiel);
 
-        imprimante_Materiel = new JCheckBox("imprimante");
-        imprimante_Materiel.setBounds(137, 215, 132, 21);
+        imprimante_Materiel = new JCheckBox("Imprimante");
+        imprimante_Materiel.setBounds(10, 222, 150, 21);
+        imprimante_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(imprimante_Materiel);
 
+        JPanel panelBouton = new JPanel();
+        panelBouton.setLayout(new BoxLayout(panelBouton, BoxLayout.X_AXIS));
+        panelBouton.setBounds(3, 285, 270, 21);
+        panelBouton.setBackground(Color.WHITE);
+
         JButton addSalleBouton = new JButton("Ajouter");
-        addSalleBouton.setBounds(3, 285, 85, 21);
-        panelFormAddSalle.add(addSalleBouton);
-
-        JButton modificationSalleBouton = new JButton("modifier");
-        modificationSalleBouton.setBounds(190, 285, 85, 21);
-        modificationSalleBouton.setEnabled(false);
-        panelFormAddSalle.add(modificationSalleBouton);
-
-
-
-        addSalleBouton.addActionListener(actionEvent -> {
-            List<Materiel.TypeMateriel> listMateriel = new ArrayList<>();
-            String nom = salleNumero.getText();
-            int capacite = Integer.parseInt(salleNbrPlaces.getText());
-            if (ordi_Materiel.isSelected())
-                listMateriel.add(Materiel.TypeMateriel.ORDINATEUR);
-            if (imprimante_Materiel.isSelected())
-                listMateriel.add(Materiel.TypeMateriel.IMPRIMANTE);
-            if (tableau_Materiel.isSelected())
-                listMateriel.add(Materiel.TypeMateriel.TABLEAU_TACTIL);
-            if (video_Materiel.isSelected())
-                listMateriel.add(Materiel.TypeMateriel.VIDEO_PROJECTEUR);
-
-            System.out.println(nom);
-            System.out.println(capacite);
-            controleur.creerSalle(nom,capacite,listMateriel);
-
-        });
-
-
-
-
-
+        // addSalleBouton.setBounds(3, 285, 85, 21);
+        panelBouton.add(addSalleBouton);
 
         JButton button_1 = new JButton("Annuler");
-        button_1.setBounds(95, 285, 85, 21);
-        panelFormAddSalle.add(button_1);
+        // button_1.setBounds(95, 285, 85, 21);
+        panelBouton.add(button_1);
+
+        JButton modificationSalleBouton = new JButton("Modifier");
+        // modificationSalleBouton.setBounds(190, 285, 85, 21);
+        modificationSalleBouton.setEnabled(false);
+        panelBouton.add(modificationSalleBouton);
+
+        panelFormAddSalle.add(panelBouton);
 
         JPanel panelListeSalles = new JPanel();
         panelListeSalles.setLayout(null);
@@ -504,19 +522,23 @@ public class VueGestionaire extends JFrame {
         panelListeSalles.setBounds(325, 39, 620, 361);
         panel2.add(panelListeSalles);
 
+        JPanel panelBouton_1 = new JPanel();
+        // panelBouton_1.setLayout(new BoxLayout(panelBouton_1, BoxLayout.X_AXIS));
+        panelBouton_1.setBounds(160, 320, 300, 30);
+        panelBouton_1.setBackground(Color.WHITE);
+
         JButton supSalleBouton = new JButton("Supprimer");
-        supSalleBouton.setBounds(0, 330, 240, 31);
-        panelListeSalles.add(supSalleBouton);
+        // supSalleBouton.setBounds(20, 330, 240, 31);
+        panelBouton_1.add(supSalleBouton);
+
+        panelBouton_1.add(Box.createHorizontalStrut(10));
 
         JButton modifSalleBouton = new JButton("Modifier");
-        modifSalleBouton.setBounds(330, 330, 240, 31);
-        panelListeSalles.add(modifSalleBouton);
+        modifSalleBouton.setEnabled(false);
+        // modifSalleBouton.setBounds(330, 350, 240, 31);
+        panelBouton_1.add(modifSalleBouton);
 
-
-
-
-
-
+        panelListeSalles.add(panelBouton_1);
 
         JTable tableSalles = new JTable(tmodelSalle);
         //celui la le panel qui regroupe la JTable et son header
@@ -526,22 +548,69 @@ public class VueGestionaire extends JFrame {
         scroll.getViewport().add(tableSalles);
 
 
-
-
         panelTabSalles.setLayout(new BoxLayout(panelTabSalles, BoxLayout.Y_AXIS));
 
         panelTabSalles.setBackground(Color.white);
         panelListeSalles.setBackground(Color.white);
 
-
-
-
-        panelTabSalles.setBounds(0, 0, 600, 320);
+        panelTabSalles.setBounds(1, 1, 618, 320);
         panelTabSalles.add(tableSalles.getTableHeader());
         panelTabSalles.add(scroll );
         panelListeSalles.add(panelTabSalles);
 
 
+        ListSelectionModel model = tableSalles.getSelectionModel();
+        model.addListSelectionListener(e -> {
+            if (model.isSelectionEmpty()){
+                modifSalleBouton.setEnabled(false);
+            }else {
+                modifSalleBouton.setEnabled(true);
+            }
+        });
+
+        addSalleBouton.addActionListener(actionEvent -> {
+            List<Materiel.TypeMateriel> listMateriel = new ArrayList<>();
+            String nom = salleNumero.getText();
+            String capacite = salleNbrPlaces.getText();
+            boolean valider = true;
+
+            if (ordi_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.ORDINATEUR);
+            if (imprimante_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.IMPRIMANTE);
+            if (tableau_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.TABLEAU_TACTIL);
+            if (video_Materiel.isSelected())
+                listMateriel.add(Materiel.TypeMateriel.VIDEO_PROJECTEUR);
+
+            salleNumero.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            salleNbrPlaces.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+            messageNumero.setText("[ex: U110]");
+            messageNumero.setForeground(Color.GRAY);
+
+            messageNbrPlaces.setText("Infèrieur à 128");
+            messageNbrPlaces.setForeground(Color.GRAY);
+
+            if(!Pattern.matches("[A-Z][0-9]{3}", nom)) {
+                salleNumero.setBorder(BorderFactory.createLineBorder(Color.RED));
+                messageNumero.setText("Mauvais format");
+                messageNumero.setForeground(Color.RED);
+                valider = false;
+            }
+
+            if(!Pattern.matches("[0-9]+", capacite)) {
+                salleNbrPlaces.setBorder(BorderFactory.createLineBorder(Color.RED));
+
+                messageNbrPlaces.setText("Mauvais format");
+                messageNbrPlaces.setForeground(Color.RED);
+                valider = false;
+            }
+
+            if(valider)
+                controleur.creerSalle(nom,Integer.parseInt(capacite),listMateriel);
+
+        });
 
         supSalleBouton.addActionListener(actionEvent -> {
             int ints[] = tableSalles.getSelectedRows();
@@ -553,7 +622,6 @@ public class VueGestionaire extends JFrame {
                 controleur.suprimerSalle(salle);
             }
         });
-
 
         //BOUTON EN DESSOUS DE LA TABLE
         modifSalleBouton.addActionListener(actionEvent -> {
@@ -605,7 +673,6 @@ public class VueGestionaire extends JFrame {
 
         });
 
-
         return panel2;
     }
 
@@ -614,19 +681,23 @@ public class VueGestionaire extends JFrame {
             //controleur.afficherPersonne(new Personne("michel","ll",45, Personne.Statut.ETUDIANT));
             String nom = personneNom.getText();
             String prenom = personnePrenom.getText();
+            String mot = "[a-zA-Zéçàèù]+";
+            boolean valider = true;
 
             personneNom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             personnePrenom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-            if (nom.equals("")) {
+            if (!Pattern.matches(mot, nom)) {
                 personneNom.setBorder(BorderFactory.createLineBorder(Color.RED));
+                valider = false;
             }
 
-            if (prenom.equals("")) {
+            if (!Pattern.matches(mot, prenom)) {
                 personnePrenom.setBorder(BorderFactory.createLineBorder(Color.RED));
+                valider = false;
             }
 
-            if (!(prenom.equals("") || nom.equals(""))) {
+            if (valider) {
                 Date dateNaissance = personneDateNaissance.getDate();
                 Formation formation = (Formation) listeFormation.getSelectedItem();
                 Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();
@@ -639,11 +710,7 @@ public class VueGestionaire extends JFrame {
                         controleur.creerEtudiant(nom, prenom, dateNaissance, formation);
                         break;
                     case 1:
-                        try {
-                            controleur.creerEnseignant(nom, prenom, dateNaissance, departementEnseignant);
-                        } catch (NumberFormatException ez) {
-                            System.out.println("Format Nombre invalide( rentrer un nombre)");
-                        }
+                        controleur.creerEnseignant(nom, prenom, dateNaissance, departementEnseignant);
                         break;
                     case 2:
                 }
@@ -662,19 +729,23 @@ public class VueGestionaire extends JFrame {
             //controleur.afficherPersonne(new Personne("michel","ll",45, Personne.Statut.ETUDIANT));
             String nom = personneNom.getText();
             String prenom = personnePrenom.getText();
+            String mot = "[a-zA-Zéçàèù]+";
+            boolean valider = true;
 
             personneNom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             personnePrenom.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-            if (nom.equals("")) {
+            if (!Pattern.matches(mot, nom)) {
                 personneNom.setBorder(BorderFactory.createLineBorder(Color.RED));
+                valider = false;
             }
 
-            if (prenom.equals("")) {
+            if (!Pattern.matches(mot, prenom)) {
                 personnePrenom.setBorder(BorderFactory.createLineBorder(Color.RED));
+                valider = false;
             }
 
-            if (!(prenom.equals("") || nom.equals(""))) {
+            if (valider) {
                 Date dateNaissance = personneDateNaissance.getDate();
                 Formation formation = (Formation) listeFormation.getSelectedItem();
                 Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();
@@ -683,19 +754,15 @@ public class VueGestionaire extends JFrame {
                 int RecupBox = listeStatut.getSelectedIndex();
                 switch (RecupBox) {
                     case 0:
-                        id = 0;
                         Etudiant etudiant = new Etudiant(identifiantPersonne, nom, prenom, dateNaissance, formation);
                         controleur.modifierEtudiant(etudiant);
                         break;
                     case 1:
-                        try {
-                            Enseignant enseignant = new Enseignant(identifiantPersonne, nom, prenom,
-                                                                    dateNaissance, departementEnseignant);
+                        Enseignant enseignant = new Enseignant(identifiantPersonne, nom, prenom,
+                                dateNaissance, departementEnseignant);
 
-                            controleur.modifierEnseignant(enseignant);
-                        } catch (NumberFormatException ez) {
-                            System.out.println("Format Nombre invalide( rentrer un nombre)");
-                        }
+                        controleur.modifierEnseignant(enseignant);
+                        System.out.println("Format Nombre invalide( rentrer un nombre)");
                         break;
                     case 2:
                 }
@@ -763,11 +830,10 @@ public class VueGestionaire extends JFrame {
             Object[] o = etudiant.getAttributs().toArray();
             return o[i1];
         }
-
-}
+    }
 
     public class TmodelEnseignant extends  AbstractTableModel implements Observer {
-        private final String[] entetes = {"id", "nom", "prenom", "date naissance", "login", "departement"};
+        private final String[] entetes = {"ID", "Nom", "Prénom", "Date de Naissance", "Login", "Département"};
         private final List<Enseignant> enseignants;
 
         public TmodelEnseignant(List<Enseignant> enseignants) {
@@ -810,7 +876,7 @@ public class VueGestionaire extends JFrame {
         }
     }
     public class TmodelSalle extends  AbstractTableModel implements Observer {
-        private final String[] entetes = {"id","salle", "capacite", "Matos"};
+        private final String[] entetes = {"ID","Salle", "Capacite", "Matériels"};
         private final List<Salle> salles;
 
         public TmodelSalle(List<Salle> salles) {
@@ -819,7 +885,6 @@ public class VueGestionaire extends JFrame {
 
         @Override
         public void update(Observable observable, Object o) {
-
             fireTableDataChanged();
         }
 
