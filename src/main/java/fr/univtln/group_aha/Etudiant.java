@@ -10,8 +10,7 @@ public class Etudiant extends Personne {
 
     /**
      * @see Personne#Personne()
-     */
-    public Etudiant() {
+     */ public Etudiant() {
         super();
         formation = new Formation();
     }
@@ -33,6 +32,10 @@ public class Etudiant extends Personne {
 
     public Formation getFormation() {
         return formation;
+    }
+
+    public void setFormation(Formation formation) {
+        this.formation = formation;
     }
 
     public List getAttributs(){

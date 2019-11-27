@@ -8,28 +8,35 @@ public class EnseignantDAO extends DAO<Enseignant> {
     @Override
     public void create(Enseignant obj) {
         try {
-            String query = "INSERT INTO Enseignant (nom, prenom,  date_naissance, mdp, login, id_departement) VALUES(?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Enseignant (nom, prenom, date_naissance, id_departement) VALUES(?, ?, ?, ?)";
             Departement departement = obj.getDepartement();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
 
             PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            String motdepasse = obj.generationMpd();
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
             state.setString(1, obj.getNom());
             state.setString(2, obj.getPrenom());
             state.setDate(3, d2);
-            state.setInt(4, motdepasse.hashCode());
-            state.setString(5, obj.getLogin());
-            state.setInt(6, departement.getId());
+            state.setInt(4, departement.getId());
             state.executeUpdate();
             // Obtenir la clé autogénéré par INSERT
             ResultSet key = state.getGeneratedKeys();
             if(key.first())
                 obj.setId(key.getInt(1));
 
-            System.out.println(obj.getId());
+            // J'ai besoin de l'id pour la génération du login donc voila pourquoi cela a été fait séparament.
+            query = "UPDATE Enseignant SET login=?, mdp=? WHERE id=?";
+            state = connect.prepareStatement(query);
+            obj.generationLogin();
+            obj.generationMdp();
+
+            state.setString(1, obj.getLogin());
+            state.setInt(2, obj.getMdp());
+            state.setInt(3, obj.getId());
+
+            state.executeUpdate();
         }
 
 
@@ -59,7 +66,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
     public void update(Enseignant obj) {
         try {
             String query = "UPDATE Enseignant SET nom=?, prenom=?, date_naissance=?," +
-                            "id_departement=?, login=?, mdp=? WHERE id=?;";
+                            "id_departement=?, mdp=? WHERE id=?;";
             PreparedStatement state = connect.prepareStatement(query);
             Departement departement = obj.getDepartement();
 
@@ -67,11 +74,9 @@ public class EnseignantDAO extends DAO<Enseignant> {
             state.setString(1, obj.getNom());
             state.setString(2, obj.getPrenom());
             state.setDate(3,  d2);
-
             state.setInt(4, departement.getId());
-            state.setString(5, obj.generationLogin());
-            state.setInt(6, obj.generationMpd().hashCode());
-            state.setInt(7, obj.getId());
+            state.setInt(5, obj.getMdp());
+            state.setInt(6, obj.getId());
 
             state.executeUpdate();
         }
@@ -131,9 +136,12 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
             while(result.next()) {
                 Departement departement = departementDAO.find(result.getInt("id_departement"));
+                Enseignant enseignant =new Enseignant(result.getInt("id"), result.getString("nom"),
+                        result.getString("prenom"), result.getDate("date_naissance"), departement);
 
-                resultat.add(new Enseignant(result.getInt("id"), result.getString("nom"), result.getString("prenom"),
-                                            result.getDate("date_naissance"), departement));
+                enseignant.setLogin(result.getString("login"));
+                resultat.add(enseignant);
+
             }
 
         } catch (SQLException e) {

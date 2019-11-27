@@ -44,7 +44,6 @@ public class SalleDAO extends DAO<Salle> {
 
             }
 
-            System.out.println(obj.getId());
         }
 
         catch (SQLException e) {

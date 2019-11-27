@@ -26,6 +26,10 @@ public class Enseignant extends Personne {
         return departement;
     }
 
+    public void setDepartement(Departement departement) {
+        this.departement = departement;
+    }
+
     public List getAttributs() {
         List resultat = super.getAttributs();
         resultat.add(this.departement);

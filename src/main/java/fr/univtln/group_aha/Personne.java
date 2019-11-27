@@ -14,7 +14,10 @@ public abstract class Personne {
     private String nom;
     private String prenom;
     private Date date_naissance;
-    private String login;
+    // Hacher du mot de passe (transient sert à rien mais ça indique que c'est une
+    // information générée).
+    private transient String mdp;
+    private transient String login;
 
     public Personne() {
         id = 0;
@@ -35,22 +38,23 @@ public abstract class Personne {
         this.nom = nom;
         this.prenom = prenom;
         this.date_naissance = date_naissance;
-        this.login = generationLogin();
+        generationMdp();
     }
 
     public Personne( String nom, String prenom, Date date_naissance) {
         this.nom = nom;
         this.prenom = prenom;
         this.date_naissance = date_naissance;
-        this.login = generationLogin();
+        generationMdp();
     }
 
-    public String generationLogin() {
+
+    public void generationLogin() {
         java.util.Date date = date_naissance;
-        int x = date.hashCode() % 1000;
-        return prenom.substring(0, 1) + nom + x;
-    }
 
+        int x = Math.abs((date.hashCode() + 31*id) % 1000);
+        this.login = prenom.substring(0, 1) + nom + x;
+    }
 
     public String getNom() {
         return nom;
@@ -69,11 +73,12 @@ public abstract class Personne {
         return date_naissance;
     }
 
-    public String generationMpd() {
+    public void generationMdp() {
         Calendar calender = new GregorianCalendar();
         int annee  = calender.get(Calendar.YEAR);
-        return getNom() + getPrenom() + annee;
+        this.mdp = getNom() + getPrenom() + annee;
     }
+
 
     public String getLogin() {
         return login;
@@ -110,5 +115,26 @@ public abstract class Personne {
         if (id != personne.id) return false;
 
         return true;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public void setDate_naissance(Date date_naissance) {
+        this.date_naissance = date_naissance;
+    }
+
+
+    public int getMdp() {
+        return mdp.hashCode();
     }
 }

@@ -77,9 +77,6 @@ public class VueGestionaire extends JFrame {
         tmodelSalle = new TmodelSalle(modele.getSallesList());
 
 
-        ArrayList<Etudiant> etudiants = controleur.getEtudiants();
-        ArrayList<Enseignant> enseignants = controleur.getEnseignants();
-
         this.modele.addObserver(tmodelEtudiant);
         this.modele.addObserver(tmodelEnseignant);
         this.modele.addObserver(tmodelSalle);
@@ -762,7 +759,6 @@ public class VueGestionaire extends JFrame {
                                 dateNaissance, departementEnseignant);
 
                         controleur.modifierEnseignant(enseignant);
-                        System.out.println("Format Nombre invalide( rentrer un nombre)");
                         break;
                     case 2:
                 }

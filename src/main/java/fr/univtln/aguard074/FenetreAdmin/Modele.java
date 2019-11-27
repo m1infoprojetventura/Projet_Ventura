@@ -37,12 +37,8 @@ public class Modele extends Observable implements Imodele {
     }
     @Override
     public void creerEtudiant(String nom, String prenom, Date date, Formation formation) {
-
-        // Le hashcode est une solution temporaire pour créer un identifinat
-        // Le constructeur parcours
         Etudiant etudiant = new Etudiant(nom, prenom, date, formation);
         etudiantDAO.create(etudiant);
-
         etudiants.add(etudiant);
         setChanged();
         notifyObservers(etudiant);
@@ -112,8 +108,13 @@ public class Modele extends Observable implements Imodele {
     @Override
     public void modifierEtudiant(Etudiant etudiant) {
         int i = etudiants.indexOf(etudiant);
-        etudiants.set(i, etudiant);
-        etudiantDAO.update(etudiant);
+        Etudiant etudiant1 = etudiants.get(i);
+        etudiant1.setNom(etudiant.getNom());
+        etudiant1.setPrenom(etudiant.getPrenom());
+        etudiant1.setDate_naissance(etudiant.getDate_naissance());
+        etudiant1.setFormation(etudiant.getFormation());
+        etudiant1.generationMdp();
+        etudiantDAO.update(etudiant1);
         setChanged();
         notifyObservers();
     }
@@ -121,14 +122,20 @@ public class Modele extends Observable implements Imodele {
     @Override
     public void modifierEnseignant(Enseignant enseignant) {
         int i = enseignants.indexOf(enseignant);
-        enseignants.set(i, enseignant);
-        enseignantDAO.update(enseignant);
+        Enseignant enseignant1 = enseignants.get(i);
+        // Au moins ça a le mérite d'etre clair, on change les anciennes sonnées par les nouvelles.
+        enseignant1.setNom(enseignant.getNom());
+        enseignant1.setPrenom(enseignant.getPrenom());
+        enseignant1.setDate_naissance(enseignant.getDate_naissance());
+        enseignant1.setDepartement(enseignant.getDepartement());
+        enseignant1.generationMdp();
+        enseignantDAO.update(enseignant1);
+
         setChanged();
         notifyObservers();
     }
     @Override
     public void creerSalle(String nom, int capacite, List<Materiel.TypeMateriel> listMateriel){
-
         Salle salle = new Salle(nom,listMateriel,capacite);
         salleDAO.create(salle);
         salles.add(salle);
@@ -164,7 +171,4 @@ public class Modele extends Observable implements Imodele {
     /*public void addObserver(Observer obs) {
         this.listObserver.add(obs);
     }*/
-
-
 }
-

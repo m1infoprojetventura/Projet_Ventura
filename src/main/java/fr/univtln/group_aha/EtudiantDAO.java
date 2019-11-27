@@ -1,11 +1,7 @@
 package fr.univtln.group_aha;
 
 import java.sql.*;
-import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.logging.Level;
 
 public class EtudiantDAO extends DAO<Etudiant> {
@@ -27,20 +23,17 @@ public class EtudiantDAO extends DAO<Etudiant> {
     @Override
     public void create(Etudiant obj) {
         try {
-            String query = "INSERT INTO Etudiant (nom, prenom,  date_naissance, mdp, login, id_formation) VALUES(?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Etudiant (nom, prenom,  date_naissance, id_formation) VALUES(?, ?, ?, ?)";
             Formation formation = obj.getFormation();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
             PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            String motdepasse = obj.generationMpd();
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
             state.setString(1, obj.getNom());
             state.setString(2, obj.getPrenom());
             state.setDate(3, d2);
-            state.setInt(4, motdepasse.hashCode());
-            state.setString(5, obj.getLogin());
-            state.setInt(6, formation.getId());
+            state.setInt(4, formation.getId());
             state.executeUpdate();
 
             // Obtenir la clé autogénéré par INSERT
@@ -48,7 +41,20 @@ public class EtudiantDAO extends DAO<Etudiant> {
             if(key.first())
                 obj.setId(key.getInt(1));
 
-            System.out.println(obj.getId());
+            // J'ai besoin de l'id pour la génération du login donc voila pourquoi l'ajout de le login a été fait séparament.
+            // Pour le mot de passe ce n'était pas nécéssaire mais bon, je voulais pas laisser le login seul. Anticipation
+            // d'une eventuelle modification du la génération du mot de passe (incluant l'id).
+
+            query = "UPDATE Etudiant SET login=?, mdp=? WHERE id=?";
+            state = connect.prepareStatement(query);
+            obj.generationLogin();
+            obj.generationMdp();
+
+            state.setString(1, obj.getLogin());
+            state.setInt(2, obj.getMdp());
+            state.setInt(3, obj.getId());
+
+            state.executeUpdate();
         }
 
         catch (SQLException e) {
@@ -78,7 +84,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
     public void update(Etudiant obj) {
         try {
             String query = "UPDATE Etudiant SET nom =?, prenom =?, date_naissance =?, id_formation =?," +
-                    "mdp = ?, login = ? WHERE id = ?";
+                    "mdp = ? WHERE id = ?";
             PreparedStatement state = connect.prepareStatement(query);
             Formation formation = obj.getFormation();
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
@@ -87,9 +93,8 @@ public class EtudiantDAO extends DAO<Etudiant> {
             state.setString(2, obj.getPrenom());
             state.setDate(3,  d2);
             state.setInt(4, formation.getId());
-            state.setInt(5, obj.generationMpd().hashCode());
-            state.setString(6, obj.getLogin());
-            state.setInt(7, obj.getId());
+            state.setInt(5, obj.getMdp());
+            state.setInt(6, obj.getId());
             state.executeUpdate();
         }
 
@@ -152,9 +157,11 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
             while(result.next()) {
                 Formation formation = formationDAO.find(result.getInt("id_formation"));
+                Etudiant etudiant = new Etudiant(result.getInt("id"), result.getString("nom"),
+                        result.getString("prenom"), result.getDate("date_naissance"), formation);
+                etudiant.setLogin(result.getString("login"));
 
-                resultat.add(new Etudiant(result.getInt("id"), result.getString("nom"), result.getString("prenom"),
-                        result.getDate("date_naissance"), formation));
+                resultat.add(etudiant);
             }
 
         } catch (SQLException e) {
