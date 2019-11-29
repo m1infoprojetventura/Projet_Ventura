@@ -9,6 +9,8 @@ public class TestEmploi
         //Création du contrôleur
         ControleurEmploi controler = new ControleurEmploi(modele);
         //Création de notre fenêtre avec le contrôleur en paramètre
-        VueEmploi gestionaire = new VueEmploi(controler, modele);
+        //VueEmploi gestionaire = new VueEmploi(controler, modele);
+        VueDeLemploi vue = new VueDeLemploi();
+        //vue.setVisible(true);
     }
 }

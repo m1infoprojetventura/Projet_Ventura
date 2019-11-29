@@ -459,7 +459,7 @@ public class VueGestionaire extends JFrame {
         panelFormAddSalle.add(salleNbrPlaces);
 
         JLabel messageNumero = new JLabel("[ex: U110]");
-        messageNumero.setBounds(137, 60, 132, 19);
+        messageNumero.setBounds(137, 60, 145, 19);
         messageNumero.setForeground(Color.GRAY);
         messageNumero.setFont(new Font("Dialog", Font.PLAIN, 11));
         panelFormAddSalle.add(messageNumero);
@@ -591,7 +591,7 @@ public class VueGestionaire extends JFrame {
 
             if(!Pattern.matches("[A-Z][0-9]{3}", nom)) {
                 salleNumero.setBorder(BorderFactory.createLineBorder(Color.RED));
-                messageNumero.setText("Mauvais format");
+                messageNumero.setText("Mauvais format: U110");
                 messageNumero.setForeground(Color.RED);
                 valider = false;
             }

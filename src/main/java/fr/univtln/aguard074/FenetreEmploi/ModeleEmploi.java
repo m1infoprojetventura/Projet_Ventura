@@ -1,4 +1,6 @@
 package fr.univtln.aguard074.FenetreEmploi;
 
-public class ModeleEmploi {
+import java.util.Observable;
+
+public class ModeleEmploi extends Observable {
 }

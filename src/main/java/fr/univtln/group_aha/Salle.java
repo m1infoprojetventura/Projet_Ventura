@@ -9,6 +9,13 @@ public class Salle {
     private int capacite;
     private int id;
 
+    public Salle() {
+        nom = "";
+        materiels = new ArrayList<>();
+        capacite = 0;
+        id = 0;
+    }
+
     public Salle(String nom, List<Materiel.TypeMateriel> materiels, int capacite) {
         this.nom = nom;
         this.materiels = materiels;
