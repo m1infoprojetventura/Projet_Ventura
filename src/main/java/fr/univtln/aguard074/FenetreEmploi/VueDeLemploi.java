@@ -7,9 +7,15 @@ package fr.univtln.aguard074.FenetreEmploi;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.plaf.*;
+
+import fr.univtln.aguard074.FenetreAdmin.Icontroleur;
+import fr.univtln.aguard074.FenetreAdmin.Modele;
+import fr.univtln.group_aha.Seance;
 import org.jdesktop.beansbinding.*;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
@@ -17,21 +23,24 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
  * @author unknown
  */
 public class VueDeLemploi extends JFrame {
-    public VueDeLemploi() {
+
+    JPanel jour;
+    ModeleEmploi modele;
+    ControleurEmploi controleur;
+
+
+
+
+
+
+
+    public VueDeLemploi(ModeleEmploi modele, ControleurEmploi controleur) {
+        this.modele = modele;
+        this.controleur = controleur;
         initComponents();
         this.fenetreDebut.setVisible(true);
     }
 
-    private void panel2MouseEntered(MouseEvent e) {
-        // TODO add your code here
-        //System.out.println("luuuuuuuuuuuuuuul");
-    }
-
-    private void panel2MouseClicked(MouseEvent e) {
-        System.out.println("appuyé");
-        creationSeance.setVisible(true);
-
-    }
 
     private void button1ActionPerformed(ActionEvent e) {
         ArrayList debutCour = new ArrayList();
@@ -50,7 +59,7 @@ public class VueDeLemploi extends JFrame {
         creationSeance.setVisible(false);
         JPanel panelle = new JPanel();
         panelle.setLayout(null);
-        lundi.add(panelle);
+        this.jour.add(panelle);
         JLabel matiere = new JLabel(this.nomMatiere.getText());
         JLabel proffeseur = new JLabel(this.nomProffeseur.getText());
         JLabel salle = new JLabel(this.nomSalle.getText());
@@ -66,6 +75,10 @@ public class VueDeLemploi extends JFrame {
         matiere.setBounds(15,1,66,10);
         proffeseur.setBounds(15,15,66,10);
         salle.setBounds(15,30,66,15);
+        Calendar test1 = new GregorianCalendar(1999,7,26);
+        Calendar test2 = new GregorianCalendar(1999,7,26);
+        Calendar test3 = new GregorianCalendar(1999,7,26);
+        controleur.creerSeance( test1, test2, test3);
         //lundi.setBackground(Color.red);
 
 
@@ -74,8 +87,46 @@ public class VueDeLemploi extends JFrame {
     private void annulerEmploiActionPerformed(ActionEvent e) {
         this.dispose();
 
-        //lundi.removeAll();
+        lundi.removeAll();
+        mardi.removeAll();
+        mercredi.removeAll();
+        jeudi.removeAll();
+        vendredi.removeAll();
+        samedi.removeAll();
         fenetreDebut.setVisible(true);
+    }
+
+    private void panel2MouseClicked(MouseEvent e) {
+        creationSeance.setVisible(true);
+        this.jour = lundi;
+    }
+    private void mardiMouseClicked(MouseEvent e) {
+        creationSeance.setVisible(true);
+        jour = mardi;
+    }
+
+    private void mercrediMouseClicked(MouseEvent e) {
+        creationSeance.setVisible(true);
+        jour = mercredi;
+    }
+
+    private void jeudiMouseClicked(MouseEvent e) {
+        creationSeance.setVisible(true);
+        jour = jeudi;
+    }
+
+    private void vendrediMouseClicked(MouseEvent e) {
+        creationSeance.setVisible(true);
+        jour = vendredi;
+    }
+
+    private void samediMouseClicked(MouseEvent e) {
+        creationSeance.setVisible(true);
+        jour = samedi;
+    }
+
+    private void validerEmploiActionPerformed(ActionEvent e) {
+        controleur.creerEmploi();
     }
 
     private void initComponents() {
@@ -110,7 +161,7 @@ public class VueDeLemploi extends JFrame {
         label25 = new JLabel();
         label26 = new JLabel();
         label27 = new JLabel();
-        button1 = new JButton();
+        validerEmploi = new JButton();
         annulerEmploi = new JButton();
         creationSeance = new JFrame();
         nomMatiere = new JTextField();
@@ -138,12 +189,13 @@ public class VueDeLemploi extends JFrame {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing.
-            border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e" , javax. swing .border . TitledBorder. CENTER
-            ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dialo\u0067", java .awt . Font
-            . BOLD ,12 ) ,java . awt. Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener(
-            new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "borde\u0072"
-            .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
+            . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder
+            . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .
+            awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,panel1. getBorder () ) )
+            ; panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+            ) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
+            ;
 
             //======== lundi ========
             {
@@ -200,7 +252,7 @@ public class VueDeLemploi extends JFrame {
                 mardi.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panel2MouseClicked(e);
+                        mardiMouseClicked(e);
                     }
                 });
 
@@ -222,7 +274,7 @@ public class VueDeLemploi extends JFrame {
                 mercredi.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panel2MouseClicked(e);
+                        mercrediMouseClicked(e);
                     }
                 });
 
@@ -244,7 +296,7 @@ public class VueDeLemploi extends JFrame {
                 jeudi.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panel2MouseClicked(e);
+                        jeudiMouseClicked(e);
                     }
                 });
 
@@ -266,7 +318,7 @@ public class VueDeLemploi extends JFrame {
                 vendredi.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panel2MouseClicked(e);
+                        vendrediMouseClicked(e);
                     }
                 });
 
@@ -288,7 +340,7 @@ public class VueDeLemploi extends JFrame {
                 samedi.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        panel2MouseClicked(e);
+                        samediMouseClicked(e);
                     }
                 });
 
@@ -462,8 +514,9 @@ public class VueDeLemploi extends JFrame {
         //---- label27 ----
         label27.setText("samedi");
 
-        //---- button1 ----
-        button1.setText("Valider");
+        //---- validerEmploi ----
+        validerEmploi.setText("Valider");
+        validerEmploi.addActionListener(e -> validerEmploiActionPerformed(e));
 
         //---- annulerEmploi ----
         annulerEmploi.setText("Annuler");
@@ -475,7 +528,7 @@ public class VueDeLemploi extends JFrame {
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
                     .addGap(151, 151, 151)
-                    .addComponent(button1, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(validerEmploi, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 314, Short.MAX_VALUE)
                     .addComponent(annulerEmploi, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
                     .addGap(250, 250, 250))
@@ -518,7 +571,7 @@ public class VueDeLemploi extends JFrame {
                     .addComponent(panel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(button1, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(validerEmploi, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
                         .addComponent(annulerEmploi, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
                     .addContainerGap())
         );
@@ -777,7 +830,7 @@ public class VueDeLemploi extends JFrame {
     private JLabel label25;
     private JLabel label26;
     private JLabel label27;
-    private JButton button1;
+    private JButton validerEmploi;
     private JButton annulerEmploi;
     private JFrame creationSeance;
     private JTextField nomMatiere;
