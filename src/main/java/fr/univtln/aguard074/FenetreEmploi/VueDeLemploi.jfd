@@ -168,17 +168,14 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "annulerEmploiActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 35, 800 )
+			"location": new java.awt.Point( 35, 1260 )
 			"size": new java.awt.Dimension( 975, 725 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {par l:l {seq {space :p:21:p, par l {comp label8:::p::p, comp label7:::p::p}, space :p:31:p}, seq t {comp label5:::p::p, space s:::p}}, seq {par l {seq {space :p:21:p, comp validercours:::p::p}, comp label6::l:p::p, comp label2:::p::p}, space :p:3:p}}, par l {seq {par l {par t:l::p {seq {comp hFinH:::p:53:p, space :::x, comp hFinM:::p:53:p}, seq {comp hDebutH:::p:53:p, space :p:26:p, comp hDebutM:::p:53:p}}, comp nomMatiere::l:p:173:p}, space :::x}, seq {par l {comp nomSalle:::p:173:p, comp nomProffeseur:::p:173:p}, space :0:195:x}}}}"
-			"$verticalGroup": "par l {seq l {space :p:15:p, par b {comp label5::b:p::p, comp nomMatiere::b:p::p}, space :::p, par b {comp nomProffeseur::b:p::p, comp label6::b:p::p}, space :::p, par b {comp nomSalle::b:p::p, comp label2::b:p::p}, space :p:11:p, par l {comp label7:::p::p, par b {comp hDebutH::b:p::p, comp hDebutM::b:p::p}}, space :::p, par b {comp label8::b:p::p, comp hFinH::b:p::p, comp hFinM::b:p::p}, space :::x, comp validercours:::p::p, space :::p}}"
+			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label5::l:p::p, seq {space :p:21:p, comp validercours:::p::p}, comp label6::l:p::p, comp label2:::p::p, comp label7:::p::p, comp label8:::p::p}, space s:::p, par l {seq l {par l {par t:::p {seq {comp hFinH:::p:53:p, space :p:34:p, comp hFinM:::p:53:p}, seq {comp hDebutH:::p:53:p, space :::x, comp hDebutM:::p:53:p}}, comp nomSalle:::p::p}, space :45:213:x}, seq {par l {comp nomMatiere:::p::p, comp nomProffeseur:::p::p}, space :0:260:x}}}}"
+			"$verticalGroup": "par l {seq l {space :p:9:p, par t {comp label5:::p::p, comp nomMatiere:::p::p}, space :::p, par b {comp label6::b:p::p, comp nomProffeseur::b:p::p}, space :::p, par b {comp label2::b:p::p, comp nomSalle::b:p::p}, par l {seq {space :p:11:p, par b {comp hDebutM::b:p::p, comp hDebutH::b:p::p}}, seq l {space u:::p, comp label7:::p::p}}, space s:::p, par l {comp hFinM:::p::p, par b {comp hFinH::b:p::p, comp label8::b:p::p}}, space :::x, comp validercours:::p::p, space :::p}}"
 		} ) {
 			name: "creationSeance"
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "nomMatiere"
-			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
 				"text": "nom matière"
@@ -186,9 +183,6 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
 				"text": "proffeseur"
-			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "nomProffeseur"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label7"
@@ -257,52 +251,92 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", true ) )
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "validercoursActionPerformed", true ) )
 			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "nomSalle"
-			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
 				"text": "Salle"
 			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "nomSalle"
+				"selectedIndex": -1
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "nomMatiere"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "nomProffeseur"
+			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 235, 510 )
+			"location": new java.awt.Point( 175, 970 )
 			"size": new java.awt.Dimension( 495, 265 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {par l {seq {space :p:133:p, comp label1:::p::p, space :p:43:p, comp choixFormationBox:::p::p}, seq l {space :p:232:p, comp boutonCreerEmploi:::p:130:p}}, space ::201:x}, seq t {space :0:208:x, comp label3:::p:248:p, space :p:192:p}}"
-			"$verticalGroup": "par l {seq l {space :p:21:p, comp label3:::p:43:p, space :p:55:p, par b {comp choixFormationBox::b:p::p, comp label1::b:p::p}, space :p:91:p, comp boutonCreerEmploi:::p:68:p, space ::128:x}}"
+			"$horizontalGroup": "par l {comp tabbedPane1::t:::x}"
+			"$verticalGroup": "par l {seq {space :::p, comp tabbedPane1:::::x, space :p:38:p}}"
 		} ) {
 			name: "fenetreDebut"
-			add( new FormComponent( "javax.swing.JComboBox" ) {
-				name: "choixFormationBox"
-				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "Maths"
-					addElement( "Maths" )
-					addElement( "Physique" )
-					addElement( "Informatique" )
-					addElement( "Biologie" )
-					addElement( "Arts" )
-					addElement( "Musique" )
-					addElement( "Staps" )
-					addElement( "Lettres" )
-				}
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label1"
-				"text": "Choix de formation"
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "boutonCreerEmploi"
-				"text": "creer"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "boutonCreerEmploiActionPerformed", true ) )
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label3"
-				"text": "Gestion emploi du temps"
+			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				name: "tabbedPane1"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {seq {par l {seq l {space :p:110:p, comp label1:::p::p, space :p:40:p, comp choixFormationBox:::p::p}, seq l {space :p:193:p, comp label3:::p:248:p}, seq l {space :p:202:p, comp boutonCreerEmploi:::p:130:p}}, space ::207:x}}"
+					"$verticalGroup": "par l {seq {par l {seq l {space :p:44:p, comp label3:::p:43:p, space :p:111:p}, seq t {space :::p, par b {comp label1::b:p::p, comp choixFormationBox::b:p::p}, space :p:88:p}}, comp boutonCreerEmploi:::p:68:p, space ::89:x}}"
+				} ) {
+					name: "panel3"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label3"
+						"text": "Gestion emploi du temps"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label1"
+						"text": "Choix de formation"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "choixFormationBox"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "Maths"
+							addElement( "Maths" )
+							addElement( "Physique" )
+							addElement( "Informatique" )
+							addElement( "Biologie" )
+							addElement( "Arts" )
+							addElement( "Musique" )
+							addElement( "Staps" )
+							addElement( "Lettres" )
+						}
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "boutonCreerEmploi"
+						"text": "creer"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "boutonCreerEmploiActionPerformed", true ) )
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Creation Emploi"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {comp scrollPane1::l::648:x, seq l {space :p:29:p, comp nomMatiere2:::p::p, space ::255:x, comp associerBouton:::p::p, space :p:179:p}}"
+					"$verticalGroup": "par l {seq l {space ::14:x, comp scrollPane1:::p:287:p, space s:::p, par b {comp nomMatiere2::b:p::p, comp associerBouton::b:p::p}, space :::p}}"
+				} ) {
+					name: "panel4"
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "nomMatiere2"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane1"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "tableEnseignants"
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "associerBouton"
+						"text": "Associer"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "associerBoutonActionPerformed", true ) )
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Association Matieres/Profs"
+				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 150, 10 )
-			"size": new java.awt.Dimension( 650, 465 )
+			"location": new java.awt.Point( 130, 470 )
+			"size": new java.awt.Dimension( 650, 460 )
 		} )
 	}
 }

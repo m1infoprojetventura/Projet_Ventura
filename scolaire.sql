@@ -85,7 +85,7 @@ CREATE TABLE `Enseignant` (
   `login` varchar(40) DEFAULT NULL,
   `id_departement` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `Enseignant` (
 
 LOCK TABLES `Enseignant` WRITE;
 /*!40000 ALTER TABLE `Enseignant` DISABLE KEYS */;
-INSERT INTO `Enseignant` VALUES (4,'Jack','Jean','2019-11-14',-1499813715,'JJack788',1),(18,'miss','mister','2013-02-15',2134782028,'mmiss-28',1),(20,'peter','parker','2016-11-19',-166493559,'ppeter482',1),(21,'Adrienbg','Guard','2019-01-15',1563063939,'GAdrienbg288',1),(26,'zaada','adazdyttt','2019-11-09',1686191058,'azaada518',1),(32,'ezrt','azeaze','2022-11-06',-1056429475,'aezrt772',1),(33,'eeee','eeeea','2019-11-29',1299163719,'eeeee164',1),(34,'eeee','eeeea','2019-11-29',1299163719,'eeeee133',1);
+INSERT INTO `Enseignant` VALUES (4,'Jack','Jean','2019-11-14',-1499813715,'JJack788',1),(18,'miss','mister','2013-02-15',2134782028,'mmiss-28',1),(20,'peter','parker','2016-11-19',-166493559,'ppeter482',1),(21,'Adrienbg','Guard','2019-01-15',1563063939,'GAdrienbg288',1),(26,'zaada','adazdyttt','2019-11-09',1686191058,'azaada518',1),(32,'ezrt','azeaze','2022-11-06',-1056429475,'aezrt772',1),(33,'eeeeerico','eeeea','2019-11-10',-651991297,'eeeee164',1),(34,'eeee','eeeea','2019-11-29',1299163719,'eeeee133',1),(35,'eeeeerico','eeeea','2019-11-10',-651991297,'eeeeeerico603',1);
 /*!40000 ALTER TABLE `Enseignant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,7 +193,7 @@ CREATE TABLE `Matiere` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nom` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,6 +202,7 @@ CREATE TABLE `Matiere` (
 
 LOCK TABLES `Matiere` WRITE;
 /*!40000 ALTER TABLE `Matiere` DISABLE KEYS */;
+INSERT INTO `Matiere` VALUES (1,'Physique'),(2,'Maths'),(3,'Informatique'),(4,'Anglais');
 /*!40000 ALTER TABLE `Matiere` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +222,7 @@ CREATE TABLE `Matiere_Enseignant` (
   KEY `fk_id_enseignant` (`id_enseignant`),
   CONSTRAINT `fk_id_enseignant` FOREIGN KEY (`id_enseignant`) REFERENCES `Enseignant` (`id`),
   CONSTRAINT `fk_id_matiere` FOREIGN KEY (`id_matiere`) REFERENCES `Matiere` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,6 +231,7 @@ CREATE TABLE `Matiere_Enseignant` (
 
 LOCK TABLES `Matiere_Enseignant` WRITE;
 /*!40000 ALTER TABLE `Matiere_Enseignant` DISABLE KEYS */;
+INSERT INTO `Matiere_Enseignant` VALUES (4,1,32),(5,2,34),(6,4,4);
 /*!40000 ALTER TABLE `Matiere_Enseignant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -320,4 +322,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-29 12:00:51
+-- Dump completed on 2019-12-01 21:21:09

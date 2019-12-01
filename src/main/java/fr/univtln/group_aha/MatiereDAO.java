@@ -49,6 +49,56 @@ public class MatiereDAO extends DAO<Matiere> {
         }
 
     }
+    public void associate(Matiere matiere,Enseignant enseignant){
+        try {
+        String query = "INSERT INTO Matiere_Enseignant(id_matiere,id_enseignant) VALUES(?,?)";
+        // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
+        PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        int id_mat = matiere.getId();
+        int id_ense = enseignant.getId();
+        //System.out.println(id_ense);
+        //System.out.println(id_mat);
+
+        state.setInt(1,id_mat );
+        state.setInt(2,id_ense);
+        state.executeUpdate();
+        }
+
+        catch (SQLException e) {
+            lgr.log(Level.WARNING, e.getMessage(), e);
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<Enseignant>  getAssocTeachers(Matiere matiere){
+        List<Enseignant> enseignants= new ArrayList<>();
+        try {
+
+            String query = "SELECT * FROM Matiere_Enseignant WHERE id_matiere = ?";
+            // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            int id_mat = matiere.getId();
+            state.setInt(1,id_mat );
+            ResultSet result = state.executeQuery();
+            EnseignantDAO enseignantDAO = new EnseignantDAO();
+            while (result.next()) {
+                Enseignant e = enseignantDAO.find(result.getInt("id_enseignant"));
+                enseignants.add(e);
+
+            }
+
+        }
+
+        catch (SQLException e) {
+            lgr.log(Level.WARNING, e.getMessage(), e);
+            e.printStackTrace();
+        }
+        finally {
+            return enseignants;
+        }
+
+    }
 
     @Override
     public void delete(Matiere obj) {
@@ -67,6 +117,26 @@ public class MatiereDAO extends DAO<Matiere> {
 
     @Override
     public ArrayList<Matiere> getData() {
-        return null;
+        ArrayList<Matiere> resultat = new ArrayList();
+
+        try {
+            String query = "SELECT * FROM Matiere";
+            PreparedStatement state = connect.prepareStatement(query);
+            ResultSet result = state.executeQuery();
+
+
+            while(result.next()) {
+                Matiere matiere = new Matiere(result.getInt("id"), result.getString("nom"),new ArrayList<Enseignant>());
+                resultat.add(matiere);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return resultat;
+        }
     }
 }
+

@@ -9,12 +9,17 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.plaf.*;
 
 import fr.univtln.aguard074.FenetreAdmin.Icontroleur;
 import fr.univtln.aguard074.FenetreAdmin.Modele;
+import fr.univtln.aguard074.FenetreAdmin.VueGestionaire;
+import fr.univtln.group_aha.Enseignant;
+import fr.univtln.group_aha.Matiere;
+import fr.univtln.group_aha.Salle;
 import fr.univtln.group_aha.Seance;
 import org.jdesktop.beansbinding.*;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
@@ -24,10 +29,10 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
  */
 public class VueDeLemploi extends JFrame {
 
-    JPanel jour;
-    ModeleEmploi modele;
-    ControleurEmploi controleur;
-
+    private JPanel jour;
+    private ModeleEmploi modele;
+    private ControleurEmploi controleur;
+    private VueGestionaire.TmodelEnseignant tmodelEnseignant;
 
 
 
@@ -38,6 +43,7 @@ public class VueDeLemploi extends JFrame {
         this.modele = modele;
         this.controleur = controleur;
         initComponents();
+        setComponents();
         this.fenetreDebut.setVisible(true);
     }
 
@@ -49,6 +55,7 @@ public class VueDeLemploi extends JFrame {
 
     private void boutonCreerEmploiActionPerformed(ActionEvent e) {
         this.fenetreDebut.setVisible(false);
+        this.fenetreDebut.dispose();
         this.setVisible(true);
         this.intituleFormation.setText(choixFormationBox.getSelectedItem().toString());
 
@@ -60,9 +67,9 @@ public class VueDeLemploi extends JFrame {
         JPanel panelle = new JPanel();
         panelle.setLayout(null);
         this.jour.add(panelle);
-        JLabel matiere = new JLabel(this.nomMatiere.getText());
-        JLabel proffeseur = new JLabel(this.nomProffeseur.getText());
-        JLabel salle = new JLabel(this.nomSalle.getText());
+        JLabel matiere = new JLabel(this.nomMatiere.getSelectedItem().toString());
+        JLabel proffeseur = new JLabel(this.nomProffeseur.getSelectedItem().toString());
+        JLabel salle = new JLabel(this.nomSalle.getSelectedItem().toString());
         panelle.add(matiere);
         panelle.add(proffeseur);
         panelle.add(salle);
@@ -129,6 +136,40 @@ public class VueDeLemploi extends JFrame {
         controleur.creerEmploi();
     }
 
+    private void setComponents(){
+        //SALLES
+        DefaultComboBoxModel salleModel = new DefaultComboBoxModel();
+        nomSalle.setModel(salleModel);
+        for(Salle salle: this.modele.getSalles())
+            salleModel.addElement(salle.getNom());
+        //MATIERES
+        DefaultComboBoxModel matiereModel = new DefaultComboBoxModel();
+        nomMatiere.setModel(matiereModel);
+        nomMatiere2.setModel(matiereModel);// celui du debut ou on associe un prof a une matière
+        System.out.println(this.modele.getMatieres());
+        for(Matiere matiere: this.modele.getMatieres())
+            matiereModel.addElement(matiere);
+        //ENSEIGANANTS(association)
+        tmodelEnseignant = new VueGestionaire.TmodelEnseignant(modele.getEnseignantsList());
+        tableEnseignants.setModel(tmodelEnseignant);
+        //ENSEIGNANTS(Creation Seance)
+        DefaultComboBoxModel enseignantModel = new DefaultComboBoxModel();
+        nomProffeseur.setModel(enseignantModel);
+
+        List<Enseignant> enseignantsDispo = this.controleur.getAssocTeachers((Matiere) nomMatiere.getSelectedItem());
+        for(Enseignant enseignant: enseignantsDispo)
+            enseignantModel.addElement(enseignant);
+    }
+
+    private void associerBoutonActionPerformed(ActionEvent e) {
+        Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
+        int i = tableEnseignants.getSelectedRow();
+        Enseignant enseignant = tmodelEnseignant.getRowValue(i);
+        this.controleur.associerMatiereProf(matiere,enseignant);
+    }
+
+
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - adrien guard
@@ -164,10 +205,8 @@ public class VueDeLemploi extends JFrame {
         validerEmploi = new JButton();
         annulerEmploi = new JButton();
         creationSeance = new JFrame();
-        nomMatiere = new JTextField();
         label5 = new JLabel();
         label6 = new JLabel();
-        nomProffeseur = new JTextField();
         label7 = new JLabel();
         label8 = new JLabel();
         hDebutH = new JComboBox<>();
@@ -175,13 +214,22 @@ public class VueDeLemploi extends JFrame {
         hFinH = new JComboBox<>();
         hFinM = new JComboBox<>();
         validercours = new JButton();
-        nomSalle = new JTextField();
         label2 = new JLabel();
+        nomSalle = new JComboBox();
+        nomMatiere = new JComboBox();
+        nomProffeseur = new JComboBox();
         fenetreDebut = new JFrame();
-        choixFormationBox = new JComboBox<>();
-        label1 = new JLabel();
-        boutonCreerEmploi = new JButton();
+        tabbedPane1 = new JTabbedPane();
+        panel3 = new JPanel();
         label3 = new JLabel();
+        label1 = new JLabel();
+        choixFormationBox = new JComboBox<>();
+        boutonCreerEmploi = new JButton();
+        panel4 = new JPanel();
+        nomMatiere2 = new JComboBox();
+        scrollPane1 = new JScrollPane();
+        tableEnseignants = new JTable();
+        associerBouton = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -189,13 +237,13 @@ public class VueDeLemploi extends JFrame {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
-            . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder
-            . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .
-            awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,panel1. getBorder () ) )
-            ; panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-            ) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
-            ;
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
+            swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border
+            . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog"
+            , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,panel1. getBorder
+            () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
+            . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException
+            ( ) ;} } );
 
             //======== lundi ========
             {
@@ -655,6 +703,9 @@ public class VueDeLemploi extends JFrame {
             //---- label2 ----
             label2.setText("Salle");
 
+            //---- nomSalle ----
+            nomSalle.setSelectedIndex(-1);
+
             GroupLayout creationSeanceContentPaneLayout = new GroupLayout(creationSeanceContentPane);
             creationSeanceContentPane.setLayout(creationSeanceContentPaneLayout);
             creationSeanceContentPaneLayout.setHorizontalGroup(
@@ -662,70 +713,65 @@ public class VueDeLemploi extends JFrame {
                     .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
-                            .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
-                                .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
-                                    .addGap(21, 21, 21)
-                                    .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
-                                        .addComponent(label8)
-                                        .addComponent(label7))
-                                    .addGap(31, 31, 31))
-                                .addGroup(GroupLayout.Alignment.TRAILING, creationSeanceContentPaneLayout.createSequentialGroup()
-                                    .addComponent(label5)
-                                    .addGap(18, 18, 18)))
+                            .addComponent(label5)
                             .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
-                                .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
-                                    .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
-                                        .addGap(21, 21, 21)
-                                        .addComponent(validercours))
-                                    .addComponent(label6)
-                                    .addComponent(label2))
-                                .addGap(3, 3, 3)))
+                                .addGap(21, 21, 21)
+                                .addComponent(validercours))
+                            .addComponent(label6)
+                            .addComponent(label2)
+                            .addComponent(label7)
+                            .addComponent(label8))
+                        .addGap(18, 18, 18)
                         .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
                             .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
                                 .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
                                     .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                         .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
                                             .addComponent(hFinH, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGap(34, 34, 34)
                                             .addComponent(hFinM, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
                                         .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
                                             .addComponent(hDebutH, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-                                            .addGap(26, 26, 26)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(hDebutM, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(nomMatiere, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(nomSalle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addGap(45, 213, Short.MAX_VALUE))
                             .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
                                 .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
-                                    .addComponent(nomSalle, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(nomProffeseur, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 195, Short.MAX_VALUE))))
+                                    .addComponent(nomMatiere, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(nomProffeseur, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 260, Short.MAX_VALUE))))
             );
             creationSeanceContentPaneLayout.setVerticalGroup(
                 creationSeanceContentPaneLayout.createParallelGroup()
                     .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addGap(9, 9, 9)
+                        .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                             .addComponent(label5)
                             .addComponent(nomMatiere, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomProffeseur, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label6))
+                            .addComponent(label6)
+                            .addComponent(nomProffeseur, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomSalle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label2))
-                        .addGap(11, 11, 11)
+                            .addComponent(label2)
+                            .addComponent(nomSalle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
-                            .addComponent(label7)
+                            .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(hDebutM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(hDebutH, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(label7)))
+                        .addGap(18, 18, 18)
+                        .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
+                            .addComponent(hFinM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(hDebutH, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(hDebutM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label8)
-                            .addComponent(hFinH, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(hFinM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addComponent(hFinH, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(label8)))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(validercours)
                         .addContainerGap())
@@ -738,60 +784,130 @@ public class VueDeLemploi extends JFrame {
         {
             Container fenetreDebutContentPane = fenetreDebut.getContentPane();
 
-            //---- choixFormationBox ----
-            choixFormationBox.setModel(new DefaultComboBoxModel<>(new String[] {
-                "Maths",
-                "Physique",
-                "Informatique",
-                "Biologie",
-                "Arts",
-                "Musique",
-                "Staps",
-                "Lettres"
-            }));
+            //======== tabbedPane1 ========
+            {
 
-            //---- label1 ----
-            label1.setText("Choix de formation");
+                //======== panel3 ========
+                {
+                    panel3.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
+                    EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
+                    . border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,
+                    java . awt. Color .red ) ,panel3. getBorder () ) ); panel3. addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
+                    { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )
+                    throw new RuntimeException( ) ;} } );
 
-            //---- boutonCreerEmploi ----
-            boutonCreerEmploi.setText("creer");
-            boutonCreerEmploi.addActionListener(e -> boutonCreerEmploiActionPerformed(e));
+                    //---- label3 ----
+                    label3.setText("Gestion emploi du temps");
 
-            //---- label3 ----
-            label3.setText("Gestion emploi du temps");
+                    //---- label1 ----
+                    label1.setText("Choix de formation");
+
+                    //---- choixFormationBox ----
+                    choixFormationBox.setModel(new DefaultComboBoxModel<>(new String[] {
+                        "Maths",
+                        "Physique",
+                        "Informatique",
+                        "Biologie",
+                        "Arts",
+                        "Musique",
+                        "Staps",
+                        "Lettres"
+                    }));
+
+                    //---- boutonCreerEmploi ----
+                    boutonCreerEmploi.setText("creer");
+                    boutonCreerEmploi.addActionListener(e -> boutonCreerEmploiActionPerformed(e));
+
+                    GroupLayout panel3Layout = new GroupLayout(panel3);
+                    panel3.setLayout(panel3Layout);
+                    panel3Layout.setHorizontalGroup(
+                        panel3Layout.createParallelGroup()
+                            .addGroup(panel3Layout.createSequentialGroup()
+                                .addGroup(panel3Layout.createParallelGroup()
+                                    .addGroup(panel3Layout.createSequentialGroup()
+                                        .addGap(110, 110, 110)
+                                        .addComponent(label1)
+                                        .addGap(40, 40, 40)
+                                        .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panel3Layout.createSequentialGroup()
+                                        .addGap(193, 193, 193)
+                                        .addComponent(label3, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panel3Layout.createSequentialGroup()
+                                        .addGap(202, 202, 202)
+                                        .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(207, Short.MAX_VALUE))
+                    );
+                    panel3Layout.setVerticalGroup(
+                        panel3Layout.createParallelGroup()
+                            .addGroup(panel3Layout.createSequentialGroup()
+                                .addGroup(panel3Layout.createParallelGroup()
+                                    .addGroup(panel3Layout.createSequentialGroup()
+                                        .addGap(44, 44, 44)
+                                        .addComponent(label3, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(111, 111, 111))
+                                    .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                            .addComponent(label1)
+                                            .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addGap(88, 88, 88)))
+                                .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(89, Short.MAX_VALUE))
+                    );
+                }
+                tabbedPane1.addTab("Creation Emploi", panel3);
+
+                //======== panel4 ========
+                {
+
+                    //======== scrollPane1 ========
+                    {
+                        scrollPane1.setViewportView(tableEnseignants);
+                    }
+
+                    //---- associerBouton ----
+                    associerBouton.setText("Associer");
+                    associerBouton.addActionListener(e -> associerBoutonActionPerformed(e));
+
+                    GroupLayout panel4Layout = new GroupLayout(panel4);
+                    panel4.setLayout(panel4Layout);
+                    panel4Layout.setHorizontalGroup(
+                        panel4Layout.createParallelGroup()
+                            .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
+                            .addGroup(panel4Layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 255, Short.MAX_VALUE)
+                                .addComponent(associerBouton)
+                                .addGap(179, 179, 179))
+                    );
+                    panel4Layout.setVerticalGroup(
+                        panel4Layout.createParallelGroup()
+                            .addGroup(panel4Layout.createSequentialGroup()
+                                .addContainerGap(14, Short.MAX_VALUE)
+                                .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(panel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(associerBouton))
+                                .addContainerGap())
+                    );
+                }
+                tabbedPane1.addTab("Association Matieres/Profs", panel4);
+            }
 
             GroupLayout fenetreDebutContentPaneLayout = new GroupLayout(fenetreDebutContentPane);
             fenetreDebutContentPane.setLayout(fenetreDebutContentPaneLayout);
             fenetreDebutContentPaneLayout.setHorizontalGroup(
                 fenetreDebutContentPaneLayout.createParallelGroup()
-                    .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
-                        .addGroup(fenetreDebutContentPaneLayout.createParallelGroup()
-                            .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
-                                .addGap(133, 133, 133)
-                                .addComponent(label1)
-                                .addGap(43, 43, 43)
-                                .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                            .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
-                                .addGap(232, 232, 232)
-                                .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(201, Short.MAX_VALUE))
-                    .addGroup(GroupLayout.Alignment.TRAILING, fenetreDebutContentPaneLayout.createSequentialGroup()
-                        .addGap(0, 208, Short.MAX_VALUE)
-                        .addComponent(label3, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
-                        .addGap(192, 192, 192))
+                    .addComponent(tabbedPane1, GroupLayout.Alignment.TRAILING)
             );
             fenetreDebutContentPaneLayout.setVerticalGroup(
                 fenetreDebutContentPaneLayout.createParallelGroup()
                     .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(label3, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-                        .addGap(55, 55, 55)
-                        .addGroup(fenetreDebutContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label1))
-                        .addGap(91, 91, 91)
-                        .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(128, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(tabbedPane1)
+                        .addGap(38, 38, 38))
             );
             fenetreDebut.pack();
             fenetreDebut.setLocationRelativeTo(fenetreDebut.getOwner());
@@ -833,10 +949,8 @@ public class VueDeLemploi extends JFrame {
     private JButton validerEmploi;
     private JButton annulerEmploi;
     private JFrame creationSeance;
-    private JTextField nomMatiere;
     private JLabel label5;
     private JLabel label6;
-    private JTextField nomProffeseur;
     private JLabel label7;
     private JLabel label8;
     private JComboBox<String> hDebutH;
@@ -844,12 +958,21 @@ public class VueDeLemploi extends JFrame {
     private JComboBox<String> hFinH;
     private JComboBox<String> hFinM;
     private JButton validercours;
-    private JTextField nomSalle;
     private JLabel label2;
+    private JComboBox nomSalle;
+    private JComboBox nomMatiere;
+    private JComboBox nomProffeseur;
     private JFrame fenetreDebut;
-    private JComboBox<String> choixFormationBox;
-    private JLabel label1;
-    private JButton boutonCreerEmploi;
+    private JTabbedPane tabbedPane1;
+    private JPanel panel3;
     private JLabel label3;
+    private JLabel label1;
+    private JComboBox<String> choixFormationBox;
+    private JButton boutonCreerEmploi;
+    private JPanel panel4;
+    private JComboBox nomMatiere2;
+    private JScrollPane scrollPane1;
+    private JTable tableEnseignants;
+    private JButton associerBouton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

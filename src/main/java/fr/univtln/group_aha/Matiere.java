@@ -40,4 +40,8 @@ public class Matiere {
     public void setId(int anInt) {
         this.id = anInt;
     }
+    public String toString()
+    {return this.getNom();
+
+    }
 }

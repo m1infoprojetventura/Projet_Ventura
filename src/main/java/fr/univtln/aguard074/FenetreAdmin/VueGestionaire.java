@@ -828,7 +828,7 @@ public class VueGestionaire extends JFrame {
         }
     }
 
-    public class TmodelEnseignant extends  AbstractTableModel implements Observer {
+    public static class TmodelEnseignant extends  AbstractTableModel implements Observer {
         private final String[] entetes = {"ID", "Nom", "Prénom", "Date de Naissance", "Login", "Département"};
         private final List<Enseignant> enseignants;
 
