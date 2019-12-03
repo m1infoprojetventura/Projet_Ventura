@@ -6,19 +6,6 @@ public class TestEmploi
 {
     public static void main( String[] args )
     {
-        // Instanciation de notre modèle
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
         ModeleEmploi modele = new ModeleEmploi();
         //Création du contrôleur
         ControleurEmploi controler = new ControleurEmploi(modele);
