@@ -20,7 +20,6 @@ public class Salle {
         this.nom = nom;
         this.materiels = materiels;
         this.capacite = capacite;
-
     }
 
     public Salle(String nom, List<Materiel.TypeMateriel> materiels, int capacite, int id) {
@@ -28,7 +27,11 @@ public class Salle {
         this.materiels = materiels;
         this.capacite = capacite;
         this.id = id;
+    }
 
+    @Override
+    public String toString() {
+        return nom;
     }
 
     public String getNom() {

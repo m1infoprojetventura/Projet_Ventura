@@ -1,7 +1,5 @@
 package fr.univtln.group_aha;
 
-import sun.rmi.server.MarshalInputStream;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -134,8 +132,8 @@ public class MatiereDAO extends DAO<Matiere> {
                 ResultSet resultSet1 = state.executeQuery();
                 List<Enseignant> enseignants = new ArrayList<>();
 
-                while (resultSet.next()) {
-                    int id_enseignant = resultSet.getInt("id_enseignant");
+                while (resultSet1.next()) {
+                    int id_enseignant = resultSet1.getInt("id_enseignant");
                     enseignants.add(enseignantDAO.find(id_enseignant));
                 }
 

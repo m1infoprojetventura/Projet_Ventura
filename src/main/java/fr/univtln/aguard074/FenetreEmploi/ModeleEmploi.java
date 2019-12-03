@@ -32,6 +32,11 @@ public class ModeleEmploi extends Observable {
             matieres.add(matiere);
         for(Enseignant enseignant: enseignantDAO.getData())
             enseignants.add(enseignant);
+
+        for(int i = 0; i < semaines; i++) {
+            emploiDuTemps[i] = new ArrayList<>();
+        }
+
     }
 
     public void creerEmploi() {
@@ -66,8 +71,11 @@ public class ModeleEmploi extends Observable {
 
     public void creerSeance(Salle salle, Enseignant enseignant, Matiere matiere, Calendar debutCours, Calendar finCours) {
         Seance seance = new Seance(salle, enseignant, matiere, debutCours, finCours);
-        int x = debutCours.getWeekYear();
+        int x = debutCours.get(Calendar.WEEK_OF_YEAR);
+
+        System.out.println(x);
         emploiDuTemps[x].add(seance);
+        setChanged();
         notifyObservers();
     }
 }

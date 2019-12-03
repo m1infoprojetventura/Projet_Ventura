@@ -42,10 +42,24 @@ public class VueDeLemploi extends JFrame implements Observer {
         this.modele = modele;
         this.controleur = controleur;
         this.emploiDuTemps = modele.getEmploiDuTemps();
-        DefaultComboBoxModel matierecomboBoxModel = new DefaultComboBoxModel(modele.getMatieres().toArray());
 
+        // Temporaire
+        this.modele.addObserver(this);
+
+        DefaultComboBoxModel matierecomboBoxModel = new DefaultComboBoxModel(modele.getMatieres().toArray());
         nomMatiere.setModel(matierecomboBoxModel);
+
+        DefaultComboBoxModel sallecomboBoxModel = new DefaultComboBoxModel(modele.getSalles().toArray());
+        nomSalle.setModel(sallecomboBoxModel);
+
         joursSemainePanel = new JPanel[]{lundi, mardi, mercredi, jeudi, vendredi, samedi};
+        lundi.setName("lundi");
+        mardi.setName("mardi");
+        mercredi.setName("mercredi");
+        jeudi.setName("jeudi");
+        vendredi.setName("vendredi");
+        samedi.setName("samedi");
+
         this.fenetreDebut.setVisible(true);
     }
 
@@ -67,16 +81,40 @@ public class VueDeLemploi extends JFrame implements Observer {
      */
     private void affichageSeance(Seance seance) {
         JPanel panelle = new JPanel();
+        creationSeance.setVisible(false);
+
         Calendar debut =seance.getHdebut();
         Calendar fin =seance.getHfin();
-        JPanel jourPanel = joursSemainePanel[debut.get(Calendar.DAY_OF_WEEK) - 2];
+        int j = debut.get(Calendar.DAY_OF_WEEK) - 2;
+
+        JPanel jourPanel = joursSemainePanel[j];
+        jourPanel.add(panelle);
+        System.out.println(jourPanel.getName());
 
         JLabel matiere = new JLabel(seance.getMatiere().getNom());
         JLabel proffeseur = new JLabel(seance.getEnseignant().getNom());
         JLabel salle = new JLabel(seance.getSalle().getNom());
 
-        int d =  (debut.get(Calendar.HOUR_OF_DAY) - 8)*40 + (debut.get(Calendar.MINUTE)/15)*10;
-        int f =  (fin.get(Calendar.HOUR_OF_DAY) - 8)*40 + (fin.get(Calendar.MINUTE)/15)*10;
+        int debH = debut.get(Calendar.HOUR_OF_DAY) - 8;
+        int finH = fin.get(Calendar.HOUR_OF_DAY) - 8;
+        int debM = debut.get(Calendar.MINUTE)/15;
+        int finM = fin.get(Calendar.MINUTE)/15;
+
+        System.out.println("seance");
+        creationSeance.setVisible(false);
+        panelle.setLayout(null);
+
+        System.out.println(debH);
+        System.out.println(debM);
+
+        System.out.println(finH);
+        System.out.println(finM);
+
+        int d =  (debH)*40 + (debM)*10;
+        int f =  (finH)*40 + (finM)*10;
+
+        System.out.println("Debut: " + d);
+        System.out.println("Fin: " + f);
 
         panelle.setBounds(8, d,111,f - d);
         panelle.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -88,14 +126,13 @@ public class VueDeLemploi extends JFrame implements Observer {
         panelle.add(matiere);
         panelle.add(proffeseur);
         panelle.add(salle);
-        jourPanel.add(panelle);
     }
 
     @Override
     public void update(Observable observable, Object o) {
         // Temporaire juste pour tester l'ajout de seance, réecrit toutes les seances:
         // Doit evidemment changer. Comment ? Je sais pas encore.
-
+        System.out.println("Mise a jour");
         for(JPanel panel: joursSemainePanel)
             panel.removeAll();
 
@@ -266,13 +303,12 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
-            swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border
-            .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
-            ,java.awt.Font.BOLD,12),java.awt.Color.red),panel1. getBorder
-            ()));panel1. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
-            .beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
-            ();}});
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
+            border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER
+            , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
+            .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (
+            new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r"
+            .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
             //======== lundi ========
             {
@@ -821,12 +857,11 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
-                    border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER
-                    , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font
-                    .BOLD ,12 ), java. awt. Color. red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (
-                    new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order"
-                    .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+                    panel3.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(
+                    0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder
+                    .BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.
+                    red),panel3. getBorder()));panel3. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.
+                    beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}});
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
