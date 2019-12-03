@@ -1,11 +1,11 @@
-JFDML JFormDesigner: "7.0.0.6.255" Java: "11.0.4" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.0.6.255" Java: "11.0.5" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:151:p, comp validerEmploi:::p:129:p, space ::314:x, comp annulerEmploi:::p:129:p, space :p:250:p}, seq {par l {seq l {space :p:69:p, comp intituleFormation:::p::p}, seq l {space :p:177:p, comp label22:::p::p, space :p:82:p, comp label23:::p::p, space :p:95:p, comp label24:::p::p, space :p:88:p, comp label25:::p::p, space :p:71:p, comp label26:::p::p, space :p:73:p, comp label27:::p::p}, seq l {space :p:14:p, comp panel1:::p::p}}, space ::25:x}}"
-			"$verticalGroup": "par l {seq l {comp intituleFormation:::p::p, space :p:3:p, par b {comp label22::b:p::p, comp label23::b:p::p, comp label24::b:p::p, comp label25::b:p::p, comp label26::b:p::p, comp label27::b:p::p}, space :::p, comp panel1:::p::p, space ::26:x, par b {comp validerEmploi::b:p:54:p, comp annulerEmploi::b:p:54:p}, space :::p}}"
+			"$horizontalGroup": "par l {seq l {space :p:151:p, comp validerEmploi:::p:129:p, space ::314:x, comp annulerEmploi:::p:129:p, space :p:250:p}, seq {par l {seq l {space :p:69:p, comp intituleFormation:::p::p}, seq l {space :p:177:p, comp label22:::p::p, space :p:82:p, comp label23:::p::p, space :p:95:p, comp label24:::p::p, space :p:88:p, comp label25:::p::p, space :p:71:p, comp label26:::p::p, space :p:73:p, comp label27:::p::p}, seq l {space :p:14:p, comp panel1:::p::p}}, space ::26:x}}"
+			"$verticalGroup": "par l {seq l {comp intituleFormation:::p::p, space :p:3:p, par b {comp label22::b:p::p, comp label23::b:p::p, comp label24::b:p::p, comp label25::b:p::p, comp label26::b:p::p, comp label27::b:p::p}, space :::p, comp panel1:::p::p, space ::12:x, par b {comp validerEmploi::b:p:54:p, comp annulerEmploi::b:p:54:p}, space :::p}}"
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -172,8 +172,8 @@ new FormModel {
 			"size": new java.awt.Dimension( 975, 725 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label5::l:p::p, seq {space :p:21:p, comp validercours:::p::p}, comp label6::l:p::p, comp label2:::p::p, comp label7:::p::p, comp label8:::p::p}, space s:::p, par l {seq l {par l {par t:::p {seq {comp hFinH:::p:53:p, space :p:34:p, comp hFinM:::p:53:p}, seq {comp hDebutH:::p:53:p, space :::x, comp hDebutM:::p:53:p}}, comp nomSalle:::p::p}, space :45:213:x}, seq {par l {comp nomMatiere:::p::p, comp nomProffeseur:::p::p}, space :0:260:x}}}}"
-			"$verticalGroup": "par l {seq l {space :p:9:p, par t {comp label5:::p::p, comp nomMatiere:::p::p}, space :::p, par b {comp label6::b:p::p, comp nomProffeseur::b:p::p}, space :::p, par b {comp label2::b:p::p, comp nomSalle::b:p::p}, par l {seq {space :p:11:p, par b {comp hDebutM::b:p::p, comp hDebutH::b:p::p}}, seq l {space u:::p, comp label7:::p::p}}, space s:::p, par l {comp hFinM:::p::p, par b {comp hFinH::b:p::p, comp label8::b:p::p}}, space :::x, comp validercours:::p::p, space :::p}}"
+			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label5::l:p::p, seq {space :p:21:p, comp validercours:::p::p}, comp label6::l:p::p, comp label2:::p::p, comp label7:::p::p, comp label8:::p::p}, space s:::p, par l {seq l {par l {par t:::p {seq {comp hFinH:::p:53:p, space :p:34:p, comp hFinM:::p:53:p}, seq {comp hDebutH:::p:53:p, space :::x, comp hDebutM:::p:53:p}}, comp nomSalle:::p::p}, space :45:221:x}, seq {par l {comp nomMatiere:::p::p, comp nomEnseignant:::p::p}, space :0:265:x}}}}"
+			"$verticalGroup": "par l {seq l {space :p:9:p, par t {comp label5:::p::p, comp nomMatiere:::p::p}, space :::p, par b {comp label6::b:p::p, comp nomEnseignant::b:p::p}, space :::p, par b {comp label2::b:p::p, comp nomSalle::b:p::p}, par l {seq {space :p:11:p, par b {comp hDebutM::b:p::p, comp hDebutH::b:p::p}}, seq l {space u:::p, comp label7:::p::p}}, space s:::p, par l {comp hFinM:::p::p, par b {comp hFinH::b:p::p, comp label8::b:p::p}}, space :::x, comp validercours:::p::p, space :::p}}"
 		} ) {
 			name: "creationSeance"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -261,9 +261,10 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "nomMatiere"
+				addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "nomMatiereItemStateChanged", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
-				name: "nomProffeseur"
+				name: "nomEnseignant"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 175, 970 )
@@ -277,8 +278,8 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq {par l {seq l {space :p:110:p, comp label1:::p::p, space :p:40:p, comp choixFormationBox:::p::p}, seq l {space :p:193:p, comp label3:::p:248:p}, seq l {space :p:202:p, comp boutonCreerEmploi:::p:130:p}}, space ::207:x}}"
-					"$verticalGroup": "par l {seq {par l {seq l {space :p:44:p, comp label3:::p:43:p, space :p:111:p}, seq t {space :::p, par b {comp label1::b:p::p, comp choixFormationBox::b:p::p}, space :p:88:p}}, comp boutonCreerEmploi:::p:68:p, space ::89:x}}"
+					"$horizontalGroup": "par l {seq {par l {seq l {space :p:110:p, comp label1:::p::p, space :p:40:p, comp choixFormationBox:::p::p}, seq l {space :p:193:p, comp label3:::p:248:p}, seq l {space :p:202:p, comp boutonCreerEmploi:::p:130:p}}, space ::203:x}}"
+					"$verticalGroup": "par l {seq {par l {seq l {space :p:44:p, comp label3:::p:43:p, space :p:111:p}, seq t {space :::p, par b {comp label1::b:p::p, comp choixFormationBox::b:p::p}, space :p:88:p}}, comp boutonCreerEmploi:::p:68:p, space ::94:x}}"
 				} ) {
 					name: "panel3"
 					add( new FormComponent( "javax.swing.JLabel" ) {
@@ -312,8 +313,8 @@ new FormModel {
 					"title": "Creation Emploi"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {comp scrollPane1::l::648:x, seq l {space :p:29:p, comp nomMatiere2:::p::p, space ::255:x, comp associerBouton:::p::p, space :p:179:p}}"
-					"$verticalGroup": "par l {seq l {space ::14:x, comp scrollPane1:::p:287:p, space s:::p, par b {comp nomMatiere2::b:p::p, comp associerBouton::b:p::p}, space :::p}}"
+					"$horizontalGroup": "par l {comp scrollPane1::l::644:x, seq l {space :p:29:p, comp nomMatiere2:::p::p, space ::258:x, comp associerBouton:::p::p, space :p:179:p}}"
+					"$verticalGroup": "par l {seq l {space :::x, comp scrollPane1:::p:287:p, space s:::p, par b {comp nomMatiere2::b:p::p, comp associerBouton::b:p::p}, space :::p}}"
 				} ) {
 					name: "panel4"
 					add( new FormComponent( "javax.swing.JComboBox" ) {

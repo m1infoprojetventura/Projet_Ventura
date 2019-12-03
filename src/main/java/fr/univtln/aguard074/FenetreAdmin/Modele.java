@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Observable;
 
 public class Modele extends Observable implements Imodele {
-    private ArrayList<Personne> listPersonnes= new ArrayList<Personne>();
-    //private ArrayList<Observer> listObserver = new ArrayList<Observer>();
 
     // Il faut que le modèle puisse accéder à la Vue comme sur le TP de Bibliotheque en ayant en attribut
     // des modèles des Componant (exemple modèle de JTextField: PlainDocument, ou Combobox: ComboboxModel)

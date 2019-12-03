@@ -3,6 +3,7 @@ package fr.univtln.aguard074.FenetreEmploi;
 
 import fr.univtln.group_aha.Enseignant;
 import fr.univtln.group_aha.Matiere;
+import fr.univtln.group_aha.Salle;
 
 import java.util.Calendar;
 import java.util.List;
@@ -14,8 +15,8 @@ public class ControleurEmploi{
         this.modele = modele;
     }
 
-    public void creerSeance(Calendar test1, Calendar test2, Calendar test3) {
-        this.modele.creerSeance(test1,test2,test3);
+    public void creerSeance(Salle salle, Enseignant enseignant, Matiere matiere, Calendar debutCours, Calendar finCours) {
+        this.modele.creerSeance(salle, enseignant, matiere, debutCours, finCours);
     }
 
     public void creerEmploi() {

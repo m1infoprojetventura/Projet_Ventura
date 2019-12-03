@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class EnseignantDAO extends DAO<Enseignant> {
+
     @Override
     public void create(Enseignant obj) {
         try {

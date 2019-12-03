@@ -1,5 +1,7 @@
 package fr.univtln.group_aha;
 
+import sun.rmi.server.MarshalInputStream;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class MatiereDAO extends DAO<Matiere> {
+    private static EnseignantDAO enseignantDAO = new EnseignantDAO();
     @Override
     public void create(Matiere obj) {
         try {
@@ -112,7 +115,40 @@ public class MatiereDAO extends DAO<Matiere> {
 
     @Override
     public Matiere find(int id) {
-        return null;
+        Matiere matiere = null;
+
+        try {
+            String query = "SELECT * FROM Matiere WHERE id = ?";
+            PreparedStatement state = connect.prepareStatement(query);
+
+            state.setInt(1, id);
+
+            ResultSet resultSet = state.executeQuery();
+
+            if(resultSet.first()) {
+                query = "SELECT * FROM Matiere_Enseignant WHERE id_matiere = ?";
+                // Je saus pas si affecter de nouveau une nouvellle variable à ce truc
+                // ne va pas le casser
+                state = connect.prepareStatement(query);
+                state.setInt(1, id);
+                ResultSet resultSet1 = state.executeQuery();
+                List<Enseignant> enseignants = new ArrayList<>();
+
+                while (resultSet.next()) {
+                    int id_enseignant = resultSet.getInt("id_enseignant");
+                    enseignants.add(enseignantDAO.find(id_enseignant));
+                }
+
+                matiere = new Matiere(id, resultSet.getString("nom"), enseignants);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return matiere;
+        }
+
     }
 
     @Override
@@ -124,10 +160,11 @@ public class MatiereDAO extends DAO<Matiere> {
             PreparedStatement state = connect.prepareStatement(query);
             ResultSet result = state.executeQuery();
 
-
             while(result.next()) {
-                Matiere matiere = new Matiere(result.getInt("id"), result.getString("nom"),new ArrayList<Enseignant>());
-                resultat.add(matiere);
+                // Pour cause de flemme profonde (je sais pas si c'est plus long
+                // que de le faire à la main, je pense que si car un truc avec le
+                // PreparedStetement
+                resultat.add(find(result.getInt("id")));
             }
 
         } catch (SQLException e) {

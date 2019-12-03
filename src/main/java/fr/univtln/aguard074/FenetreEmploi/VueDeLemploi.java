@@ -6,47 +6,48 @@ package fr.univtln.aguard074.FenetreEmploi;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.plaf.*;
 
-import fr.univtln.aguard074.FenetreAdmin.Icontroleur;
-import fr.univtln.aguard074.FenetreAdmin.Modele;
-import fr.univtln.aguard074.FenetreAdmin.VueGestionaire;
 import fr.univtln.group_aha.Enseignant;
 import fr.univtln.group_aha.Matiere;
 import fr.univtln.group_aha.Salle;
 import fr.univtln.group_aha.Seance;
-import org.jdesktop.beansbinding.*;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+// Temporaire implements Obververs pour observer le modèle emploi du temps
 /**
  * @author unknown
  */
-public class VueDeLemploi extends JFrame {
+public class VueDeLemploi extends JFrame implements Observer {
 
-    private JPanel jour;
-    private ModeleEmploi modele;
-    private ControleurEmploi controleur;
-    private VueGestionaire.TmodelEnseignant tmodelEnseignant;
+    ModeleEmploi modele;
+    ControleurEmploi controleur;
 
-
-
-
-
+    // A separer avec le reste plus tard
+    /**
+     * La variable jour peut prendre des valeurs allant de 1 à 7 (le 1 correspondant au dimanche: Compatibilité avec
+     * Calendar)
+     */
+    private int jourSemaine;
+    private int semaneAnnee;
+    private JPanel[] joursSemainePanel;
+    private List<Seance>[] emploiDuTemps;
 
     public VueDeLemploi(ModeleEmploi modele, ControleurEmploi controleur) {
+        initComponents();
+        this.semaneAnnee = 10;
         this.modele = modele;
         this.controleur = controleur;
-        initComponents();
-        setComponents();
+        this.emploiDuTemps = modele.getEmploiDuTemps();
+        DefaultComboBoxModel matierecomboBoxModel = new DefaultComboBoxModel(modele.getMatieres().toArray());
+
+        nomMatiere.setModel(matierecomboBoxModel);
+        joursSemainePanel = new JPanel[]{lundi, mardi, mercredi, jeudi, vendredi, samedi};
         this.fenetreDebut.setVisible(true);
     }
-
 
     private void button1ActionPerformed(ActionEvent e) {
         ArrayList debutCour = new ArrayList();
@@ -55,40 +56,75 @@ public class VueDeLemploi extends JFrame {
 
     private void boutonCreerEmploiActionPerformed(ActionEvent e) {
         this.fenetreDebut.setVisible(false);
-        this.fenetreDebut.dispose();
         this.setVisible(true);
         this.intituleFormation.setText(choixFormationBox.getSelectedItem().toString());
 
     }
 
-    private void validercoursActionPerformed(ActionEvent e) {
-        System.out.println("seance");
-        creationSeance.setVisible(false);
+    /**
+     * Insère une séance dans l'emploi du temps (la semaine est fixée).
+     * @param seance
+     */
+    private void affichageSeance(Seance seance) {
         JPanel panelle = new JPanel();
-        panelle.setLayout(null);
-        this.jour.add(panelle);
-        JLabel matiere = new JLabel(this.nomMatiere.getSelectedItem().toString());
-        JLabel proffeseur = new JLabel(this.nomProffeseur.getSelectedItem().toString());
-        JLabel salle = new JLabel(this.nomSalle.getSelectedItem().toString());
-        panelle.add(matiere);
-        panelle.add(proffeseur);
-        panelle.add(salle);
-        int debut = (hDebutH.getSelectedIndex())*40 + hDebutM.getSelectedIndex()*10;
-        int fin = (hFinH.getSelectedIndex())*40 + hFinM.getSelectedIndex()*10;
-        System.out.println(fin);
-        panelle.setBounds(8,debut,111,fin - debut);
+        Calendar debut =seance.getHdebut();
+        Calendar fin =seance.getHfin();
+        JPanel jourPanel = joursSemainePanel[debut.get(Calendar.DAY_OF_WEEK) - 2];
+
+        JLabel matiere = new JLabel(seance.getMatiere().getNom());
+        JLabel proffeseur = new JLabel(seance.getEnseignant().getNom());
+        JLabel salle = new JLabel(seance.getSalle().getNom());
+
+        int d =  (debut.get(Calendar.HOUR_OF_DAY) - 8)*40 + (debut.get(Calendar.MINUTE)/15)*10;
+        int f =  (fin.get(Calendar.HOUR_OF_DAY) - 8)*40 + (fin.get(Calendar.MINUTE)/15)*10;
+
+        panelle.setBounds(8, d,111,f - d);
         panelle.setBorder(BorderFactory.createLineBorder(Color.black));
         panelle.setBackground(Color.gray);
         matiere.setBounds(15,1,66,10);
         proffeseur.setBounds(15,15,66,10);
         salle.setBounds(15,30,66,15);
-        Calendar test1 = new GregorianCalendar(1999,7,26);
-        Calendar test2 = new GregorianCalendar(1999,7,26);
-        Calendar test3 = new GregorianCalendar(1999,7,26);
-        controleur.creerSeance( test1, test2, test3);
-        //lundi.setBackground(Color.red);
 
+        panelle.add(matiere);
+        panelle.add(proffeseur);
+        panelle.add(salle);
+        jourPanel.add(panelle);
+    }
 
+    @Override
+    public void update(Observable observable, Object o) {
+        // Temporaire juste pour tester l'ajout de seance, réecrit toutes les seances:
+        // Doit evidemment changer. Comment ? Je sais pas encore.
+
+        for(JPanel panel: joursSemainePanel)
+            panel.removeAll();
+
+        for(Seance seance: emploiDuTemps[this.semaneAnnee]) {
+            affichageSeance(seance);
+        }
+    }
+
+    private void validercoursActionPerformed(ActionEvent e) {
+        System.out.println("seance");
+
+        Matiere matiere = (Matiere) this.nomMatiere.getSelectedItem();
+        Enseignant enseignant = (Enseignant) this.nomEnseignant.getSelectedItem();
+        Salle salle = (Salle) this.nomSalle.getSelectedItem();
+
+        GregorianCalendar debutH = new GregorianCalendar();
+        GregorianCalendar finH = new GregorianCalendar();
+
+        debutH.set(GregorianCalendar.WEEK_OF_YEAR, this.semaneAnnee);
+        debutH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
+        debutH.set(GregorianCalendar.HOUR_OF_DAY, hDebutH.getSelectedIndex() + 8);
+        debutH.set(GregorianCalendar.MINUTE,  hDebutM.getSelectedIndex()*15);
+
+        finH.set(GregorianCalendar.WEEK_OF_YEAR, this.semaneAnnee);
+        finH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
+        finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH.getSelectedIndex() + 8);
+        finH.set(GregorianCalendar.MINUTE, hFinM.getSelectedIndex()*15);
+
+        controleur.creerSeance(salle, enseignant, matiere, debutH, finH);
     }
 
     private void annulerEmploiActionPerformed(ActionEvent e) {
@@ -105,74 +141,67 @@ public class VueDeLemploi extends JFrame {
 
     private void panel2MouseClicked(MouseEvent e) {
         creationSeance.setVisible(true);
-        this.jour = lundi;
+        this.jourSemaine = 2;
     }
     private void mardiMouseClicked(MouseEvent e) {
         creationSeance.setVisible(true);
-        jour = mardi;
+        this.jourSemaine = 3;
     }
 
     private void mercrediMouseClicked(MouseEvent e) {
         creationSeance.setVisible(true);
-        jour = mercredi;
+        this.jourSemaine = 4;
     }
 
     private void jeudiMouseClicked(MouseEvent e) {
         creationSeance.setVisible(true);
-        jour = jeudi;
+        this.jourSemaine = 5;
     }
 
     private void vendrediMouseClicked(MouseEvent e) {
         creationSeance.setVisible(true);
-        jour = vendredi;
+        this.jourSemaine = 6;
     }
 
     private void samediMouseClicked(MouseEvent e) {
         creationSeance.setVisible(true);
-        jour = samedi;
+        this.jourSemaine = 7;
     }
 
     private void validerEmploiActionPerformed(ActionEvent e) {
         controleur.creerEmploi();
     }
 
-    private void setComponents(){
-        //SALLES
-        DefaultComboBoxModel salleModel = new DefaultComboBoxModel();
-        nomSalle.setModel(salleModel);
-        for(Salle salle: this.modele.getSalles())
-            salleModel.addElement(salle.getNom());
-        //MATIERES
-        DefaultComboBoxModel matiereModel = new DefaultComboBoxModel();
-        nomMatiere.setModel(matiereModel);
-        nomMatiere2.setModel(matiereModel);// celui du debut ou on associe un prof a une matière
-        System.out.println(this.modele.getMatieres());
-        for(Matiere matiere: this.modele.getMatieres())
-            matiereModel.addElement(matiere);
-        //ENSEIGANANTS(association)
-        tmodelEnseignant = new VueGestionaire.TmodelEnseignant(modele.getEnseignantsList());
-        tableEnseignants.setModel(tmodelEnseignant);
-        //ENSEIGNANTS(Creation Seance)
-        DefaultComboBoxModel enseignantModel = new DefaultComboBoxModel();
-        nomProffeseur.setModel(enseignantModel);
+    private void semainePrecedenteActionPerformed(ActionEvent e) {
+    }
 
-        List<Enseignant> enseignantsDispo = this.controleur.getAssocTeachers((Matiere) nomMatiere.getSelectedItem());
-        for(Enseignant enseignant: enseignantsDispo)
-            enseignantModel.addElement(enseignant);
+
+    private void semaineSuivanteActionPerformed(ActionEvent e) {
+        // TODO add your code here
+    }
+
+    private void button2ActionPerformed(ActionEvent e) {
+        // TODO add your code here
+    }
+
+    private void button3ActionPerformed(ActionEvent e) {
+        // TODO add your code here
     }
 
     private void associerBoutonActionPerformed(ActionEvent e) {
-        Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
-        int i = tableEnseignants.getSelectedRow();
-        Enseignant enseignant = tmodelEnseignant.getRowValue(i);
-        this.controleur.associerMatiereProf(matiere,enseignant);
+        // TODO add your code here
     }
 
-
+    private void nomMatiereItemStateChanged(ItemEvent e) {
+        Matiere matiere = (Matiere) e.getItem();
+        // Temporaire: Je sais pas comment changer la liste en paramètre de combobox sans créer un nouveau modele
+        DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(matiere.getListeEnseignants().toArray());
+        nomEnseignant.setModel(comboBoxModel);
+    }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - adrien guard
+        // Generated using JFormDesigner Evaluation license - Haribou Abdallah
         panel1 = new JPanel();
         lundi = new JPanel();
         lundi2 = new JPanel();
@@ -217,7 +246,7 @@ public class VueDeLemploi extends JFrame {
         label2 = new JLabel();
         nomSalle = new JComboBox();
         nomMatiere = new JComboBox();
-        nomProffeseur = new JComboBox();
+        nomEnseignant = new JComboBox();
         fenetreDebut = new JFrame();
         tabbedPane1 = new JTabbedPane();
         panel3 = new JPanel();
@@ -237,13 +266,13 @@ public class VueDeLemploi extends JFrame {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax .
-            swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border
-            . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog"
-            , java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,panel1. getBorder
-            () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java
-            . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException
-            ( ) ;} } );
+            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
+            swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border
+            .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
+            ,java.awt.Font.BOLD,12),java.awt.Color.red),panel1. getBorder
+            ()));panel1. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
+            .beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
+            ();}});
 
             //======== lundi ========
             {
@@ -601,7 +630,7 @@ public class VueDeLemploi extends JFrame {
                         .addGroup(contentPaneLayout.createSequentialGroup()
                             .addGap(14, 14, 14)
                             .addComponent(panel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap(25, Short.MAX_VALUE))
+                    .addContainerGap(26, Short.MAX_VALUE))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
@@ -617,7 +646,7 @@ public class VueDeLemploi extends JFrame {
                         .addComponent(label27))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(panel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(validerEmploi, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
                         .addComponent(annulerEmploi, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
@@ -706,6 +735,9 @@ public class VueDeLemploi extends JFrame {
             //---- nomSalle ----
             nomSalle.setSelectedIndex(-1);
 
+            //---- nomMatiere ----
+            nomMatiere.addItemListener(e -> nomMatiereItemStateChanged(e));
+
             GroupLayout creationSeanceContentPaneLayout = new GroupLayout(creationSeanceContentPane);
             creationSeanceContentPane.setLayout(creationSeanceContentPaneLayout);
             creationSeanceContentPaneLayout.setHorizontalGroup(
@@ -735,12 +767,12 @@ public class VueDeLemploi extends JFrame {
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(hDebutM, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)))
                                     .addComponent(nomSalle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGap(45, 213, Short.MAX_VALUE))
+                                .addGap(45, 221, Short.MAX_VALUE))
                             .addGroup(creationSeanceContentPaneLayout.createSequentialGroup()
                                 .addGroup(creationSeanceContentPaneLayout.createParallelGroup()
                                     .addComponent(nomMatiere, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(nomProffeseur, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 260, Short.MAX_VALUE))))
+                                    .addComponent(nomEnseignant, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 265, Short.MAX_VALUE))))
             );
             creationSeanceContentPaneLayout.setVerticalGroup(
                 creationSeanceContentPaneLayout.createParallelGroup()
@@ -752,7 +784,7 @@ public class VueDeLemploi extends JFrame {
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(label6)
-                            .addComponent(nomProffeseur, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nomEnseignant, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(creationSeanceContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(label2)
@@ -789,12 +821,12 @@ public class VueDeLemploi extends JFrame {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
-                    EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
-                    . border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,
-                    java . awt. Color .red ) ,panel3. getBorder () ) ); panel3. addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
-                    { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )
-                    throw new RuntimeException( ) ;} } );
+                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
+                    border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER
+                    , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font
+                    .BOLD ,12 ), java. awt. Color. red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (
+                    new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order"
+                    .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -835,7 +867,7 @@ public class VueDeLemploi extends JFrame {
                                     .addGroup(panel3Layout.createSequentialGroup()
                                         .addGap(202, 202, 202)
                                         .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(207, Short.MAX_VALUE))
+                                .addContainerGap(203, Short.MAX_VALUE))
                     );
                     panel3Layout.setVerticalGroup(
                         panel3Layout.createParallelGroup()
@@ -852,7 +884,7 @@ public class VueDeLemploi extends JFrame {
                                             .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                         .addGap(88, 88, 88)))
                                 .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(89, Short.MAX_VALUE))
+                                .addContainerGap(94, Short.MAX_VALUE))
                     );
                 }
                 tabbedPane1.addTab("Creation Emploi", panel3);
@@ -873,18 +905,18 @@ public class VueDeLemploi extends JFrame {
                     panel4.setLayout(panel4Layout);
                     panel4Layout.setHorizontalGroup(
                         panel4Layout.createParallelGroup()
-                            .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
+                            .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
                             .addGroup(panel4Layout.createSequentialGroup()
                                 .addGap(29, 29, 29)
                                 .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 255, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
                                 .addComponent(associerBouton)
                                 .addGap(179, 179, 179))
                     );
                     panel4Layout.setVerticalGroup(
                         panel4Layout.createParallelGroup()
                             .addGroup(panel4Layout.createSequentialGroup()
-                                .addContainerGap(14, Short.MAX_VALUE)
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(panel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -916,7 +948,7 @@ public class VueDeLemploi extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - adrien guard
+    // Generated using JFormDesigner Evaluation license - Haribou Abdallah
     private JPanel panel1;
     private JPanel lundi;
     private JPanel lundi2;
@@ -961,7 +993,7 @@ public class VueDeLemploi extends JFrame {
     private JLabel label2;
     private JComboBox nomSalle;
     private JComboBox nomMatiere;
-    private JComboBox nomProffeseur;
+    private JComboBox nomEnseignant;
     private JFrame fenetreDebut;
     private JTabbedPane tabbedPane1;
     private JPanel panel3;

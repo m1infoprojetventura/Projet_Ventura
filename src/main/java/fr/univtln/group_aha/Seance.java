@@ -1,31 +1,57 @@
 package fr.univtln.group_aha;
 
-import fr.univtln.group_aha.Enseignant;
-import fr.univtln.group_aha.Salle;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Calendar;
-import java.util.Date;
-
 
 public class Seance {
-    private Calendar jour;
-    private Calendar  hdebut;
-    private Calendar hfin;
+    private int id;
     private Salle salle;
     private Enseignant enseignant;
     private Matiere matiere;
+    private Calendar  hdebut;
+    private Calendar hfin;
 
+    public Seance(Salle salle, Enseignant enseignant, Matiere matiere, Calendar hdebut, Calendar hfin) {
+        this.salle = salle;
+        this.enseignant = enseignant;
+        this.matiere = matiere;
+        this.hdebut = hdebut;
+        this.hfin = hfin;
+    }
 
-    public Seance(Calendar jour, Calendar hdebut, Calendar hfin)
+    public Seance(Calendar hdebut, Calendar hfin)
     {
-        this.jour = jour;
         this.hdebut = hdebut;
         this.hfin = hfin;
         this.enseignant = new Enseignant();
         this.salle = new Salle();
         this.matiere = new Matiere();
+    }
+
+    public Calendar getHdebut() {
+        return hdebut;
+    }
+
+    public Calendar getHfin() {
+        return hfin;
+    }
+
+    public Salle getSalle() {
+        return salle;
+    }
+
+    public Enseignant getEnseignant() {
+        return enseignant;
+    }
+
+    public Matiere getMatiere() {
+        return matiere;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
