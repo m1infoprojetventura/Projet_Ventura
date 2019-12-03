@@ -78,4 +78,8 @@ public class ModeleEmploi extends Observable {
         setChanged();
         notifyObservers();
     }
+
+    public void modifierSeance(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere) {
+        emploiDuTemps.toString();
+    }
 }

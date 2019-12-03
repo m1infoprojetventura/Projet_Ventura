@@ -34,4 +34,9 @@ public class ControleurEmploi{
     public List<Enseignant> getAssocTeachers(Matiere matiere) {
         return this.modele.getAssocTeachers(matiere);
     }
+
+
+    public void modifierSeance(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere) {
+        this.modele.modifierSeance(idSalle,salle,enseignant,matiere);
+    }
 }

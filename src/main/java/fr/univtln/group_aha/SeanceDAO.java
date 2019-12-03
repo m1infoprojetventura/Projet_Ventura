@@ -27,9 +27,9 @@ public class SeanceDAO extends DAO<Seance> {
             state.setInt(1,  id_salle);
             state.setInt(2,  id_enseignant);
             state.setInt(3,  id_matiere);
-            state.setTime(4,  debut_seance);
-            state.setTime(5,  fin_seance);
-            state.setDate(6,  date);
+            state.setDate(4,  date);
+            state.setTime(5,  debut_seance);
+            state.setTime(6,  fin_seance);
 
             state.executeUpdate();
 
