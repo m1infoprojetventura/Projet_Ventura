@@ -79,8 +79,20 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     private void button1ActionPerformed(ActionEvent e) {
+        GregorianCalendar debutH = new GregorianCalendar();
+        GregorianCalendar finH = new GregorianCalendar();
 
-        this.controleur.modifierSeance(idSalle,(Salle)nomSalle2.getSelectedItem(),(Enseignant)nomEnseignant2.getSelectedItem(),(Matiere)nomMatiere3.getSelectedItem());
+        debutH.set(GregorianCalendar.WEEK_OF_YEAR, this.semaneAnnee);
+        //debutH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
+        debutH.set(GregorianCalendar.HOUR_OF_DAY, hDebutH2.getSelectedIndex() + 8);
+        debutH.set(GregorianCalendar.MINUTE,  hDebutM2.getSelectedIndex()*15);
+
+        finH.set(GregorianCalendar.WEEK_OF_YEAR, this.semaneAnnee);
+        //finH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
+        finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH2.getSelectedIndex() + 8);
+        finH.set(GregorianCalendar.MINUTE, hFinM2.getSelectedIndex()*15);
+
+        this.controleur.modifierSeance(idSalle,(Salle)nomSalle2.getSelectedItem(),(Enseignant)nomEnseignant2.getSelectedItem(),(Matiere)nomMatiere3.getSelectedItem(),debutH, finH);
 
     }
 
@@ -105,7 +117,15 @@ public class VueDeLemploi extends JFrame implements Observer {
                 nomMatiere3.setSelectedItem(seance.getMatiere());
                 nomEnseignant2.setSelectedItem(seance.getEnseignant());
                 nomSalle2.setSelectedItem(seance.getSalle());
+                hDebutH2.setSelectedItem(String.valueOf(seance.getHdebut().get(Calendar.HOUR_OF_DAY)));
+                hDebutM2.setSelectedItem(String.valueOf(seance.getHdebut().get(Calendar.MINUTE)));
+                hFinH2.setSelectedItem(String.valueOf(seance.getHfin().get(Calendar.HOUR_OF_DAY)));
+                hFinH2.setSelectedItem(String.valueOf(seance.getHfin().get(Calendar.MINUTE)));
                 idSalle = seance.getId();
+                //jourSemaine = seance.getHdebut().get(Calendar.DAY_OF_WEEK);
+                System.out.println("llllllllll" + jourSemaine);
+
+
 
             }
         });
@@ -165,6 +185,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         System.out.println("Mise a jour");
         for(JPanel panel: joursSemainePanel)
             panel.removeAll();
+            repaint();
 
         for(Seance seance: emploiDuTemps[this.semaneAnnee]) {
             affichageSeance(seance);
@@ -267,6 +288,11 @@ public class VueDeLemploi extends JFrame implements Observer {
         nomEnseignant2.setModel(comboBoxModel);
     }
 
+    private void suppSeanceBoutonActionPerformed(ActionEvent e) {
+        this.controleur.supprimerSeance(idSalle, semaneAnnee);
+
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - adrien guard
@@ -342,7 +368,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         nomEnseignant2 = new JComboBox();
         button1 = new JButton();
         button3 = new JButton();
-        button2 = new JButton();
+        suppSeanceBouton = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -350,11 +376,12 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder ( 0
-            , 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
-            , new java. awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,
-            panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-            ) { if( "\u0062or\u0064er" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
+            ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
+            .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
+            . Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
+            propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
+            ;} } );
 
             //======== lundi ========
             {
@@ -816,10 +843,7 @@ public class VueDeLemploi extends JFrame implements Observer {
 
             //---- validercours2 ----
             validercours2.setText("valider");
-            validercours2.addActionListener(e -> {
-			button1ActionPerformed(e);
-			validercoursActionPerformed(e);
-		});
+            validercours2.addActionListener(e -> validercoursActionPerformed(e));
 
             GroupLayout creationSeanceContentPaneLayout = new GroupLayout(creationSeanceContentPane);
             creationSeanceContentPane.setLayout(creationSeanceContentPaneLayout);
@@ -904,12 +928,12 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-                    ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-                    . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-                    . Color. red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-                    propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-                    ; }} );
+                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+                    EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing
+                    . border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ),
+                    java. awt. Color. red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+                    { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () ))
+                    throw new RuntimeException( ); }} );
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -1112,8 +1136,9 @@ public class VueDeLemploi extends JFrame implements Observer {
             //---- button3 ----
             button3.setText("annuler");
 
-            //---- button2 ----
-            button2.setText("supprimer");
+            //---- suppSeanceBouton ----
+            suppSeanceBouton.setText("supprimer");
+            suppSeanceBouton.addActionListener(e -> suppSeanceBoutonActionPerformed(e));
 
             GroupLayout modifierSeanceContentPaneLayout = new GroupLayout(modifierSeanceContentPane);
             modifierSeanceContentPane.setLayout(modifierSeanceContentPaneLayout);
@@ -1151,7 +1176,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(button1)
                                         .addGap(18, 18, 18)
-                                        .addComponent(button2)))
+                                        .addComponent(suppSeanceBouton)))
                                 .addGap(0, 62, Short.MAX_VALUE))))
             );
             modifierSeanceContentPaneLayout.setVerticalGroup(
@@ -1192,7 +1217,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                     .addComponent(button3, GroupLayout.Alignment.TRAILING)))
                             .addGroup(GroupLayout.Alignment.TRAILING, modifierSeanceContentPaneLayout.createSequentialGroup()
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(button2)))
+                                .addComponent(suppSeanceBouton)))
                         .addContainerGap())
             );
             modifierSeance.pack();
@@ -1275,6 +1300,6 @@ public class VueDeLemploi extends JFrame implements Observer {
     private JComboBox nomEnseignant2;
     private JButton button1;
     private JButton button3;
-    private JButton button2;
+    private JButton suppSeanceBouton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

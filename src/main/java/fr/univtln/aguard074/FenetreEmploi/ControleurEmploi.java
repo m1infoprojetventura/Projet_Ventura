@@ -6,6 +6,7 @@ import fr.univtln.group_aha.Matiere;
 import fr.univtln.group_aha.Salle;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class ControleurEmploi{
@@ -36,7 +37,11 @@ public class ControleurEmploi{
     }
 
 
-    public void modifierSeance(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere) {
-        this.modele.modifierSeance(idSalle,salle,enseignant,matiere);
+    public void modifierSeance(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH) {
+        this.modele.modifierSeance(idSalle,salle,enseignant,debutH,finH);
+    }
+
+    public void supprimerSeance(int idSalle, int jourSemaine) {
+        this.modele.supprimerSeance(idSalle, jourSemaine);
     }
 }

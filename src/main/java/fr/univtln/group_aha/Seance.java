@@ -27,6 +27,10 @@ public class Seance {
         this.matiere = new Matiere();
     }
 
+    public Seance(int idSeance) {
+        id= idSeance;
+    }
+
     public Calendar getHdebut() {
         return hdebut;
     }
@@ -53,5 +57,37 @@ public class Seance {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setSalle(Salle salle) {
+        this.salle = salle;
+    }
+
+    public void setEnseignant(Enseignant enseignant) {
+        this.enseignant = enseignant;
+    }
+
+    public void setMatiere(Matiere matiere) {
+        this.matiere = matiere;
+    }
+
+    public void setHdebut(Calendar hdebut) {
+        this.hdebut = hdebut;
+    }
+
+    public void setHfin(Calendar hfin) {
+        this.hfin = hfin;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Seance seance = (Seance) o;
+
+        if (id != seance.id) return false;
+
+        return true;
     }
 }

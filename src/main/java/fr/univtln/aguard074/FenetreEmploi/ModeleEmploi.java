@@ -7,10 +7,7 @@ import fr.univtln.group_aha.Seance;
 import fr.univtln.group_aha.SeanceDAO;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Observable;
+import java.util.*;
 
 public class ModeleEmploi extends Observable {
 
@@ -79,7 +76,31 @@ public class ModeleEmploi extends Observable {
         notifyObservers();
     }
 
-    public void modifierSeance(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere) {
-        emploiDuTemps.toString();
+
+
+    public void modifierSeance(int idSeance, Salle salle, Enseignant enseignant, GregorianCalendar debutH, GregorianCalendar finH) {
+        int x = debutH.get(Calendar.WEEK_OF_YEAR);
+        Seance seance = new Seance(idSeance);
+        int idx = emploiDuTemps[x].indexOf(seance);
+        emploiDuTemps[x].get(idx).setId(idSeance);
+        Calendar ancien = emploiDuTemps[x].get(idx).getHdebut();
+        emploiDuTemps[x].get(idx).getHdebut().set(Calendar.DAY_OF_WEEK,ancien.get(Calendar.DAY_OF_WEEK));
+        emploiDuTemps[x].get(idx).setSalle(salle);
+        emploiDuTemps[x].get(idx).setEnseignant(enseignant);
+        emploiDuTemps[x].get(idx).setHdebut(debutH);
+        emploiDuTemps[x].get(idx).setHfin(finH);
+        setChanged();
+        notifyObservers();
+
+    }
+
+    public void supprimerSeance(int idSeance, int jourSemaine) {
+        System.out.println(jourSemaine);
+        Seance seance = new Seance(idSeance);
+        int idx = emploiDuTemps[jourSemaine].indexOf(seance);
+        emploiDuTemps[jourSemaine].remove(idx);
+        setChanged();
+        notifyObservers();
+
     }
 }
