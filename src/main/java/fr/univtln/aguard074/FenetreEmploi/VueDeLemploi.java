@@ -39,6 +39,7 @@ public class VueDeLemploi extends JFrame implements Observer {
     private DefaultComboBoxModel sallecomboBoxModel;
     private DefaultComboBoxModel comboBoxModel;
     private int idSalle;
+    private static int nomPanel = 0;
 
 
     public VueDeLemploi(ModeleEmploi modele, ControleurEmploi controleur) {
@@ -79,16 +80,17 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     private void button1ActionPerformed(ActionEvent e) {
+        //System.out.println("le jour actuel c" +this.jourSemaine);
         GregorianCalendar debutH = new GregorianCalendar();
         GregorianCalendar finH = new GregorianCalendar();
 
         debutH.set(GregorianCalendar.WEEK_OF_YEAR, this.semaneAnnee);
-        //debutH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
+        debutH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
         debutH.set(GregorianCalendar.HOUR_OF_DAY, hDebutH2.getSelectedIndex() + 8);
         debutH.set(GregorianCalendar.MINUTE,  hDebutM2.getSelectedIndex()*15);
 
         finH.set(GregorianCalendar.WEEK_OF_YEAR, this.semaneAnnee);
-        //finH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
+        finH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
         finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH2.getSelectedIndex() + 8);
         finH.set(GregorianCalendar.MINUTE, hFinM2.getSelectedIndex()*15);
 
@@ -109,6 +111,7 @@ public class VueDeLemploi extends JFrame implements Observer {
      */
     private void affichageSeance(Seance seance) {
         JPanel panelle = new JPanel();
+        panelle.setName(Integer.toString(nomPanel));
         panelle.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -122,8 +125,9 @@ public class VueDeLemploi extends JFrame implements Observer {
                 hFinH2.setSelectedItem(String.valueOf(seance.getHfin().get(Calendar.HOUR_OF_DAY)));
                 hFinH2.setSelectedItem(String.valueOf(seance.getHfin().get(Calendar.MINUTE)));
                 idSalle = seance.getId();
-                //jourSemaine = seance.getHdebut().get(Calendar.DAY_OF_WEEK);
-                System.out.println("llllllllll" + jourSemaine);
+                System.out.println(idSalle);
+                jourSemaine = seance.getHdebut().get(Calendar.DAY_OF_WEEK);
+                //System.out.println("llllllllll" + jourSemaine);
 
 
 
@@ -134,11 +138,11 @@ public class VueDeLemploi extends JFrame implements Observer {
 
         Calendar debut =seance.getHdebut();
         Calendar fin =seance.getHfin();
-        int j = debut.get(Calendar.DAY_OF_WEEK) - 2;
+        int j = debut.get(Calendar.DAY_OF_WEEK) -2;
 
         JPanel jourPanel = joursSemainePanel[j];
         jourPanel.add(panelle);
-        System.out.println(jourPanel.getName());
+        //System.out.println(jourPanel.getName());
 
         JLabel matiere = new JLabel(seance.getMatiere().getNom());
         JLabel proffeseur = new JLabel(seance.getEnseignant().getNom());
@@ -149,21 +153,21 @@ public class VueDeLemploi extends JFrame implements Observer {
         int debM = debut.get(Calendar.MINUTE)/15;
         int finM = fin.get(Calendar.MINUTE)/15;
 
-        System.out.println("seance");
+
         creationSeance.setVisible(false);
         panelle.setLayout(null);
 
-        System.out.println(debH);
-        System.out.println(debM);
+        //System.out.println(debH);
+        //System.out.println(debM);
 
-        System.out.println(finH);
-        System.out.println(finM);
+        //System.out.println(finH);
+        //System.out.println(finM);
 
         int d =  (debH)*40 + (debM)*10;
         int f =  (finH)*40 + (finM)*10;
 
-        System.out.println("Debut: " + d);
-        System.out.println("Fin: " + f);
+        //System.out.println("Debut: " + d);
+        //System.out.println("Fin: " + f);
 
         panelle.setBounds(8, d,111,f - d);
         panelle.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -182,7 +186,7 @@ public class VueDeLemploi extends JFrame implements Observer {
     public void update(Observable observable, Object o) {
         // Temporaire juste pour tester l'ajout de seance, réecrit toutes les seances:
         // Doit evidemment changer. Comment ? Je sais pas encore.
-        System.out.println("Mise a jour");
+        //System.out.println("Mise a jour");
         for(JPanel panel: joursSemainePanel)
             panel.removeAll();
             repaint();
@@ -193,8 +197,9 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     private void validercoursActionPerformed(ActionEvent e) {
-        System.out.println("seance");
-
+        //System.out.println("seance");
+        int id = nomPanel;
+        nomPanel+=1;
         Matiere matiere = (Matiere) this.nomMatiere.getSelectedItem();
         Enseignant enseignant = (Enseignant) this.nomEnseignant.getSelectedItem();
         Salle salle = (Salle) this.nomSalle.getSelectedItem();
@@ -212,7 +217,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH.getSelectedIndex() + 8);
         finH.set(GregorianCalendar.MINUTE, hFinM.getSelectedIndex()*15);
 
-        controleur.creerSeance(salle, enseignant, matiere, debutH, finH);
+        controleur.creerSeance(id,salle, enseignant, matiere, debutH, finH);
     }
 
     private void annulerEmploiActionPerformed(ActionEvent e) {

@@ -16,8 +16,8 @@ public class ControleurEmploi{
         this.modele = modele;
     }
 
-    public void creerSeance(Salle salle, Enseignant enseignant, Matiere matiere, Calendar debutCours, Calendar finCours) {
-        this.modele.creerSeance(salle, enseignant, matiere, debutCours, finCours);
+    public void creerSeance(int id, Salle salle, Enseignant enseignant, Matiere matiere, Calendar debutCours, Calendar finCours) {
+        this.modele.creerSeance(id,salle, enseignant, matiere, debutCours, finCours);
     }
 
     public void creerEmploi() {

@@ -18,13 +18,14 @@ public class Seance {
         this.hfin = hfin;
     }
 
-    public Seance(Calendar hdebut, Calendar hfin)
+    public Seance(int id, Salle salle, Enseignant enseignant, Matiere matiere, Calendar hdebut, Calendar hfin)
     {
+        this.id = id;
         this.hdebut = hdebut;
         this.hfin = hfin;
-        this.enseignant = new Enseignant();
-        this.salle = new Salle();
-        this.matiere = new Matiere();
+        this.enseignant = enseignant;
+        this.salle = salle;
+        this.matiere = matiere;
     }
 
     public Seance(int idSeance) {
@@ -86,7 +87,7 @@ public class Seance {
 
         Seance seance = (Seance) o;
 
-        if (id != seance.id) return false;
+        if (this.id != seance.id) return false;
 
         return true;
     }
