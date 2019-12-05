@@ -870,6 +870,7 @@ public class VueGestionaire extends JFrame {
             Object[] o = enseignant.getAttributs().toArray();
             return o[i1];
         }
+
     }
     public class TmodelSalle extends  AbstractTableModel implements Observer {
         private final String[] entetes = {"ID","Salle", "Capacite", "Matériels"};

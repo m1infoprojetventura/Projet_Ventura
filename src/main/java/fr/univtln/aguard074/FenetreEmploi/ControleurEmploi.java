@@ -2,6 +2,7 @@ package fr.univtln.aguard074.FenetreEmploi;
 
 
 import fr.univtln.group_aha.Enseignant;
+import fr.univtln.group_aha.Formation;
 import fr.univtln.group_aha.Matiere;
 import fr.univtln.group_aha.Salle;
 
@@ -16,8 +17,8 @@ public class ControleurEmploi{
         this.modele = modele;
     }
 
-    public void creerSeance(int id, Salle salle, Enseignant enseignant, Matiere matiere, Calendar debutCours, Calendar finCours) {
-        this.modele.creerSeance(id,salle, enseignant, matiere, debutCours, finCours);
+    public void creerSeance(int id, Salle salle, Enseignant enseignant, Matiere matiere, Calendar debutCours, Calendar finCours, Formation formation) {
+        this.modele.creerSeance(id,salle, enseignant, matiere, debutCours, finCours, formation);
     }
 
     public void creerEmploi() {
@@ -37,11 +38,23 @@ public class ControleurEmploi{
     }
 
 
-    public void modifierSeance(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH) {
-        this.modele.modifierSeance(idSalle,salle,enseignant,debutH,finH);
+    public void modifierSeance(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
+        this.modele.modifierSeance(idSalle,salle,enseignant,debutH,finH,formation);
     }
 
     public void supprimerSeance(int idSalle, int jourSemaine) {
         this.modele.supprimerSeance(idSalle, jourSemaine);
+    }
+
+    public List<String> recupMatieres(Enseignant enseignant) {
+        return this.modele.recupMatieres(enseignant);
+    }
+
+    public void initEmploi(int id){
+        this.modele.initEmploi(id);
+    }
+
+    public void supprimerEmploi(int id) {
+        this.modele.supprimerEmploi(id);
     }
 }

@@ -9,16 +9,26 @@ public class Seance {
     private Matiere matiere;
     private Calendar  hdebut;
     private Calendar hfin;
+    private Formation formation;
 
-    public Seance(Salle salle, Enseignant enseignant, Matiere matiere, Calendar hdebut, Calendar hfin) {
+    public Seance(Salle salle, Enseignant enseignant, Matiere matiere, Calendar hdebut, Calendar hfin,Formation formation) {
         this.salle = salle;
         this.enseignant = enseignant;
         this.matiere = matiere;
         this.hdebut = hdebut;
         this.hfin = hfin;
+        this.formation = formation;
     }
 
-    public Seance(int id, Salle salle, Enseignant enseignant, Matiere matiere, Calendar hdebut, Calendar hfin)
+    public Formation getFormation() {
+        return formation;
+    }
+
+    public void setFormation(Formation formation) {
+        this.formation = formation;
+    }
+
+    public Seance(int id, Salle salle, Enseignant enseignant, Matiere matiere, Calendar hdebut, Calendar hfin, Formation formation)
     {
         this.id = id;
         this.hdebut = hdebut;
@@ -26,6 +36,7 @@ public class Seance {
         this.enseignant = enseignant;
         this.salle = salle;
         this.matiere = matiere;
+        this.formation = formation;
     }
 
     public Seance(int idSeance) {

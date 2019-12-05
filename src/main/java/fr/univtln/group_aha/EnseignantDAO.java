@@ -125,6 +125,32 @@ public class EnseignantDAO extends DAO<Enseignant> {
         }
     }
 
+
+    public ArrayList<String> getMatieres(Enseignant obj) {
+        ArrayList<String> matieres = new ArrayList<>();
+        MatiereDAO matiereDAO = new MatiereDAO();
+        try {
+            String query = "SELECT * FROM Matiere_Enseignant where id_enseignant =? ";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setInt(1, obj.getId());
+            ResultSet result = state.executeQuery();
+            while (result.next()){
+                //System.out.println(result.getInt("id_matiere"));
+                Matiere matiere = matiereDAO.find(result.getInt("id_matiere"));
+                matieres.add(matiere.getNom());
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return matieres;
+        }
+
+    }
+
     @Override
       public ArrayList<Enseignant> getData() {
 

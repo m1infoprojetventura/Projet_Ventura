@@ -118,7 +118,43 @@ public class SalleDAO extends DAO<Salle> {
 
     @Override
     public Salle find(int id) {
-        return null;
+        Salle salle = new Salle();
+
+
+        try {
+
+            Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            String query = "SELECT * FROM Salle WHERE id = %d;";
+
+            ResultSet resultat = st.executeQuery(String.format(query, id));
+
+            if (resultat.first()) {
+                ArrayList<Materiel.TypeMateriel> resultat2 = new ArrayList<>();
+
+                String query2 = "SELECT * FROM Materiel WHERE id_salle = ?";
+                PreparedStatement state2 = connect.prepareStatement(query2);
+
+                state2.setInt(1,resultat.getInt("id"));
+                ResultSet result2 = state2.executeQuery();
+                while (result2.next()){
+                    if(result2.getString("type").equals("IMPRIMANTE")){resultat2.add(Materiel.TypeMateriel.IMPRIMANTE);}
+                    if(result2.getString("type").equals("ORDINATEUR")){resultat2.add(Materiel.TypeMateriel.ORDINATEUR);}
+                    if(result2.getString("type").equals("VIDEO_PROJECTEUR")){resultat2.add(Materiel.TypeMateriel.VIDEO_PROJECTEUR);}
+                    if(result2.getString("type").equals("TABLEAU_TACTIL")){resultat2.add(Materiel.TypeMateriel.TABLEAU_TACTIL);}
+                    //System.out.println(result.getInt("id")+result2.getString("type"));
+
+                }
+                salle = new Salle(resultat.getString("nom"),resultat2 ,resultat.getInt("capacite"));
+
+            }
+        }
+
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            return salle;
+        }
     }
 
     @Override

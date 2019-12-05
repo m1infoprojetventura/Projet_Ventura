@@ -11,11 +11,11 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.plaf.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
-import fr.univtln.group_aha.Enseignant;
-import fr.univtln.group_aha.Matiere;
-import fr.univtln.group_aha.Salle;
-import fr.univtln.group_aha.Seance;
+import fr.univtln.aguard074.FenetreAdmin.VueGestionaire;
+import fr.univtln.group_aha.*;
 
 // Temporaire implements Obververs pour observer le modèle emploi du temps
 /**
@@ -38,11 +38,16 @@ public class VueDeLemploi extends JFrame implements Observer {
     private DefaultComboBoxModel matierecomboBoxModel;
     private DefaultComboBoxModel sallecomboBoxModel;
     private DefaultComboBoxModel comboBoxModel;
+    private DefaultComboBoxModel formationComboBoxModel;
+    private VueGestionaire.TmodelEnseignant tmodelEnseignant;
     private int idSalle;
     private static int nomPanel = 0;
+    private DefaultTableModel matTable = new DefaultTableModel();
 
 
     public VueDeLemploi(ModeleEmploi modele, ControleurEmploi controleur) {
+        setResizable(false); //On interdit la redimensionnement de la fenêtre
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initComponents();
         //nomMatiere3 = nomMatiere;
 
@@ -57,15 +62,18 @@ public class VueDeLemploi extends JFrame implements Observer {
 
         // Temporaire
         this.modele.addObserver(this);
+        formationComboBoxModel = new DefaultComboBoxModel(modele.getFormations().toArray());
+        choixFormationBox.setModel(formationComboBoxModel);
 
         DefaultComboBoxModel matierecomboBoxModel = new DefaultComboBoxModel(modele.getMatieres().toArray());
         nomMatiere.setModel(matierecomboBoxModel);
+        nomMatiere2.setModel(matierecomboBoxModel);
         nomMatiere3.setModel(matierecomboBoxModel);
 
         DefaultComboBoxModel sallecomboBoxModel = new DefaultComboBoxModel(modele.getSalles().toArray());
         nomSalle.setModel(sallecomboBoxModel);
         nomSalle2.setModel(sallecomboBoxModel);
-
+        gererTabEnseignants();
 
 
         joursSemainePanel = new JPanel[]{lundi, mardi, mercredi, jeudi, vendredi, samedi};
@@ -77,6 +85,32 @@ public class VueDeLemploi extends JFrame implements Observer {
         samedi.setName("samedi");
 
         this.fenetreDebut.setVisible(true);
+    }
+
+    private void gererTabEnseignants(){
+        tmodelEnseignant = new VueGestionaire.TmodelEnseignant(modele.getEnseignantsList());
+        tableEnseignants.setModel(tmodelEnseignant);
+        tableEnseignants.getColumnModel().getColumn(0).setMinWidth(0);
+        tableEnseignants.getColumnModel().getColumn(0).setMaxWidth(0);
+        tableEnseignants.getColumnModel().getColumn(3).setMinWidth(0);
+        tableEnseignants.getColumnModel().getColumn(3).setMaxWidth(0);
+        tableEnseignants.getColumnModel().getColumn(4).setMinWidth(0);
+        tableEnseignants.getColumnModel().getColumn(4).setMaxWidth(0);
+        tableMatiere.setModel(matTable);
+        matTable.addColumn("Matiere1");
+        matTable.addColumn("Matiere2");
+        matTable.addColumn("Matiere3");
+        for(Enseignant enseignant: modele.getEnseignantsList()){
+            matTable.addRow((this.controleur.recupMatieres(enseignant)).toArray());
+
+
+            //System.out.println(this.controleur.recupMatieres(enseignant).toArray());
+            matTable.fireTableDataChanged();
+        }
+
+
+
+
     }
 
     private void button1ActionPerformed(ActionEvent e) {
@@ -94,7 +128,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH2.getSelectedIndex() + 8);
         finH.set(GregorianCalendar.MINUTE, hFinM2.getSelectedIndex()*15);
 
-        this.controleur.modifierSeance(idSalle,(Salle)nomSalle2.getSelectedItem(),(Enseignant)nomEnseignant2.getSelectedItem(),(Matiere)nomMatiere3.getSelectedItem(),debutH, finH);
+        this.controleur.modifierSeance(idSalle,(Salle)nomSalle2.getSelectedItem(),(Enseignant)nomEnseignant2.getSelectedItem(),(Matiere)nomMatiere3.getSelectedItem(),debutH, finH, (Formation) choixFormationBox.getSelectedItem());
 
     }
 
@@ -190,8 +224,11 @@ public class VueDeLemploi extends JFrame implements Observer {
         for(JPanel panel: joursSemainePanel)
             panel.removeAll();
             repaint();
+        //System.out.println(emploiDuTemps[10].get(0).getSalle());
 
+        //System.out.println(emploiDuTemps[this.semaneAnnee]);
         for(Seance seance: emploiDuTemps[this.semaneAnnee]) {
+            //System.out.println(seance);
             affichageSeance(seance);
         }
     }
@@ -216,8 +253,9 @@ public class VueDeLemploi extends JFrame implements Observer {
         finH.set(GregorianCalendar.DAY_OF_WEEK,  this.jourSemaine);
         finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH.getSelectedIndex() + 8);
         finH.set(GregorianCalendar.MINUTE, hFinM.getSelectedIndex()*15);
+        Formation formation = (Formation) this.choixFormationBox.getSelectedItem();
 
-        controleur.creerSeance(id,salle, enseignant, matiere, debutH, finH);
+        controleur.creerSeance(id,salle, enseignant, matiere, debutH, finH,formation);
     }
 
     private void annulerEmploiActionPerformed(ActionEvent e) {
@@ -273,8 +311,9 @@ public class VueDeLemploi extends JFrame implements Observer {
         // TODO add your code here
     }
 
-    private void button2ActionPerformed(ActionEvent e) {
-        // TODO add your code here
+    private void supprimerSeance(ActionEvent e) {
+        int id = ((Formation)choixFormationBox.getSelectedItem()).getId();
+        controleur.supprimerEmploi(id);
     }
 
     private void button3ActionPerformed(ActionEvent e) {
@@ -282,7 +321,11 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     private void associerBoutonActionPerformed(ActionEvent e) {
-        // TODO add your code here
+        int i = tableEnseignants.getSelectedRow();
+        Enseignant enseignant = tmodelEnseignant.getRowValue(i);
+        Matiere matiere = (Matiere) nomMatiere2.getSelectedItem();
+        controleur.associerMatiereProf(matiere,enseignant);
+
     }
 
     private void nomMatiereItemStateChanged(ItemEvent e) {
@@ -296,6 +339,26 @@ public class VueDeLemploi extends JFrame implements Observer {
     private void suppSeanceBoutonActionPerformed(ActionEvent e) {
         this.controleur.supprimerSeance(idSalle, semaneAnnee);
 
+    }
+
+    private void bouttonMofierEmploiActionPerformed(ActionEvent e) {
+        this.fenetreDebut.setVisible(false);
+        this.setVisible(true);
+
+        this.intituleFormation.setText(choixFormationBox.getSelectedItem().toString());
+        int id = ((Formation)choixFormationBox.getSelectedItem()).getId();
+        //System.out.println(id);
+        this.controleur.initEmploi(id);
+    }
+
+    private void choixFormationBoxActionPerformed(ActionEvent e) {
+        //Changer de formation masque les autres
+        lundi.removeAll();
+        mardi.removeAll();
+        mercredi.removeAll();
+        jeudi.removeAll();
+        vendredi.removeAll();
+        samedi.removeAll();
     }
 
     private void initComponents() {
@@ -353,11 +416,15 @@ public class VueDeLemploi extends JFrame implements Observer {
         label1 = new JLabel();
         choixFormationBox = new JComboBox<>();
         boutonCreerEmploi = new JButton();
+        bouttonMofierEmploi = new JButton();
+        button2 = new JButton();
         panel4 = new JPanel();
         nomMatiere2 = new JComboBox();
         scrollPane1 = new JScrollPane();
         tableEnseignants = new JTable();
         associerBouton = new JButton();
+        scrollPane2 = new JScrollPane();
+        tableMatiere = new JTable();
         modifierSeance = new JFrame();
         label21 = new JLabel();
         label28 = new JLabel();
@@ -376,17 +443,18 @@ public class VueDeLemploi extends JFrame implements Observer {
         suppSeanceBouton = new JButton();
 
         //======== this ========
+        setResizable(false);
         Container contentPane = getContentPane();
 
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-            ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-            .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
-            . Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-            propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-            ;} } );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
+            EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing
+            . border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ),
+            java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
+            { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () ))
+            throw new RuntimeException( ); }} );
 
             //======== lundi ========
             {
@@ -772,6 +840,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== creationSeance ========
         {
             creationSeance.setTitle("creer");
+            creationSeance.setResizable(false);
             Container creationSeanceContentPane = creationSeance.getContentPane();
 
             //---- label5 ----
@@ -926,6 +995,7 @@ public class VueDeLemploi extends JFrame implements Observer {
 
         //======== fenetreDebut ========
         {
+            fenetreDebut.setResizable(false);
             Container fenetreDebutContentPane = fenetreDebut.getContentPane();
 
             //======== tabbedPane1 ========
@@ -933,12 +1003,12 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-                    EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing
-                    . border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ),
-                    java. awt. Color. red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-                    { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () ))
-                    throw new RuntimeException( ); }} );
+                    panel3.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.
+                    border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border.TitledBorder.CENTER
+                    ,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font
+                    .BOLD,12),java.awt.Color.red),panel3. getBorder()));panel3. addPropertyChangeListener(
+                    new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r"
+                    .equals(e.getPropertyName()))throw new RuntimeException();}});
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -957,46 +1027,58 @@ public class VueDeLemploi extends JFrame implements Observer {
                         "Staps",
                         "Lettres"
                     }));
+                    choixFormationBox.addActionListener(e -> choixFormationBoxActionPerformed(e));
 
                     //---- boutonCreerEmploi ----
                     boutonCreerEmploi.setText("creer");
                     boutonCreerEmploi.addActionListener(e -> boutonCreerEmploiActionPerformed(e));
+
+                    //---- bouttonMofierEmploi ----
+                    bouttonMofierEmploi.setText("Modifier");
+                    bouttonMofierEmploi.addActionListener(e -> bouttonMofierEmploiActionPerformed(e));
+
+                    //---- button2 ----
+                    button2.setText("Supprimer");
+                    button2.addActionListener(e -> supprimerSeance(e));
 
                     GroupLayout panel3Layout = new GroupLayout(panel3);
                     panel3.setLayout(panel3Layout);
                     panel3Layout.setHorizontalGroup(
                         panel3Layout.createParallelGroup()
                             .addGroup(panel3Layout.createSequentialGroup()
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGap(110, 110, 110)
-                                        .addComponent(label1)
-                                        .addGap(40, 40, 40)
-                                        .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGap(193, 193, 193)
-                                        .addComponent(label3, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGap(202, 202, 202)
-                                        .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(207, Short.MAX_VALUE))
+                                .addGap(94, 94, 94)
+                                .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                                .addGap(51, 51, 51)
+                                .addComponent(bouttonMofierEmploi, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+                                .addGap(57, 57, 57)
+                                .addComponent(button2, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(90, Short.MAX_VALUE))
+                            .addGroup(panel3Layout.createSequentialGroup()
+                                .addGap(193, 193, 193)
+                                .addComponent(label3, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
+                                .addContainerGap(139, Short.MAX_VALUE)
+                                .addComponent(label1)
+                                .addGap(77, 77, 77)
+                                .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(161, 161, 161))
                     );
                     panel3Layout.setVerticalGroup(
                         panel3Layout.createParallelGroup()
                             .addGroup(panel3Layout.createSequentialGroup()
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGap(44, 44, 44)
-                                        .addComponent(label3, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(111, 111, 111))
-                                    .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                            .addComponent(label1)
-                                            .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(88, 88, 88)))
-                                .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(89, Short.MAX_VALUE))
+                                .addGap(31, 31, 31)
+                                .addComponent(label3, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(label1))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bouttonMofierEmploi, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(button2, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE))
+                                .addGap(99, 99, 99))
                     );
                 }
                 tabbedPane1.addTab("Creation Emploi", panel3);
@@ -1013,24 +1095,46 @@ public class VueDeLemploi extends JFrame implements Observer {
                     associerBouton.setText("Associer");
                     associerBouton.addActionListener(e -> associerBoutonActionPerformed(e));
 
+                    //======== scrollPane2 ========
+                    {
+
+                        //---- tableMatiere ----
+                        tableMatiere.setModel(new DefaultTableModel(
+                            new Object[][] {
+                                {null},
+                                {null},
+                            },
+                            new String[] {
+                                null
+                            }
+                        ));
+                        scrollPane2.setViewportView(tableMatiere);
+                    }
+
                     GroupLayout panel4Layout = new GroupLayout(panel4);
                     panel4.setLayout(panel4Layout);
                     panel4Layout.setHorizontalGroup(
                         panel4Layout.createParallelGroup()
-                            .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE)
                             .addGroup(panel4Layout.createSequentialGroup()
                                 .addGap(29, 29, 29)
                                 .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 255, Short.MAX_VALUE)
                                 .addComponent(associerBouton)
                                 .addGap(179, 179, 179))
+                            .addGroup(panel4Layout.createSequentialGroup()
+                                .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                                .addContainerGap())
                     );
                     panel4Layout.setVerticalGroup(
                         panel4Layout.createParallelGroup()
                             .addGroup(panel4Layout.createSequentialGroup()
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGroup(panel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                                    .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
+                                .addGap(28, 28, 28)
                                 .addGroup(panel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                     .addComponent(associerBouton))
@@ -1050,7 +1154,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                 fenetreDebutContentPaneLayout.createParallelGroup()
                     .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(tabbedPane1)
+                        .addComponent(tabbedPane1, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                         .addGap(38, 38, 38))
             );
             fenetreDebut.pack();
@@ -1060,6 +1164,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== modifierSeance ========
         {
             modifierSeance.setTitle("modifier");
+            modifierSeance.setResizable(false);
             Container modifierSeanceContentPane = modifierSeance.getContentPane();
 
             //---- label21 ----
@@ -1285,11 +1390,15 @@ public class VueDeLemploi extends JFrame implements Observer {
     private JLabel label1;
     private JComboBox<String> choixFormationBox;
     private JButton boutonCreerEmploi;
+    private JButton bouttonMofierEmploi;
+    private JButton button2;
     private JPanel panel4;
     private JComboBox nomMatiere2;
     private JScrollPane scrollPane1;
     private JTable tableEnseignants;
     private JButton associerBouton;
+    private JScrollPane scrollPane2;
+    private JTable tableMatiere;
     private JFrame modifierSeance;
     private JLabel label21;
     private JLabel label28;
