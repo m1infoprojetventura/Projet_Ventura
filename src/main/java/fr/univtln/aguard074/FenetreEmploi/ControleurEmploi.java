@@ -57,4 +57,8 @@ public class ControleurEmploi{
     public void supprimerEmploi(int id) {
         this.modele.supprimerEmploi(id);
     }
+
+    public boolean verifierAuthResponsable(String login, String password) {
+        return this.modele.verifierAuthResponsable(login,password);
+    }
 }

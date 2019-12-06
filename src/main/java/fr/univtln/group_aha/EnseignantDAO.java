@@ -179,4 +179,19 @@ public class EnseignantDAO extends DAO<Enseignant> {
             return resultat;
         }
     }
+    public Boolean verifierAuthResponsable(String login , String password){
+        try {
+            String query = "SELECT * FROM Responsable where login = ? and password = ?";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setString(1,login);
+            state.setString(2,password);
+            ResultSet result = state.executeQuery();
+            while(result.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
 }

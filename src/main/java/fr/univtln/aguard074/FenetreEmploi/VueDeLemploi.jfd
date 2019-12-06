@@ -281,8 +281,8 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq {space :p:94:p, comp boutonCreerEmploi:::p:130:p, space :p:51:p, comp bouttonMofierEmploi:::p:104:p, space :p:57:p, comp button2:::p:122:p, space ::90:x}, seq {space :p:193:p, comp label3:::p:248:p, space :0:0:x}, seq t {space ::139:x, comp label1:::p::p, space :p:77:p, comp choixFormationBox:::p::p, space :p:161:p}}"
-					"$verticalGroup": "par l {seq {space :p:31:p, comp label3:::p:43:p, space u:::p, par b {comp choixFormationBox::b:p::p, comp label1::b:p::p}, space ::72:x, par b {comp boutonCreerEmploi::b:p:68:p, comp bouttonMofierEmploi::b:p:68:p, comp button2::b:p:68:p}, space :p:99:p}}"
+					"$horizontalGroup": "par l {seq {space :p:94:p, comp boutonCreerEmploi:::p:130:p, space :p:51:p, comp bouttonMofierEmploi:::p:104:p, space :p:57:p, comp button2:::p:122:p, space ::90:x}, seq {space :p:193:p, comp label3:::p:248:p, space :0:0:x}, seq t {space ::139:x, par l {seq t {comp label1:::p::p, space :p:77:p, comp choixFormationBox:::p::p, space :p:161:p}, seq t {comp logoutButton:::p::p, space :p:44:p}}}}"
+					"$verticalGroup": "par l {seq {space :p:21:p, comp logoutButton:::p::p, space :p:72:p, comp label3:::p:43:p, space u:::p, par b {comp choixFormationBox::b:p::p, comp label1::b:p::p}, space :::x, par b {comp boutonCreerEmploi::b:p:68:p, comp bouttonMofierEmploi::b:p:68:p, comp button2::b:p:68:p}, space :p:99:p}}"
 				} ) {
 					name: "panel3"
 					add( new FormComponent( "javax.swing.JLabel" ) {
@@ -322,6 +322,11 @@ new FormModel {
 						name: "button2"
 						"text": "Supprimer"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "supprimerSeance", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "logoutButton"
+						"text": "text"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "logoutButtonActionPerformed", true ) )
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "Creation Emploi"
@@ -372,7 +377,7 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 130, 470 )
+			"location": new java.awt.Point( 155, 615 )
 			"size": new java.awt.Dimension( 650, 460 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -461,6 +466,51 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"size": #Dimension0
 			"location": new java.awt.Point( 15, 1915 )
+		} )
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:77:p, comp panel5:::p::p, space ::243:x}}"
+			"$verticalGroup": "par l {seq l {space :p:55:p, comp panel5:::p::p, space ::52:x}}"
+		} ) {
+			name: "fenetreAuthentification"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+				"$horizontalGroup": "par l {seq l {space :p:43:p, par l {comp label32:::p:93:p, comp label33:::::x}, space :p:81:p, par l:::p {comp inputLogin::::165:x, comp inputPassword::::165:x}, space ::76:x}, seq {space :78:78:p, comp loginButton:::p:120:p, space s:::p, comp button5:::p:120:p, space ::122:x}}"
+				"$verticalGroup": "par l {seq l {space :p:46:p, par b {comp label32::b:p::p, comp inputLogin::b:p::p}, space u:::p, par b {comp inputPassword::b:p::p, comp label33::b:p::p}, space :p:66:p, par b {comp loginButton::b:p::p, comp button5::b:p::p}, space ::140:x}}"
+			} ) {
+				name: "panel5"
+				"border": new javax.swing.border.TitledBorder( null, "Authentification", 4, 0, null, sfield java.awt.Color blue )
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "panel5KeyPressed", true ) )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.JGoodiesFormsLabel" ) {
+					name: "label32"
+					"textWithMnemonic": "Login"
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.JGoodiesFormsLabel" ) {
+					name: "label33"
+					"textWithMnemonic": "Mot de passe "
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "inputLogin"
+					"text": "jtdhs"
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "inputLoginKeyPressed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPasswordField" ) {
+					name: "inputPassword"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "loginButton"
+					"text": "Se connecter"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "loginButtonActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "loginButtonKeyPressed", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "loginButtonKeyPressed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button5"
+					"text": "Annuler"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 90, 25 )
+			"size": new java.awt.Dimension( 790, 515 )
 		} )
 	}
 }

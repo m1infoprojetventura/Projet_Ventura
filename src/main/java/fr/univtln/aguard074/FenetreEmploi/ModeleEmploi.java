@@ -6,7 +6,6 @@ import fr.univtln.group_aha.MatiereDAO;
 import fr.univtln.group_aha.Seance;
 import fr.univtln.group_aha.SeanceDAO;
 
-import javax.swing.*;
 import java.util.*;
 
 public class ModeleEmploi extends Observable {
@@ -138,6 +137,11 @@ public class ModeleEmploi extends Observable {
         listSeances = seanceDAO.getSeanceFormation(id);
         for(Seance seance: listSeances)
             seanceDAO.delete(seance);
+
+    }
+
+    public boolean verifierAuthResponsable(String login, String password) {
+        return enseignantDAO.verifierAuthResponsable(login,password);
 
     }
 }
