@@ -69,6 +69,33 @@ public class SeanceDAO extends DAO<Seance> {
 
     @Override
     public void update(Seance obj) {
+        try {
+            String query = "UPDATE Seance SET id_salle=?, id_enseignant=?, id_matiere=?, date=?, debut_seance=?, fin_seance=?, id_formation=? " +
+                    "WHERE id=?";
+            PreparedStatement state = connect.prepareStatement(query);
+            int id_salle = obj.getSalle().getId();
+            int id_enseignant = obj.getEnseignant().getId();
+            int id_matiere = obj.getMatiere().getId();
+            int id_formation = obj.getFormation().getId();
+            Time debut_seance = new Time(obj.getHdebut().getTimeInMillis());
+            Time fin_seance = new Time(obj.getHfin().getTimeInMillis());
+            java.sql.Date date = new java.sql.Date(obj.getHdebut().getTime().getTime());
+
+            state.setInt(1,  id_salle);
+            state.setInt(2,  id_enseignant);
+            state.setInt(3,  id_matiere);
+            state.setDate(4,  date);
+            state.setTime(5,  debut_seance);
+            state.setTime(6,  fin_seance);
+            state.setInt(7,  id_formation);
+            state.setInt(8,  obj.getId());
+
+            state.executeUpdate();
+        }
+
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 

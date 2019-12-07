@@ -144,4 +144,21 @@ public class ModeleEmploi extends Observable {
         return enseignantDAO.verifierAuthResponsable(login,password);
 
     }
+
+    public void modifierSeanceBDD(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
+        Seance seance = new Seance(salle,enseignant,matiere,debutH,finH,formation);
+        seanceDAO.update(seance);
+        
+        setChanged();
+        notifyObservers();
+    }
+
+    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
+        Seance seance = new Seance(salle,enseignant,matiere,debutH,finH,formation);
+        seanceDAO.create(seance);
+        int x = seance.getHdebut().get(Calendar.WEEK_OF_YEAR);
+        emploiDuTemps[x].add(seance);
+        setChanged();
+        notifyObservers();
+    }
 }

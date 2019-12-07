@@ -61,4 +61,12 @@ public class ControleurEmploi{
     public boolean verifierAuthResponsable(String login, String password) {
         return this.modele.verifierAuthResponsable(login,password);
     }
+
+    public void modifierSeanceBDD(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
+        this.modele.modifierSeanceBDD(idSalle,salle,enseignant,matiere,debutH,finH,formation);
+    }
+
+    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
+        this.modele.creerSeanceBDD(salle, enseignant, matiere, debutH, finH, formation);
+    }
 }

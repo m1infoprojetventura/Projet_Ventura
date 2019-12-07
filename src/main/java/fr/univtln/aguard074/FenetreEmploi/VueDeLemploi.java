@@ -35,6 +35,7 @@ public class VueDeLemploi extends JFrame implements Observer {
      */
     private int jourSemaine;
     private int semaneAnnee;
+    private int etatConsultation;
     private JPanel[] joursSemainePanel;
     private List<Seance>[] emploiDuTemps;
     private DefaultComboBoxModel matierecomboBoxModel;
@@ -130,11 +131,15 @@ public class VueDeLemploi extends JFrame implements Observer {
         finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH2.getSelectedIndex() + 8);
         finH.set(GregorianCalendar.MINUTE, hFinM2.getSelectedIndex()*15);
 
-        this.controleur.modifierSeance(idSalle,(Salle)nomSalle2.getSelectedItem(),(Enseignant)nomEnseignant2.getSelectedItem(),(Matiere)nomMatiere3.getSelectedItem(),debutH, finH, (Formation) choixFormationBox.getSelectedItem());
+        if(etatConsultation == 0)
+            this.controleur.modifierSeance(idSalle,(Salle)nomSalle2.getSelectedItem(),(Enseignant)nomEnseignant2.getSelectedItem(),(Matiere)nomMatiere3.getSelectedItem(),debutH, finH, (Formation) choixFormationBox.getSelectedItem());
 
+        else
+            this.controleur.modifierSeanceBDD(idSalle,(Salle)nomSalle2.getSelectedItem(),(Enseignant)nomEnseignant2.getSelectedItem(),(Matiere)nomMatiere3.getSelectedItem(),debutH, finH, (Formation) choixFormationBox.getSelectedItem());
     }
 
     private void boutonCreerEmploiActionPerformed(ActionEvent e) {
+        etatConsultation = 0;
         this.fenetreDebut.setVisible(false);
         this.setVisible(true);
         this.intituleFormation.setText(choixFormationBox.getSelectedItem().toString());
@@ -257,7 +262,11 @@ public class VueDeLemploi extends JFrame implements Observer {
         finH.set(GregorianCalendar.MINUTE, hFinM.getSelectedIndex()*15);
         Formation formation = (Formation) this.choixFormationBox.getSelectedItem();
 
-        controleur.creerSeance(id,salle, enseignant, matiere, debutH, finH,formation);
+        if (etatConsultation==0)
+            controleur.creerSeance(id,salle, enseignant, matiere, debutH, finH,formation);
+        else
+            controleur.creerSeanceBDD(salle, enseignant, matiere, debutH,finH,formation);
+
     }
 
     private void annulerEmploiActionPerformed(ActionEvent e) {
@@ -344,6 +353,7 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     private void bouttonMofierEmploiActionPerformed(ActionEvent e) {
+        etatConsultation = 1;
         this.fenetreDebut.setVisible(false);
         this.setVisible(true);
 
@@ -407,6 +417,8 @@ public class VueDeLemploi extends JFrame implements Observer {
         fenetreDebut.dispose();
         fenetreAuthentification.setVisible(true);
     }
+
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -505,13 +517,13 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-            . swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing
-            . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-            Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-            ) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-            public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName (
-            ) )) throw new RuntimeException( ); }} );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder
+            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .
+            awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) )
+            ; panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            ;
 
             //======== lundi ========
             {
@@ -1060,12 +1072,11 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border
-                    .EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax
-                    .swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,
-                    12),java.awt.Color.red),panel3. getBorder()));panel3. addPropertyChangeListener(new java.beans
-                    .PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.
-                    getPropertyName()))throw new RuntimeException();}});
+                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+                    0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+                    . BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+                    red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+                    beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -1231,7 +1242,7 @@ public class VueDeLemploi extends JFrame implements Observer {
 
         //======== modifierSeance ========
         {
-            modifierSeance.setTitle("modifier");
+            modifierSeance.setTitle("modifiercde Creer");
             modifierSeance.setResizable(false);
             Container modifierSeanceContentPane = modifierSeance.getContentPane();
 
@@ -1415,13 +1426,12 @@ public class VueDeLemploi extends JFrame implements Observer {
                         panel5KeyPressed(e);
                     }
                 });
-                panel5.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-                javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax
-                . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-                . awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
-                . Color .red ) ,panel5. getBorder () ) ); panel5. addPropertyChangeListener( new java. beans .
-                PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .
-                equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+                panel5.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
+                (0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border
+                .TitledBorder.BOTTOM,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt
+                .Color.red),panel5. getBorder()));panel5. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
+                propertyChange(java.beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
+                ;}});
 
                 //---- inputLogin ----
                 inputLogin.setText("jtdhs");
@@ -1501,7 +1511,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                     .addGroup(fenetreAuthentificationContentPaneLayout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(236, Short.MAX_VALUE))
+                        .addContainerGap(181, Short.MAX_VALUE))
             );
             fenetreAuthentificationContentPaneLayout.setVerticalGroup(
                 fenetreAuthentificationContentPaneLayout.createParallelGroup()
