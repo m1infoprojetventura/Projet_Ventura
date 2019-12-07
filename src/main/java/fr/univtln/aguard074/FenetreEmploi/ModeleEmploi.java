@@ -146,9 +146,15 @@ public class ModeleEmploi extends Observable {
     }
 
     public void modifierSeanceBDD(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
-        Seance seance = new Seance(salle,enseignant,matiere,debutH,finH,formation);
+        Seance seance = new Seance(idSalle,salle,enseignant,matiere,debutH,finH,formation);
         seanceDAO.update(seance);
-        
+        int semaine = seance.getHdebut().get(Calendar.WEEK_OF_YEAR);
+
+        int idx = emploiDuTemps[seance.getHdebut().get(Calendar.WEEK_OF_YEAR)].indexOf(seance);
+        emploiDuTemps[semaine].remove(idx);
+        emploiDuTemps[semaine].add(seance);
+
+
         setChanged();
         notifyObservers();
     }
@@ -161,4 +167,16 @@ public class ModeleEmploi extends Observable {
         setChanged();
         notifyObservers();
     }
+
+    public void supprimerSeanceBDD(int idSalle, int semaine) {
+        Seance seance = new Seance(idSalle);
+        seanceDAO.delete(seance);
+
+        int idx = emploiDuTemps[semaine].indexOf(seance);
+        //System.out.println(idx);
+        emploiDuTemps[semaine].remove(idx);
+        setChanged();
+        notifyObservers();
+    }
+
 }

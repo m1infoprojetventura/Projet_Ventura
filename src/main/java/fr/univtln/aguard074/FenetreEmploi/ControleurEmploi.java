@@ -69,4 +69,8 @@ public class ControleurEmploi{
     public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
         this.modele.creerSeanceBDD(salle, enseignant, matiere, debutH, finH, formation);
     }
+
+    public void supprimerSeanceBDD(int idSalle,int semaine) {
+        this.modele.supprimerSeanceBDD(idSalle, semaine);
+    }
 }

@@ -44,4 +44,16 @@ public class Matiere {
     {return this.getNom();
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Matiere matiere = (Matiere) o;
+
+        if (id != matiere.id) return false;
+
+        return true;
+    }
 }
