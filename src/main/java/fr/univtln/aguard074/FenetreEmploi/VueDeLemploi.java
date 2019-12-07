@@ -14,7 +14,7 @@ import javax.swing.border.*;
 import javax.swing.plaf.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import com.jgoodies.forms.factories.*;
+
 
 import fr.univtln.aguard074.FenetreAdmin.VueGestionaire;
 import fr.univtln.group_aha.*;
@@ -411,7 +411,6 @@ public class VueDeLemploi extends JFrame implements Observer {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - adrien guard
-        DefaultComponentFactory compFactory = DefaultComponentFactory.getInstance();
         panel1 = new JPanel();
         lundi = new JPanel();
         lundi2 = new JPanel();
@@ -492,12 +491,12 @@ public class VueDeLemploi extends JFrame implements Observer {
         suppSeanceBouton = new JButton();
         fenetreAuthentification = new JFrame();
         panel5 = new JPanel();
-        label32 = compFactory.createLabel("Login");
-        label33 = compFactory.createLabel("Mot de passe ");
         inputLogin = new JTextField();
         inputPassword = new JPasswordField();
         loginButton = new JButton();
         button5 = new JButton();
+        label32 = new JLabel();
+        label33 = new JLabel();
 
         //======== this ========
         setResizable(false);
@@ -506,13 +505,13 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-            javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
-            . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-            .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-            . Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans.
-            PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
-            equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+            . swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing
+            . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+            Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+            ) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+            public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName (
+            ) )) throw new RuntimeException( ); }} );
 
             //======== lundi ========
             {
@@ -1061,12 +1060,12 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder
-                    (0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax.swing.border
-                    .TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt
-                    .Color.red),panel3. getBorder()));panel3. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
-                    propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException()
-                    ;}});
+                    panel3.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border
+                    .EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border.TitledBorder.CENTER,javax
+                    .swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,
+                    12),java.awt.Color.red),panel3. getBorder()));panel3. addPropertyChangeListener(new java.beans
+                    .PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062order".equals(e.
+                    getPropertyName()))throw new RuntimeException();}});
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -1416,13 +1415,13 @@ public class VueDeLemploi extends JFrame implements Observer {
                         panel5KeyPressed(e);
                     }
                 });
-                panel5.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-                javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax
-                . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-                .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt
-                . Color. red) ,panel5. getBorder( )) ); panel5. addPropertyChangeListener (new java. beans.
-                PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .
-                equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+                panel5.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
+                javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax
+                . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
+                . awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
+                . Color .red ) ,panel5. getBorder () ) ); panel5. addPropertyChangeListener( new java. beans .
+                PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .
+                equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
 
                 //---- inputLogin ----
                 inputLogin.setText("jtdhs");
@@ -1448,38 +1447,45 @@ public class VueDeLemploi extends JFrame implements Observer {
                 button5.setText("Annuler");
                 button5.addActionListener(e -> button5ActionPerformed(e));
 
+                //---- label32 ----
+                label32.setText("login");
+
+                //---- label33 ----
+                label33.setText("mot de passe");
+
                 GroupLayout panel5Layout = new GroupLayout(panel5);
                 panel5.setLayout(panel5Layout);
                 panel5Layout.setHorizontalGroup(
                     panel5Layout.createParallelGroup()
                         .addGroup(panel5Layout.createSequentialGroup()
-                            .addGap(43, 43, 43)
                             .addGroup(panel5Layout.createParallelGroup()
-                                .addComponent(label32, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(label33, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGap(81, 81, 81)
-                            .addGroup(panel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                .addComponent(inputLogin, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                                .addComponent(inputPassword, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
-                            .addContainerGap(76, Short.MAX_VALUE))
-                        .addGroup(panel5Layout.createSequentialGroup()
-                            .addGap(78, 78, 78)
-                            .addComponent(loginButton, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(button5, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap(122, Short.MAX_VALUE))
+                                .addGroup(panel5Layout.createSequentialGroup()
+                                    .addGap(94, 94, 94)
+                                    .addGroup(panel5Layout.createParallelGroup()
+                                        .addComponent(label32)
+                                        .addComponent(label33))
+                                    .addGap(78, 78, 78)
+                                    .addGroup(panel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(inputLogin, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                                        .addComponent(inputPassword, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+                                .addGroup(panel5Layout.createSequentialGroup()
+                                    .addGap(78, 78, 78)
+                                    .addComponent(loginButton, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(button5, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)))
+                            .addContainerGap(93, Short.MAX_VALUE))
                 );
                 panel5Layout.setVerticalGroup(
                     panel5Layout.createParallelGroup()
                         .addGroup(panel5Layout.createSequentialGroup()
                             .addGap(46, 46, 46)
                             .addGroup(panel5Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(label32, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(inputLogin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addComponent(inputLogin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(label32))
                             .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(panel5Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(inputPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(label33, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addComponent(label33))
                             .addGap(66, 66, 66)
                             .addGroup(panel5Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(loginButton)
@@ -1495,7 +1501,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                     .addGroup(fenetreAuthentificationContentPaneLayout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(243, Short.MAX_VALUE))
+                        .addContainerGap(236, Short.MAX_VALUE))
             );
             fenetreAuthentificationContentPaneLayout.setVerticalGroup(
                 fenetreAuthentificationContentPaneLayout.createParallelGroup()
@@ -1592,11 +1598,11 @@ public class VueDeLemploi extends JFrame implements Observer {
     private JButton suppSeanceBouton;
     private JFrame fenetreAuthentification;
     private JPanel panel5;
-    private JLabel label32;
-    private JLabel label33;
     private JTextField inputLogin;
     private JPasswordField inputPassword;
     private JButton loginButton;
     private JButton button5;
+    private JLabel label32;
+    private JLabel label33;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

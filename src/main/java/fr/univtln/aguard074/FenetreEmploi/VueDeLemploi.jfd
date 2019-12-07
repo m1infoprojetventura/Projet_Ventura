@@ -468,25 +468,17 @@ new FormModel {
 			"location": new java.awt.Point( 15, 1915 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:77:p, comp panel5:::p::p, space ::243:x}}"
+			"$horizontalGroup": "par l {seq l {space :p:77:p, comp panel5:::p::p, space ::236:x}}"
 			"$verticalGroup": "par l {seq l {space :p:55:p, comp panel5:::p::p, space ::52:x}}"
 		} ) {
 			name: "fenetreAuthentification"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq l {space :p:43:p, par l {comp label32:::p:93:p, comp label33:::::x}, space :p:81:p, par l:::p {comp inputLogin::::165:x, comp inputPassword::::165:x}, space ::76:x}, seq {space :78:78:p, comp loginButton:::p:120:p, space s:::p, comp button5:::p:120:p, space ::122:x}}"
-				"$verticalGroup": "par l {seq l {space :p:46:p, par b {comp label32::b:p::p, comp inputLogin::b:p::p}, space u:::p, par b {comp inputPassword::b:p::p, comp label33::b:p::p}, space :p:66:p, par b {comp loginButton::b:p::p, comp button5::b:p::p}, space ::140:x}}"
+				"$horizontalGroup": "par l {seq {par l {seq l {space :p:94:p, par l {comp label32:::p::p, comp label33:::p::p}, space :p:78:p, par l:::p {comp inputLogin::::165:x, comp inputPassword::::165:x}}, seq {space :78:78:p, comp loginButton:::p:120:p, space s:::p, comp button5:::p:120:p}}, space ::93:x}}"
+				"$verticalGroup": "par l {seq l {space :p:46:p, par b {comp inputLogin::b:p::p, comp label32::b:p::p}, space u:::p, par b {comp inputPassword::b:p::p, comp label33::b:p::p}, space :p:66:p, par b {comp loginButton::b:p::p, comp button5::b:p::p}, space ::140:x}}"
 			} ) {
 				name: "panel5"
 				"border": new javax.swing.border.TitledBorder( null, "Authentification", 4, 0, null, sfield java.awt.Color blue )
 				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "panel5KeyPressed", true ) )
-				add( new FormComponent( "com.jformdesigner.designer.wrapper.JGoodiesFormsLabel" ) {
-					name: "label32"
-					"textWithMnemonic": "Login"
-				} )
-				add( new FormComponent( "com.jformdesigner.designer.wrapper.JGoodiesFormsLabel" ) {
-					name: "label33"
-					"textWithMnemonic": "Mot de passe "
-				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
 					name: "inputLogin"
 					"text": "jtdhs"
@@ -506,6 +498,14 @@ new FormModel {
 					name: "button5"
 					"text": "Annuler"
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label32"
+					"text": "login"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label33"
+					"text": "mot de passe"
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
