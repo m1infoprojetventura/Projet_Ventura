@@ -183,4 +183,7 @@ public class ModeleEmploi extends Observable {
         setChanged();
         notifyObservers();
     }
+    public String getTypeLogin(String login) {
+        return enseignantDAO.getTypeLogin(login);
+    }
 }

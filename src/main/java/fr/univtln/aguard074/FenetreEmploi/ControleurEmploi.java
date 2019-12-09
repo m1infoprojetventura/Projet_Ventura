@@ -77,4 +77,7 @@ public class ControleurEmploi{
     public void changerSemaine() {
         modele.changerSemaine();
     }
+    public String getTypeLogin(String login) {
+        return this.modele.getTypeLogin(login);
+    }
 }

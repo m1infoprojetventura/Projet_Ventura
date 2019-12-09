@@ -195,4 +195,36 @@ public class EnseignantDAO extends DAO<Enseignant> {
         }
         return  false;
     }
+    public String getTypeLogin(String login) {
+        String resultat="";
+        try {
+            String query = "SELECT * FROM Responsable where login = ? ";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setString(1,login);
+            ResultSet result = state.executeQuery();
+            while(result.next()) {
+                resultat ="Responsable";
+            }
+            String query2 = "SELECT * FROM Etudiant where login = ? ";
+            state = connect.prepareStatement(query2);
+            state.setString(1,login);
+            result = state.executeQuery();
+            while(result.next()) {
+                resultat ="Etudiant";
+            }
+            String query3 = "SELECT * FROM Enseignant where login = ? ";
+            state = connect.prepareStatement(query3);
+            state.setString(1,login);
+            result = state.executeQuery();
+            while(result.next()) {
+                resultat ="Enseignant";
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultat;
+
+    }
 }
