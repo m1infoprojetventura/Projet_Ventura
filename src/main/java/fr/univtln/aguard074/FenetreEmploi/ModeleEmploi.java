@@ -141,7 +141,7 @@ public class ModeleEmploi extends Observable {
     }
 
     public boolean verifierAuthResponsable(String login, String password) {
-        return enseignantDAO.verifierAuthResponsable(login,password);
+    return enseignantDAO.verifierAuthResponsable(login,password);
 
     }
 
@@ -179,4 +179,8 @@ public class ModeleEmploi extends Observable {
         notifyObservers();
     }
 
+    public void changerSemaine() {
+        setChanged();
+        notifyObservers();
+    }
 }

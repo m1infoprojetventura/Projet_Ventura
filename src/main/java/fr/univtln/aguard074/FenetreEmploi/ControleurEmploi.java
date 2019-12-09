@@ -73,4 +73,8 @@ public class ControleurEmploi{
     public void supprimerSeanceBDD(int idSalle,int semaine) {
         this.modele.supprimerSeanceBDD(idSalle, semaine);
     }
+
+    public void changerSemaine() {
+        modele.changerSemaine();
+    }
 }

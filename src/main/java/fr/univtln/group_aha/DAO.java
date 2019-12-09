@@ -20,7 +20,7 @@ public abstract class DAO<T> {
     public DAO() {
         try {
             String url = "jdbc:mysql://localhost/scolaire";
-            String user = "adrien";
+            String user = "haribou";
             String password = "password";
             this.connect = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {

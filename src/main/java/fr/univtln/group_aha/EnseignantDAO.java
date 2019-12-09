@@ -179,6 +179,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             return resultat;
         }
     }
+
     public Boolean verifierAuthResponsable(String login , String password){
         try {
             String query = "SELECT * FROM Responsable where login = ? and password = ?";
