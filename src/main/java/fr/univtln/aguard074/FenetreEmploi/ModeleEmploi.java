@@ -22,6 +22,7 @@ public class ModeleEmploi extends Observable {
     private static SalleDAO salleDAO = new SalleDAO();
     private static EnseignantDAO enseignantDAO = new EnseignantDAO();
     private static FormationDAO formationDAO = new FormationDAO();
+    private static ReservationDAO reservationDAO= new ReservationDAO();
 
     public ModeleEmploi(){
         for(Salle salle: salleDAO.getData())
@@ -185,5 +186,14 @@ public class ModeleEmploi extends Observable {
     }
     public String getTypeLogin(String login) {
         return enseignantDAO.getTypeLogin(login);
+    }
+
+    public Enseignant getEnseignantByLogin(String sessionPersonne) {
+        return enseignantDAO.getEnseignantByLogin(sessionPersonne);
+    }
+
+    public void creerReservation(int id_enseignant, int id_salle, Date date_reservation) {
+        Reservation reservation = new Reservation(id_enseignant,id_salle,date_reservation);
+        reservationDAO.create(reservation);
     }
 }

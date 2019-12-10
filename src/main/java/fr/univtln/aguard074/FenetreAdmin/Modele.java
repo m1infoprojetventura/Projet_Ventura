@@ -139,7 +139,6 @@ public class Modele extends Observable implements Imodele {
         salles.add(salle);
         setChanged();
         notifyObservers();
-
     }
 
     @Override

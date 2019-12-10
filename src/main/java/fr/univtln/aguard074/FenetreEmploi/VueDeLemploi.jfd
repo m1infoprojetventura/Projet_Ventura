@@ -526,11 +526,11 @@ new FormModel {
 			"$verticalGroup": "par l {comp parentPanel::l:::x}"
 		} ) {
 			name: "fenetreEnseignant"
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.CardLayout ) ) {
 				name: "parentPanel"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq l {space :p:102:p, comp label34:::p:522:p, space ::164:x}}"
-					"$verticalGroup": "par l {seq l {space :p:53:p, comp label34:::p:250:p, space ::158:x}}"
+					"$horizontalGroup": "par l {seq {space :p:244:p, comp label34:::p:522:p, space :::x}}"
+					"$verticalGroup": "par l {seq l {space :p:213:p, comp label34:::p:250:p, space :::x}}"
 				} ) {
 					name: "panelEmploi"
 					add( new FormComponent( "javax.swing.JLabel" ) {
@@ -538,21 +538,61 @@ new FormModel {
 						"text": "Ici rajoute ton emploi , adrien"
 						"font": new java.awt.Font( "Segoe UI", 0, 30 )
 					} )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "card1"
+				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:788:x}"
-					"$verticalGroup": "par l {space :0:461:x}"
+					"$horizontalGroup": "par l {seq t {space ::19:x, comp panelSalle:::p::p, space :::p}}"
+					"$verticalGroup": "par l {seq l {space :p:37:p, comp panelSalle:::p::p, space ::127:x}}"
 				} ) {
 					name: "panelReserverSalle"
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {seq t {space :::p, comp panel6:::p::p, space :::x, comp scrollPaneSalle:::p:470:p, space :p:20:p}, seq l {space :p:278:p, comp buttonDemandeReserv:::p::p, space :0:0:x}}"
+						"$verticalGroup": "par l {seq {par l {comp panel6:::::x, seq {space :0:16:x, comp scrollPaneSalle:::p:224:p}}, space :::p, comp buttonDemandeReserv:::p::p, space :::p}}"
+					} ) {
+						name: "panelSalle"
+						"border": new javax.swing.border.TitledBorder( "Réserver une salle" )
+						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+							name: "scrollPaneSalle"
+							add( new FormComponent( "javax.swing.JTable" ) {
+								name: "tableSalles"
+							} )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "buttonDemandeReserv"
+							"text": "Envoyer demande"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button6ActionPerformed", true ) )
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonDemandeReservActionPerformed", true ) )
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+							"$horizontalGroup": "par l {seq {par l {seq {space :p:77:p, comp button4:::p:106:p}, seq l {space :::p, comp label35:::p::p, space u:::p, comp inputdateReSalle:::p:112:p}}, space ::17:x}}"
+							"$verticalGroup": "par l {seq l {space :p:34:p, par b {comp label35::b:p::p, comp inputdateReSalle::b:p::p}, space :p:80:p, comp button4:::p:0:p, space ::110:x}}"
+						} ) {
+							name: "panel6"
+							"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label35"
+								"text": "Date de réservation"
+							} )
+							add( new FormComponent( "com.toedter.calendar.JDateChooser" ) {
+								name: "inputdateReSalle"
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button4"
+								"text": "Valider"
+							} )
+						} )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "card2"
+				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:100:x}"
-					"$verticalGroup": "par l {space :0:100:x}"
+					"$horizontalGroup": "par l {space :0:788:x}"
+					"$verticalGroup": "par l {space :0:469:x}"
 				} ) {
 					name: "panelListeReservation"
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-					"x": 0
-					"y": 466
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "card3"
 				} )
 			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
@@ -587,7 +627,7 @@ new FormModel {
 			}
 		}, new FormLayoutConstraints( null ) {
 			"size": new java.awt.Dimension( 790, 515 )
-			"location": new java.awt.Point( 0, 2171 )
+			"location": new java.awt.Point( 95, 2175 )
 		} )
 	}
 }

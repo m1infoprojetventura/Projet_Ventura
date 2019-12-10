@@ -872,7 +872,7 @@ public class VueGestionaire extends JFrame {
         }
 
     }
-    public class TmodelSalle extends  AbstractTableModel implements Observer {
+    public static class TmodelSalle extends  AbstractTableModel implements Observer {
         private final String[] entetes = {"ID","Salle", "Capacite", "Matériels"};
         private final List<Salle> salles;
 

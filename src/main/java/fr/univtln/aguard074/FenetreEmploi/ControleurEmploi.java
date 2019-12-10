@@ -7,6 +7,7 @@ import fr.univtln.group_aha.Matiere;
 import fr.univtln.group_aha.Salle;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -79,5 +80,9 @@ public class ControleurEmploi{
     }
     public String getTypeLogin(String login) {
         return this.modele.getTypeLogin(login);
+    }
+
+    public void creerReservation(int id_enseignant, int id_salle, Date date_reservation) {
+        this.modele.creerReservation(id_enseignant,id_salle,date_reservation);
     }
 }

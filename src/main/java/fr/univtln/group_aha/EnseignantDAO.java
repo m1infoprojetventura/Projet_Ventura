@@ -24,7 +24,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             state.executeUpdate();
             // Obtenir la clé autogénéré par INSERT
             ResultSet key = state.getGeneratedKeys();
-            if(key.first())
+            if (key.first())
                 obj.setId(key.getInt(1));
 
             // J'ai besoin de l'id pour la génération du login donc voila pourquoi cela a été fait séparament.
@@ -38,10 +38,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             state.setInt(3, obj.getId());
 
             state.executeUpdate();
-        }
-
-
-        catch (SQLException e) {
+        } catch (SQLException e) {
             lgr.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
         }
@@ -67,22 +64,20 @@ public class EnseignantDAO extends DAO<Enseignant> {
     public void update(Enseignant obj) {
         try {
             String query = "UPDATE Enseignant SET nom=?, prenom=?, date_naissance=?," +
-                            "id_departement=?, mdp=? WHERE id=?;";
+                    "id_departement=?, mdp=? WHERE id=?;";
             PreparedStatement state = connect.prepareStatement(query);
             Departement departement = obj.getDepartement();
 
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
             state.setString(1, obj.getNom());
             state.setString(2, obj.getPrenom());
-            state.setDate(3,  d2);
+            state.setDate(3, d2);
             state.setInt(4, departement.getId());
             state.setInt(5, obj.getMdp());
             state.setInt(6, obj.getId());
 
             state.executeUpdate();
-        }
-
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -115,9 +110,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
                 enseignant = new Enseignant(resultat.getInt("id"), resultat.getString("nom"), resultat.getString("prenom"), resultat.getDate("date_naissance"), departement);
             }
 
-        }
-
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         } finally {
@@ -134,7 +127,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             PreparedStatement state = connect.prepareStatement(query);
             state.setInt(1, obj.getId());
             ResultSet result = state.executeQuery();
-            while (result.next()){
+            while (result.next()) {
                 //System.out.println(result.getInt("id_matiere"));
                 Matiere matiere = matiereDAO.find(result.getInt("id_matiere"));
                 matieres.add(matiere.getNom());
@@ -143,16 +136,14 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        finally {
+        } finally {
             return matieres;
         }
 
     }
 
     @Override
-      public ArrayList<Enseignant> getData() {
+    public ArrayList<Enseignant> getData() {
 
         ArrayList<Enseignant> resultat = new ArrayList();
         try {
@@ -161,9 +152,9 @@ public class EnseignantDAO extends DAO<Enseignant> {
             ResultSet result = state.executeQuery();
             DepartementDAO departementDAO = new DepartementDAO();
 
-            while(result.next()) {
+            while (result.next()) {
                 Departement departement = departementDAO.find(result.getInt("id_departement"));
-                Enseignant enseignant =new Enseignant(result.getInt("id"), result.getString("nom"),
+                Enseignant enseignant = new Enseignant(result.getInt("id"), result.getString("nom"),
                         result.getString("prenom"), result.getDate("date_naissance"), departement);
 
                 enseignant.setLogin(result.getString("login"));
@@ -173,51 +164,50 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        finally {
+        } finally {
             return resultat;
         }
     }
 
-    public Boolean verifierAuthResponsable(String login , String password){
+    public Boolean verifierAuthResponsable(String login, String password) {
         try {
             String query = "SELECT * FROM Responsable where login = ? and password = ?";
             PreparedStatement state = connect.prepareStatement(query);
-            state.setString(1,login);
-            state.setString(2,password);
+            state.setString(1, login);
+            state.setString(2, password);
             ResultSet result = state.executeQuery();
-            while(result.next()) {
+            while (result.next()) {
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return  false;
+        return false;
     }
+
     public String getTypeLogin(String login) {
-        String resultat="";
+        String resultat = "";
         try {
             String query = "SELECT * FROM Responsable where login = ? ";
             PreparedStatement state = connect.prepareStatement(query);
-            state.setString(1,login);
+            state.setString(1, login);
             ResultSet result = state.executeQuery();
-            while(result.next()) {
-                resultat ="Responsable";
+            while (result.next()) {
+                resultat = "Responsable";
             }
             String query2 = "SELECT * FROM Etudiant where login = ? ";
             state = connect.prepareStatement(query2);
-            state.setString(1,login);
+            state.setString(1, login);
             result = state.executeQuery();
-            while(result.next()) {
-                resultat ="Etudiant";
+            while (result.next()) {
+                resultat = "Etudiant";
             }
             String query3 = "SELECT * FROM Enseignant where login = ? ";
             state = connect.prepareStatement(query3);
-            state.setString(1,login);
+            state.setString(1, login);
             result = state.executeQuery();
-            while(result.next()) {
-                resultat ="Enseignant";
+            while (result.next()) {
+                resultat = "Enseignant";
             }
 
 
@@ -226,5 +216,23 @@ public class EnseignantDAO extends DAO<Enseignant> {
         }
         return resultat;
 
+    }
+
+    public Enseignant getEnseignantByLogin(String loginEseignant) {
+
+        Enseignant enseignant = null;
+        try {
+
+            String query = "SELECT * FROM  Enseignant WHERE login = ?;";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setString(1, loginEseignant);
+            ResultSet resultat = state.executeQuery();
+            if (resultat.first()) {
+                enseignant = find(resultat.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return enseignant;
     }
 }
