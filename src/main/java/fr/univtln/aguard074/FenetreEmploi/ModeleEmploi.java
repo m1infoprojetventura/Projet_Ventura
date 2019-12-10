@@ -15,6 +15,7 @@ public class ModeleEmploi extends Observable {
     private List<Matiere> matieres = new ArrayList<>();
     final List<Enseignant> enseignants = new ArrayList<>();
     private List<Formation> formations = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
     private final int semaines = 53;
     private MatiereDAO matiereDAO = new MatiereDAO();
     private List<Seance>[] emploiDuTemps = new List[semaines];
@@ -36,6 +37,14 @@ public class ModeleEmploi extends Observable {
         for(int i = 0; i < semaines; i++) {
             emploiDuTemps[i] = new ArrayList<>();}
 
+    }
+    public void sendAuthentification(String personneAuthentifiee){
+        reservationDAO.setPersonneAuthentifiee(personneAuthentifiee);
+    }
+    //temporaire
+    public void setListSeances(){
+        for(Reservation reservation: reservationDAO.getData())
+            reservations.add(reservation);
 
     }
 
@@ -53,10 +62,6 @@ public class ModeleEmploi extends Observable {
     public List<Matiere> getMatieres() {
         return matiereDAO.getData();
     }
-
-
-
-
 
 
     public List<Salle> getSalles() {
@@ -195,5 +200,10 @@ public class ModeleEmploi extends Observable {
     public void creerReservation(int id_enseignant, int id_salle, Date date_reservation) {
         Reservation reservation = new Reservation(id_enseignant,id_salle,date_reservation);
         reservationDAO.create(reservation);
+        notifyObservers();
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 }

@@ -7,12 +7,13 @@ package fr.univtln.aguard074.FenetreEmploi;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.border.*;
+import javax.swing.plaf.*;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.*;
 import fr.univtln.aguard074.FenetreAdmin.VueGestionaire;
@@ -46,12 +47,13 @@ public class VueDeLemploi extends JFrame implements Observer {
     private static int nomPanel = 0;
     private DefaultTableModel matTable = new DefaultTableModel();
     private String typePersonne ="";
-    private String sessionPersonne ="";
+    private String personneAuthentifiee ="";
     private CardLayout c1;
     private JPanel globalpane;
     private VueGestionaire vueGestionaire;
     private VueGestionaire.TmodelSalle tmodelSalle;
-
+    private TmodelReservation tmodelReservation;
+    private Boolean sessionActive = false;
 
 
 
@@ -83,9 +85,11 @@ public class VueDeLemploi extends JFrame implements Observer {
         DefaultComboBoxModel sallecomboBoxModel = new DefaultComboBoxModel(modele.getSalles().toArray());
         nomSalle.setModel(sallecomboBoxModel);
         nomSalle2.setModel(sallecomboBoxModel);
+        gererVueEnseignant();
+
         gererTabEnseignants();
         gererTabSalle();
-        gererVueEnseignant();
+
 
 
         joursSemainePanel = new JPanel[]{lundi, mardi, mercredi, jeudi, vendredi, samedi};
@@ -97,14 +101,6 @@ public class VueDeLemploi extends JFrame implements Observer {
         samedi.setName("samedi");
         semainePrecedente.setToolTipText("Semaine " + (semaineAnnee - 1));
         semaineSuivante.setToolTipText("Semaine " + (semaineAnnee + 1));
-
-
-
-        //celui la le panel qui regroupe la JTable et son header
-        JPanel panelTabSalles = new JPanel();
-        //scrollPane pour le JTable
-
-
 
 
         this.fenetreAuthentification.setVisible(true);
@@ -135,6 +131,11 @@ public class VueDeLemploi extends JFrame implements Observer {
             }
         });
 
+    }
+    private void gererTabReservation(){
+        tmodelReservation = new TmodelReservation(modele.getReservations());
+        tableListeReservation.setModel(tmodelReservation);
+        scrollPane3.getViewport().add(tableListeReservation);
     }
 
     private void gererTabEnseignants(){
@@ -465,7 +466,9 @@ public class VueDeLemploi extends JFrame implements Observer {
         }
         if (valider){
             typePersonne = this.controleur.getTypeLogin(login);
-            sessionPersonne = login;
+            personneAuthentifiee = login;
+            modele.sendAuthentification(login);
+            sessionActive=true;
             switch(typePersonne){
                 case"Etudiant":
 
@@ -487,6 +490,11 @@ public class VueDeLemploi extends JFrame implements Observer {
 
             }}
 
+
+    }
+
+    private void authentifier(String login) {
+        this.personneAuthentifiee=login;
 
     }
 
@@ -532,7 +540,10 @@ public class VueDeLemploi extends JFrame implements Observer {
             c1.show(globalpane,"panelReserverSalle");    }    }
 
             private void menuItem2ActionPerformed(ActionEvent e) {
-                c1.show(globalpane,"panelListeReservation");            }
+                c1.show(globalpane,"panelListeReservation");
+                modele.setListSeances();
+                gererTabReservation();
+    }
 
                 private void buttonDemandeReservActionPerformed(ActionEvent e) {
                     boolean valider =true;
@@ -546,13 +557,13 @@ public class VueDeLemploi extends JFrame implements Observer {
                         JOptionPane.showMessageDialog(panelReserverSalle,"Veuillez choisir une date qui déppase pas les 14 jours","erreur", JOptionPane.ERROR_MESSAGE);
                         inputdateReSalle.setBorder(BorderFactory.createLineBorder(Color.red));
                         valider = false;
-                    }else if (date_reservation.before(dateMax)){
+                    }else if (date_reservation.before(dateNow)){
                         JOptionPane.showMessageDialog(panelReserverSalle,"Veuillez choisir une date antérieur","erreur", JOptionPane.ERROR_MESSAGE);
                         inputdateReSalle.setBorder(BorderFactory.createLineBorder(Color.red));
                         valider = false;
                     }
                     if(valider){
-                        int id_enseignant = ((Enseignant)this.modele.getEnseignantByLogin(sessionPersonne)).getId();
+                        int id_enseignant = ((Enseignant)this.modele.getEnseignantByLogin(personneAuthentifiee)).getId();
                         this.controleur.creerReservation(id_enseignant,id_Salle,date_reservation);
                         JOptionPane.showMessageDialog(panelReserverSalle,"Votre demande à été envoyé au responsable de formation","Confirm", JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -674,6 +685,9 @@ public class VueDeLemploi extends JFrame implements Observer {
         inputdateReSalle = new JDateChooser();
         button4 = new JButton();
         panelListeReservation = new JPanel();
+        panel7 = new JPanel();
+        scrollPane3 = new JScrollPane();
+        tableListeReservation = new JTable();
 
         //======== this ========
         setResizable(false);
@@ -682,13 +696,11 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-            javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax
-            . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-            . awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
-            . Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .
-            PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .
-            equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder( 0
+            , 0, 0, 0) , "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
+            , new java .awt .Font ("Dialo\u0067" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,
+            panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("borde\u0072" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
             //======== lundi ========
             {
@@ -1231,14 +1243,13 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(
-                    new javax.swing.border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion"
-                    ,javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-                    ,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,12)
-                    ,java.awt.Color.red),panel3. getBorder()));panel3. addPropertyChangeListener(
-                    new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-                    ){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException()
-                    ;}});
+                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+                    . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder
+                    . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .
+                    awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel3. getBorder( )) )
+                    ; panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+                    ) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+                    ;
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -1589,11 +1600,11 @@ public class VueDeLemploi extends JFrame implements Observer {
                     }
                 });
                 panel5.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-                javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
+                javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax
                 . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-                .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+                .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt
                 . Color. red) ,panel5. getBorder( )) ); panel5. addPropertyChangeListener (new java. beans.
-                PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
+                PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .
                 equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
                 //---- inputLogin ----
@@ -1733,13 +1744,11 @@ public class VueDeLemploi extends JFrame implements Observer {
 
             //======== parentPanel ========
             {
-                parentPanel.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
-                .swing.border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing
-                .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
-                Font("Dia\u006cog",java.awt.Font.BOLD,12),java.awt.Color.red
-                ),parentPanel. getBorder()));parentPanel. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
-                public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName(
-                )))throw new RuntimeException();}});
+                parentPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+                0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+                . BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+                red) ,parentPanel. getBorder( )) ); parentPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+                beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
                 parentPanel.setLayout(new CardLayout());
 
                 //======== panelEmploi ========
@@ -1877,15 +1886,47 @@ public class VueDeLemploi extends JFrame implements Observer {
                 //======== panelListeReservation ========
                 {
 
+                    //======== panel7 ========
+                    {
+
+                        //======== scrollPane3 ========
+                        {
+                            scrollPane3.setViewportView(tableListeReservation);
+                        }
+
+                        GroupLayout panel7Layout = new GroupLayout(panel7);
+                        panel7.setLayout(panel7Layout);
+                        panel7Layout.setHorizontalGroup(
+                            panel7Layout.createParallelGroup()
+                                .addGroup(panel7Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(scrollPane3, GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+                                    .addContainerGap())
+                        );
+                        panel7Layout.setVerticalGroup(
+                            panel7Layout.createParallelGroup()
+                                .addGroup(panel7Layout.createSequentialGroup()
+                                    .addGap(28, 28, 28)
+                                    .addComponent(scrollPane3, GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                                    .addGap(24, 24, 24))
+                        );
+                    }
+
                     GroupLayout panelListeReservationLayout = new GroupLayout(panelListeReservation);
                     panelListeReservation.setLayout(panelListeReservationLayout);
                     panelListeReservationLayout.setHorizontalGroup(
                         panelListeReservationLayout.createParallelGroup()
-                            .addGap(0, 788, Short.MAX_VALUE)
+                            .addGroup(panelListeReservationLayout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(175, Short.MAX_VALUE))
                     );
                     panelListeReservationLayout.setVerticalGroup(
                         panelListeReservationLayout.createParallelGroup()
-                            .addGap(0, 469, Short.MAX_VALUE)
+                            .addGroup(panelListeReservationLayout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(panel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(98, Short.MAX_VALUE))
                     );
                 }
                 parentPanel.add(panelListeReservation, "card3");
@@ -1895,7 +1936,7 @@ public class VueDeLemploi extends JFrame implements Observer {
             fenetreEnseignantContentPane.setLayout(fenetreEnseignantContentPaneLayout);
             fenetreEnseignantContentPaneLayout.setHorizontalGroup(
                 fenetreEnseignantContentPaneLayout.createParallelGroup()
-                    .addComponent(parentPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(parentPanel, GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
             );
             fenetreEnseignantContentPaneLayout.setVerticalGroup(
                 fenetreEnseignantContentPaneLayout.createParallelGroup()
@@ -1906,6 +1947,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
+
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown
@@ -2017,5 +2059,54 @@ public class VueDeLemploi extends JFrame implements Observer {
     private JDateChooser inputdateReSalle;
     private JButton button4;
     private JPanel panelListeReservation;
+    private JPanel panel7;
+    private JScrollPane scrollPane3;
+    private JTable tableListeReservation;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
+
+
+    public static class TmodelReservation extends AbstractTableModel implements Observer {
+        private final String[] entetes = {"ID","id_enseignant", "id_salle","date" ,"etat"};
+        private final List<Reservation> reservations;
+
+        public TmodelReservation (List<Reservation> reservations) {
+            this.reservations = reservations;
+        }
+
+        @Override
+        public void update(Observable observable, Object o) {
+            fireTableDataChanged();
+        }
+
+        @Override
+        public String getColumnName(int i) {
+            return entetes[i];
+        }
+
+        @Override
+        public int getColumnCount() {
+            return entetes.length;
+        }
+
+        @Override
+        public int getRowCount() {
+            if(reservations != null)
+                return reservations.size();
+            else
+                return 0;
+        }
+
+        public Reservation getRowValue(int i) {
+            Reservation reservation = reservations.get(i);
+            return reservation;
+        }
+
+        @Override
+        public Object getValueAt(int i, int i1) {
+            Reservation reservation = getRowValue(i);
+            //System.out.println(salle);
+            Object[] o = reservation.getAttributs().toArray();
+            return o[i1];
+        }
+    }
 }

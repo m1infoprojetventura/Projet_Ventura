@@ -522,7 +522,7 @@ new FormModel {
 			"size": new java.awt.Dimension( 520, 305 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {comp parentPanel::l:::x}"
+			"$horizontalGroup": "par l {comp parentPanel::l::788:x}"
 			"$verticalGroup": "par l {comp parentPanel::l:::x}"
 		} ) {
 			name: "fenetreEnseignant"
@@ -587,10 +587,22 @@ new FormModel {
 					"value": "card2"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:788:x}"
-					"$verticalGroup": "par l {space :0:469:x}"
+					"$horizontalGroup": "par l {seq l {space :p:48:p, comp panel7:::p::p, space ::175:x}}"
+					"$verticalGroup": "par l {seq l {space :p:35:p, comp panel7:::p::p, space ::98:x}}"
 				} ) {
 					name: "panelListeReservation"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {seq l {space :::p, comp scrollPane3::::553:x, space :::p}}"
+						"$verticalGroup": "par l {seq {space :p:28:p, comp scrollPane3::::284:x, space :p:24:p}}"
+					} ) {
+						name: "panel7"
+						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+							name: "scrollPane3"
+							add( new FormComponent( "javax.swing.JTable" ) {
+								name: "tableListeReservation"
+							} )
+						} )
+					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "card3"
 				} )

@@ -8,6 +8,17 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class ReservationDAO extends DAO<Reservation> {
+    String personneAuthentifiee ="";
+
+
+    public String getPersonneAuthentifiee() {
+        return personneAuthentifiee;
+    }
+
+    public void setPersonneAuthentifiee(String personneAuthentifiee) {
+        this.personneAuthentifiee = personneAuthentifiee;
+    }
+
     @Override
     public void create(Reservation obj) {
         try {
@@ -52,6 +63,31 @@ public class ReservationDAO extends DAO<Reservation> {
 
     @Override
     public ArrayList<Reservation> getData() {
-        return null;
+        ArrayList<Reservation> resultat = new ArrayList();
+        EnseignantDAO enseignantDAO = new EnseignantDAO();
+
+        try {
+
+            int id_enseignant =((Enseignant)enseignantDAO.getEnseignantByLogin(personneAuthentifiee)).getId();
+            String query = "SELECT * FROM Reservation where id_enseignant=? ";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setInt(1,id_enseignant);
+            ResultSet result = state.executeQuery();
+            while(result.next()) {
+
+                Reservation reservation = new Reservation(result.getInt("id"),result.getInt("id_enseignant"),result.getInt("id_salle"),
+                        result.getDate("date_reservation"),result.getString("etat_reservation"));
+                resultat.add(reservation);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return resultat;
+        }
+
+
     }
 }

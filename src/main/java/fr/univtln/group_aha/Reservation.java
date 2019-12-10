@@ -1,6 +1,9 @@
 package fr.univtln.group_aha;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public class Reservation {
     private int id;
@@ -68,5 +71,15 @@ public class Reservation {
 
     public void setEtat_reservation(String etat_reservation) {
         this.etat_reservation = etat_reservation;
+    }
+
+    public List getAttributs() {
+        List resultat= new ArrayList();
+        resultat.add(this.id);
+        resultat.add(this.id_salle);
+        resultat.add(this.id_enseignant);
+        resultat.add(this.date_reservation);
+        resultat.add(this.etat_reservation);
+        return resultat;
     }
 }
