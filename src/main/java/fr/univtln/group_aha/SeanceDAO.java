@@ -108,11 +108,81 @@ public class SeanceDAO extends DAO<Seance> {
     public ArrayList<Seance> getData() {
         return null;
     }
+
     public ArrayList<Seance>getSeanceFormation(int id){
         ArrayList<Seance> resultat = new ArrayList();
 
         try {
             String query = "SELECT * FROM Seance where id_formation = ?";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setInt(1, id);
+            ResultSet result = state.executeQuery();
+            FormationDAO formationDAO = new FormationDAO();
+            SalleDAO salleDAO = new SalleDAO();
+            EnseignantDAO enseignantDAO = new EnseignantDAO();
+            MatiereDAO matiereDAO = new MatiereDAO();
+            String aux;
+            while (result.next()) {
+
+                Formation formation = formationDAO.find(result.getInt("id_formation"));
+                Time debut_seance = result.getTime("debut_seance");
+                Time fin_seance = result.getTime("fin_seance");
+                //System.out.println(debut_seance.toString());
+                Date date = result.getDate("date");
+                Calendar cal = new GregorianCalendar();
+
+                cal.setTime(date);
+                int day = cal.get(Calendar.DAY_OF_WEEK);
+                int week = cal.get(Calendar.WEEK_OF_YEAR);
+
+
+
+                GregorianCalendar debutH = new GregorianCalendar();
+                GregorianCalendar finH = new GregorianCalendar();
+
+                // debut seance
+                aux = debut_seance.toString().substring(0,2);
+
+                debutH.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(aux));
+                aux = debut_seance.toString().substring(3,5);
+                debutH.set(GregorianCalendar.MINUTE,  Integer.parseInt(aux));
+                //semaine , jour
+                debutH.set(GregorianCalendar.WEEK_OF_YEAR, week);
+                debutH.set(GregorianCalendar.DAY_OF_WEEK,  day);
+                // fin seance
+                aux = fin_seance.toString().substring(0,2);
+                finH.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(aux));
+                aux = fin_seance.toString().substring(0,2);
+                finH.set(GregorianCalendar.MINUTE, Integer.parseInt(aux));
+                //semaine jour
+                finH.set(GregorianCalendar.WEEK_OF_YEAR, week);
+                finH.set(GregorianCalendar.DAY_OF_WEEK,  day);
+
+
+                //System.out.println(result.getInt("id"));
+                Seance seance = new Seance(result.getInt("id"),salleDAO.find(result.getInt("id_salle")), enseignantDAO.find(result.getInt("id_enseignant")),
+                        matiereDAO.find(result.getInt("id_matiere")),debutH,finH, formation);
+
+
+                resultat.add(seance);
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return resultat;
+        }
+    }
+
+    public ArrayList<Seance>getSeanceEnseignant(int id){
+        ArrayList<Seance> resultat = new ArrayList();
+
+        try {
+            String query = "SELECT * FROM Seance where id_enseignant = ?";
             PreparedStatement state = connect.prepareStatement(query);
             state.setInt(1, id);
             ResultSet result = state.executeQuery();

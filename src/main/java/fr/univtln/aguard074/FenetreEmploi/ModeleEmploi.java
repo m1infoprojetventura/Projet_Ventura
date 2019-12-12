@@ -178,6 +178,7 @@ public class ModeleEmploi extends Observable {
     }
 
     public void supprimerSeanceBDD(int idSalle, int semaine) {
+        System.out.println("uuuuuuuu");
         Seance seance = new Seance(idSalle);
         seanceDAO.delete(seance);
 
@@ -218,5 +219,18 @@ public class ModeleEmploi extends Observable {
 
     public List<Integer> getSemainesSelectionnees() {
         return semainesSelectionnees;
+    }
+
+    public void initEmploiEnseignant(int id_enseignant) {
+        for(int i = 0; i < semaines; i++) {
+            emploiDuTemps[i] = new ArrayList<>();}
+        listSeances = seanceDAO.getSeanceEnseignant(id_enseignant);
+        for (Seance seance : listSeances) {
+            int x = seance.getHdebut().get(Calendar.WEEK_OF_YEAR);
+            emploiDuTemps[x].add(seance);
+
+        }
+        setChanged();
+        notifyObservers();
     }
 }

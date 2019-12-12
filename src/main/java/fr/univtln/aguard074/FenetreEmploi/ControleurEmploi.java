@@ -90,4 +90,7 @@ public class ControleurEmploi{
         this.modele.setSemainesSelectionnees(semainesSelectionnees);
     }
 
+    public void initEmploiEnseignant(int id_enseignant) {
+        this.modele.initEmploiEnseignant(id_enseignant);
+    }
 }

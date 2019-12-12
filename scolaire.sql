@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS `Cours`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Cours` (
-  `matiere` varchar(40) NOT NULL,
-  `salle` varchar(40) NOT NULL,
+  `Matiere` varchar(40) NOT NULL,
+  `Salle` varchar(40) NOT NULL,
   `numero_professeur` smallint(5) unsigned NOT NULL,
   `type` varchar(20) DEFAULT NULL,
   `date` date NOT NULL,
   `debut` time NOT NULL,
   `fin` time DEFAULT NULL,
-  `formation` varchar(40) NOT NULL,
+  `Formation` varchar(40) NOT NULL,
   PRIMARY KEY (`numero_professeur`,`date`,`debut`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -53,10 +53,10 @@ DROP TABLE IF EXISTS `Departement`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Departement` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `nom` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_responsable` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,10 +139,10 @@ DROP TABLE IF EXISTS `Formation`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Formation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `intitule` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `intitule` varchar(40) DEFAULT NULL,
   `id_departement` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `Formation` (
 
 LOCK TABLES `Formation` WRITE;
 /*!40000 ALTER TABLE `Formation` DISABLE KEYS */;
-INSERT INTO `Formation` VALUES (1,'M1 Informatique',NULL);
+INSERT INTO `Formation` VALUES (1,'M1 Informatique',NULL),(2,'Sciences Humaines',NULL),(3,'M1 Maths',NULL);
 /*!40000 ALTER TABLE `Formation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +222,7 @@ CREATE TABLE `Matiere_Enseignant` (
   KEY `fk_id_enseignant` (`id_enseignant`),
   CONSTRAINT `fk_id_enseignant` FOREIGN KEY (`id_enseignant`) REFERENCES `Enseignant` (`id`),
   CONSTRAINT `fk_id_matiere` FOREIGN KEY (`id_matiere`) REFERENCES `Matiere` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,7 +231,7 @@ CREATE TABLE `Matiere_Enseignant` (
 
 LOCK TABLES `Matiere_Enseignant` WRITE;
 /*!40000 ALTER TABLE `Matiere_Enseignant` DISABLE KEYS */;
-INSERT INTO `Matiere_Enseignant` VALUES (4,1,32),(5,2,34),(6,4,4);
+INSERT INTO `Matiere_Enseignant` VALUES (4,1,32),(5,2,34),(6,4,4),(7,3,20);
 /*!40000 ALTER TABLE `Matiere_Enseignant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,6 +261,65 @@ INSERT INTO `Personne` VALUES (1926046598,'Jacquie','Pierre');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Reservation`
+--
+
+DROP TABLE IF EXISTS `Reservation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Reservation` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `id_enseignant` int(10) unsigned DEFAULT NULL,
+  `id_salle` int(10) unsigned DEFAULT NULL,
+  `date_reservation` date NOT NULL,
+  `etat_reservation` varchar(10) DEFAULT 'en Cours',
+  PRIMARY KEY (`id`),
+  KEY `fk_enseignant` (`id_enseignant`),
+  KEY `fk_salle` (`id_salle`),
+  CONSTRAINT `fk_enseignant` FOREIGN KEY (`id_enseignant`) REFERENCES `enseignant` (`id`),
+  CONSTRAINT `fk_salle` FOREIGN KEY (`id_salle`) REFERENCES `Salle` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Reservation`
+--
+
+LOCK TABLES `Reservation` WRITE;
+/*!40000 ALTER TABLE `Reservation` DISABLE KEYS */;
+INSERT INTO `Reservation` VALUES (1,4,13,'2019-12-10','en Cours'),(2,4,12,'2019-12-14','en Cours'),(3,4,12,'2019-12-10','en Cours'),(4,4,13,'2019-12-14','en Cours');
+/*!40000 ALTER TABLE `Reservation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Responsable`
+--
+
+DROP TABLE IF EXISTS `Responsable`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Responsable` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(50) DEFAULT NULL,
+  `prenom` varchar(50) DEFAULT NULL,
+  `date_naissance` date DEFAULT NULL,
+  `password` varchar(50) NOT NULL,
+  `login` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Responsable`
+--
+
+LOCK TABLES `Responsable` WRITE;
+/*!40000 ALTER TABLE `Responsable` DISABLE KEYS */;
+INSERT INTO `Responsable` VALUES (1,'Anouar','sayadi','0000-00-00','azerty','asayadi246'),(2,'Anouar','sayadi','1995-07-30','azerty','asayadi246');
+/*!40000 ALTER TABLE `Responsable` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Salle`
 --
 
@@ -281,7 +340,7 @@ CREATE TABLE `Salle` (
 
 LOCK TABLES `Salle` WRITE;
 /*!40000 ALTER TABLE `Salle` DISABLE KEYS */;
-INSERT INTO `Salle` VALUES (1,10,'lebellegou'),(2,42,'salle a bourboul'),(3,1,'bac a asable'),(8,2,'pekinParisNewyork'),(9,66,'salle vide'),(11,99,'masalleouPas'),(12,111,'Q522'),(13,22,'U458');
+INSERT INTO `Salle` VALUES (1,10,'lebellegou'),(2,42,'Salle a bourboul'),(3,1,'bac a asable'),(8,2,'pekinParisNewyork'),(9,66,'Salle vide'),(11,99,'masalleouPas'),(12,111,'Q522'),(13,22,'U458');
 /*!40000 ALTER TABLE `Salle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,8 +359,10 @@ CREATE TABLE `Seance` (
   `id_matiere` int(11) DEFAULT NULL,
   `id_enseignant` int(10) unsigned DEFAULT NULL,
   `id_Salle` int(10) unsigned DEFAULT NULL,
+  `etat` varchar(1) DEFAULT NULL,
+  `id_formation` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -310,7 +371,33 @@ CREATE TABLE `Seance` (
 
 LOCK TABLES `Seance` WRITE;
 /*!40000 ALTER TABLE `Seance` DISABLE KEYS */;
+INSERT INTO `Seance` VALUES (1,'2019-05-08','08:00:56','11:00:56',3,20,9,NULL,1),(2,'2019-05-06','12:00:50','18:00:50',3,20,9,NULL,1),(4,'2019-05-07','08:00:43','15:00:43',3,20,9,NULL,1),(5,'2018-12-26','08:00:33','11:00:33',3,20,9,NULL,1),(6,'2018-12-26','08:00:37','11:00:37',3,20,9,NULL,1),(7,'2018-12-26','08:00:38','11:00:38',3,20,9,NULL,1),(8,'2018-12-26','08:00:38','11:00:38',3,20,9,NULL,1),(9,'2018-12-24','08:00:44','11:00:44',3,20,9,NULL,1),(10,'2019-01-14','08:00:01','11:00:01',3,20,1,NULL,2),(11,'2019-01-16','08:00:02','11:00:02',3,20,1,NULL,2),(12,'2019-01-18','08:00:04','11:00:04',3,20,1,NULL,2),(13,'2019-01-14','08:00:01','11:00:01',3,20,1,NULL,2),(14,'2019-01-16','08:00:02','11:00:02',3,20,1,NULL,2),(15,'2019-01-18','08:00:04','11:00:04',3,20,1,NULL,2),(16,'2018-12-31','12:00:52','15:00:52',4,4,12,NULL,1),(17,'2019-02-14','12:00:59','15:00:59',4,4,12,NULL,1),(18,'2018-12-31','12:00:52','15:00:52',4,4,12,NULL,1),(19,'2019-02-14','12:00:59','15:00:59',4,4,12,NULL,1),(20,'2019-05-08','08:00:36','11:11:36',3,20,0,NULL,1),(21,'2019-05-06','12:00:36','18:18:36',3,20,0,NULL,1),(22,'2019-05-07','08:00:36','15:15:36',3,20,0,NULL,1),(23,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(24,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(25,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(26,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(27,'2019-12-23','08:00:36','11:11:36',3,20,0,NULL,1),(28,'2018-12-24','08:00:27','21:00:27',3,20,1,NULL,1),(29,'2018-12-24','08:00:39','20:00:39',3,20,1,NULL,1),(30,'2018-12-24','11:00:41','20:00:41',3,20,1,NULL,1),(31,'2019-01-21','11:00:48','21:00:48',3,20,1,NULL,1);
 /*!40000 ALTER TABLE `Seance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `personne`
+--
+
+DROP TABLE IF EXISTS `personne`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `personne` (
+  `id` int(10) unsigned NOT NULL,
+  `nom` varchar(40) NOT NULL,
+  `prenom` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `personne`
+--
+
+LOCK TABLES `personne` WRITE;
+/*!40000 ALTER TABLE `personne` DISABLE KEYS */;
+INSERT INTO `personne` VALUES (1926046598,'Jacquie','Pierre');
+/*!40000 ALTER TABLE `personne` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -322,4 +409,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-01 21:21:09
+-- Dump completed on 2019-12-12 21:20:55
