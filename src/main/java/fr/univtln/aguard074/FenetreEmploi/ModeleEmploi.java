@@ -17,6 +17,8 @@ public class ModeleEmploi extends Observable {
     private List<Formation> formations = new ArrayList<>();
     private List<Reservation> reservations = new ArrayList<>();
     private final int semaines = 53;
+    private List<Integer> semainesSelectionnees;
+
     private MatiereDAO matiereDAO = new MatiereDAO();
     private List<Seance>[] emploiDuTemps = new List[semaines];
     private static SeanceDAO seanceDAO = new SeanceDAO();
@@ -38,6 +40,7 @@ public class ModeleEmploi extends Observable {
             emploiDuTemps[i] = new ArrayList<>();}
 
     }
+
     public void sendAuthentification(String personneAuthentifiee){
         reservationDAO.setPersonneAuthentifiee(personneAuthentifiee);
     }
@@ -205,5 +208,15 @@ public class ModeleEmploi extends Observable {
 
     public List<Reservation> getReservations() {
         return reservations;
+    }
+
+    public void setSemainesSelectionnees(List<Integer> semainesSelectionnees) {
+        this.semainesSelectionnees = semainesSelectionnees;
+        setChanged();
+        notifyObservers();
+    }
+
+    public List<Integer> getSemainesSelectionnees() {
+        return semainesSelectionnees;
     }
 }

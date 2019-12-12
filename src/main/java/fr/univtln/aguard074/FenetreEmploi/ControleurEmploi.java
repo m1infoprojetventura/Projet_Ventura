@@ -85,4 +85,9 @@ public class ControleurEmploi{
     public void creerReservation(int id_enseignant, int id_salle, Date date_reservation) {
         this.modele.creerReservation(id_enseignant,id_salle,date_reservation);
     }
+
+    public void setSemainesSelectionnees(List<Integer> semainesSelectionnees) {
+        this.modele.setSemainesSelectionnees(semainesSelectionnees);
+    }
+
 }
