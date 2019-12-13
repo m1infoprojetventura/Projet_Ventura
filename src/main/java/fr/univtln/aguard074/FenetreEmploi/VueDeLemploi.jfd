@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq t {space ::309:x, comp validerEmploi:::p:129:p, space :p:233:p, comp annulerEmploi:::p:129:p, space :p:243:p}, seq l {par l {seq l {space :p:32:p, par l {comp semaineActuelle:::p::p, seq {space :p:156:p, comp label22:::p::p, space :p:99:p, comp label23:::p::p, space :p:83:p, comp label24:::p::p, space :p:83:p, comp label25:::p::p, space :p:79:p, comp label26:::p::p, space :p:87:p, comp label27:::p::p}}}, seq l {space :::p, par l {comp scrollPane4:::p:1000:p, seq l {space :p:13:p, comp intituleFormation:::p::p}}}, seq t {space :::p, comp panel1:::p::p}}, space ::37:x}}"
-			"$verticalGroup": "par l {seq l {space :p:22:p, comp intituleFormation:::p::p, space ::41:x, comp semaineActuelle:::p::p, space :::p, comp scrollPane4:::p:19:p, space :p:25:p, par b {comp label22::b:p::p, comp label23::b:p::p, comp label24::b:p::p, comp label25::b:p::p, comp label26::b:p::p, comp label27::b:p::p}, space :::p, comp panel1:::p::p, space :::p, par b {comp validerEmploi::b:p:40:p, comp annulerEmploi::b:p:38:p}, space :::p}}"
+			"$horizontalGroup": "par l {seq t {space ::305:x, comp validerEmploi:::p:129:p, space :p:76:p, comp vSpacer1:::p::p, space :p:117:p, comp annulerEmploi:::p:129:p, space :p:243:p}, seq l {par l {seq l {space :p:32:p, par l {comp semaineActuelle:::p::p, seq {space :p:156:p, comp label22:::p::p, space :p:99:p, comp label23:::p::p, space :p:83:p, comp label24:::p::p, space :p:83:p, comp label25:::p::p, space :p:79:p, comp label26:::p::p, space :p:87:p, comp label27:::p::p}}}, seq l {space :::p, par l {comp scrollPane4:::p:1000:p, seq l {space :p:13:p, comp intituleFormation:::p::p}}}, seq t {space :::p, comp panel1:::p::p}}, space ::37:x}}"
+			"$verticalGroup": "par l {seq l {space :p:22:p, comp intituleFormation:::p::p, space :p:41:p, comp semaineActuelle:::p::p, space :::p, comp scrollPane4:::p:19:p, space :p:25:p, par b {comp label22::b:p::p, comp label23::b:p::p, comp label24::b:p::p, comp label25::b:p::p, comp label26::b:p::p, comp label27::b:p::p}, space :::p, comp panel1:::p::p, space :::p, comp vSpacer1:::::x, space :::p, par b {comp validerEmploi::b:p:40:p, comp annulerEmploi::b:p:38:p}, space :::p}}"
 		} ) {
 			name: "this"
 			"resizable": false
@@ -172,6 +172,10 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "affichageSemaineMouseClicked", true ) )
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseReleased", "affichageSemaineMouseReleased", true ) )
 				} )
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer1"
+				"preferredSize": new java.awt.Dimension( 44, 10 )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 1065 )
@@ -383,7 +387,7 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 35, 575 )
+			"location": new java.awt.Point( 145, 395 )
 			"size": new java.awt.Dimension( 650, 460 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -479,8 +483,8 @@ new FormModel {
 		} ) {
 			name: "fenetreAuthentification"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq l {space :p:94:p, par l {seq {comp loginButton:::p:120:p, space s:::p, comp button5:::p:120:p}, seq {par l {comp label32:::p::p, comp label33:::p::p}, space :p:78:p, par l:::p {comp inputLogin:::::x, comp inputPassword::::165:x}}}, space ::31:x}}"
-				"$verticalGroup": "par l {seq l {space :p:46:p, par b {comp inputLogin::b:p::p, comp label32::b:p::p}, space u:::p, par b {comp inputPassword::b:p::p, comp label33::b:p::p}, space :p:42:p, par b {comp loginButton::b:p::p, comp button5::b:p::p}, space ::43:x}}"
+				"$horizontalGroup": "par l {seq l {space :p:94:p, par l {comp label34:::p::p, seq {comp loginButton:::p:120:p, space s:::p, comp button5:::p:120:p}, seq {par l {comp label32:::p::p, comp label33:::p::p}, space :p:78:p, par l:::p {comp inputLogin:::::x, comp inputPassword::::165:x}}}, space ::31:x}}"
+				"$verticalGroup": "par l {seq l {space :p:20:p, comp label34:::p::p, space :::p, par b {comp inputLogin::b:p::p, comp label32::b:p::p}, space u:::p, par b {comp inputPassword::b:p::p, comp label33::b:p::p}, space :p:42:p, par b {comp loginButton::b:p::p, comp button5::b:p::p}, space ::45:x}}"
 			} ) {
 				name: "panel5"
 				"border": new javax.swing.border.TitledBorder( null, "Authentification", 4, 0, null, sfield java.awt.Color blue )
@@ -514,6 +518,10 @@ new FormModel {
 					name: "label33"
 					"text": "mot de passe"
 				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label34"
+					"text": "text"
+				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 55, 5 )
@@ -527,20 +535,15 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.CardLayout ) ) {
 				name: "parentPanel"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq l {space :p:230:p, comp consulterProf:::p:277:p, space ::281:x}}"
-					"$verticalGroup": "par l {seq l {space :p:162:p, comp consulterProf:::p:139:p, space ::161:x}}"
+					"$horizontalGroup": "par l {space :0:788:x}"
+					"$verticalGroup": "par l {space :0:462:x}"
 				} ) {
 					name: "panelEmploi"
-					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "consulterProf"
-						"text": "CONSULTER"
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "consulterProfActionPerformed", true ) )
-					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "card1"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq t {space :::x, comp panelSalle:::p::p, space :::p}}"
+					"$horizontalGroup": "par l {seq {space :::x, comp panelSalle:::p::p, space :::p}}"
 					"$verticalGroup": "par l {seq l {space :p:37:p, comp panelSalle:::p::p, space ::115:x}}"
 				} ) {
 					name: "panelReserverSalle"
@@ -611,13 +614,14 @@ new FormModel {
 					name: "menu1"
 					"text": "Emploi"
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
-						name: "menuItem3"
+						name: "consulterEnseignantEmploi"
 						"text": "Consulter emploi"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem3ActionPerformed", true ) )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem3ActionPerformed", true ) )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem3ActionPerformed", true ) )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem3ActionPerformed", true ) )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem3ActionPerformed", true ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "consulterEnseignantEmploiActionPerformed", true ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
@@ -632,6 +636,19 @@ new FormModel {
 						name: "menuItem2"
 						"text": "Liste des réservations"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem2ActionPerformed", true ) )
+					} )
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer1"
+					"preferredSize": new java.awt.Dimension( 500, 10 )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu3"
+					"text": "Statut"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem3"
+						"text": "deconnexion"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "logoutButtonActionPerformed", true ) )
 					} )
 				} )
 			}

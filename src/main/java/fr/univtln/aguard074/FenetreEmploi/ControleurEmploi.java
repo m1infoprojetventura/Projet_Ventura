@@ -1,10 +1,7 @@
 package fr.univtln.aguard074.FenetreEmploi;
 
 
-import fr.univtln.group_aha.Enseignant;
-import fr.univtln.group_aha.Formation;
-import fr.univtln.group_aha.Matiere;
-import fr.univtln.group_aha.Salle;
+import fr.univtln.group_aha.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -92,5 +89,9 @@ public class ControleurEmploi{
 
     public void initEmploiEnseignant(int id_enseignant) {
         this.modele.initEmploiEnseignant(id_enseignant);
+    }
+
+    public Etudiant getEtudiantbyLogin(String personneAuthentifiee) {
+        return this.modele.getEtudiantbyLogin(personneAuthentifiee);
     }
 }

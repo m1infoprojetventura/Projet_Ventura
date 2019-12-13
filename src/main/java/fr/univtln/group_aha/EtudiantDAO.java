@@ -172,4 +172,23 @@ public class EtudiantDAO extends DAO<Etudiant> {
             return resultat;
         }
     }
+
+
+    public Etudiant getEtudiantByLogin(String loginEtudiant) {
+
+        Etudiant etudiant = null;
+        try {
+
+            String query = "SELECT * FROM  Etudiant WHERE login = ?;";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setString(1, loginEtudiant);
+            ResultSet resultat = state.executeQuery();
+            if (resultat.first()) {
+                etudiant = find(resultat.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return etudiant;
+    }
 }

@@ -6,7 +6,7 @@ public class TestEmploi
 {
     public static void main( String[] args )
     {
-        try {
+        /*try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -16,7 +16,7 @@ public class TestEmploi
             e.printStackTrace();
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
-        }
+        }*/
         ModeleEmploi modele = new ModeleEmploi();
         //Création du contrôleur
         ControleurEmploi controler = new ControleurEmploi(modele);

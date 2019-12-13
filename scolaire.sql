@@ -276,9 +276,8 @@ CREATE TABLE `Reservation` (
   PRIMARY KEY (`id`),
   KEY `fk_enseignant` (`id_enseignant`),
   KEY `fk_salle` (`id_salle`),
-  CONSTRAINT `fk_enseignant` FOREIGN KEY (`id_enseignant`) REFERENCES `enseignant` (`id`),
   CONSTRAINT `fk_salle` FOREIGN KEY (`id_salle`) REFERENCES `Salle` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,7 +286,7 @@ CREATE TABLE `Reservation` (
 
 LOCK TABLES `Reservation` WRITE;
 /*!40000 ALTER TABLE `Reservation` DISABLE KEYS */;
-INSERT INTO `Reservation` VALUES (1,4,13,'2019-12-10','en Cours'),(2,4,12,'2019-12-14','en Cours'),(3,4,12,'2019-12-10','en Cours'),(4,4,13,'2019-12-14','en Cours');
+INSERT INTO `Reservation` VALUES (1,4,13,'2019-12-10','en Cours'),(2,4,12,'2019-12-14','en Cours'),(3,4,12,'2019-12-10','en Cours'),(4,4,13,'2019-12-14','en Cours'),(8,21,3,'2019-12-13','en Cours'),(9,21,11,'2019-12-13','en Cours'),(10,4,13,'2019-12-13','en Cours'),(11,4,9,'2019-12-15','en Cours');
 /*!40000 ALTER TABLE `Reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,4 +408,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-12 21:20:55
+-- Dump completed on 2019-12-13 14:23:23
