@@ -94,4 +94,8 @@ public class ControleurEmploi{
     public Etudiant getEtudiantbyLogin(String personneAuthentifiee) {
         return this.modele.getEtudiantbyLogin(personneAuthentifiee);
     }
+
+    public List<Salle> getSallesDispo(GregorianCalendar debutH, GregorianCalendar finH) {
+        return this.modele.getSallesDispo(debutH,finH);
+    }
 }

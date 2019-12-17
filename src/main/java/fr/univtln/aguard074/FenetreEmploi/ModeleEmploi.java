@@ -12,6 +12,8 @@ public class ModeleEmploi extends Observable {
 
     private List<Seance> listSeances = new ArrayList<>();
     private List<Salle> salles = new ArrayList<>();
+    private List<Salle> sallesDispo = new ArrayList<>();
+    private List<Salle> enseignantDispo = new ArrayList<>();
     private List<Matiere> matieres = new ArrayList<>();
     final List<Enseignant> enseignants = new ArrayList<>();
     private List<Formation> formations = new ArrayList<>();
@@ -238,5 +240,14 @@ public class ModeleEmploi extends Observable {
         }
         setChanged();
         notifyObservers();
+    }
+
+
+    public List<Salle> getSallesDispo(GregorianCalendar debutH, GregorianCalendar finH) {
+        return seanceDAO.getSalleDispo(debutH,finH);
+    }
+
+    public List<Salle> getEnseignantDispo() {
+        return enseignantDispo;
     }
 }

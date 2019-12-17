@@ -251,5 +251,68 @@ public class SeanceDAO extends DAO<Seance> {
             return resultat;
         }
     }
+
+    public ArrayList<Salle> getSalleDispo(GregorianCalendar debutH, GregorianCalendar finH){
+
+        ArrayList<Salle> resultat = new ArrayList();
+        Time debut_seance = new Time(debutH.getTimeInMillis());
+        Time fin_seance = new Time(finH.getTimeInMillis());
+        java.sql.Date date = new java.sql.Date(debutH.getTime().getTime());
+        SalleDAO salleDAO = new SalleDAO();
+
+
+        try {
+            String query = "SELECT * FROM Seance where date = ?";
+
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setDate(1, date);
+            /*state.setTime(2, debut_seance);
+            state.setTime(3, fin_seance);
+            state.setTime(4, fin_seance);*/
+
+            ResultSet result = state.executeQuery();
+
+
+
+            while (result.next()) {
+                Salle salle = salleDAO.find(result.getInt("id_salle"));
+               /* System.out.println(result.getInt("id_salle"));
+
+                System.out.println("hahaha" + salleDAO.find(result.getInt("id_salle")));
+                System.out.println(date);
+                System.out.println("daate trouve" +result.getDate("date"));*/
+                resultat.add(salle);
+
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+
+
+
+            ArrayList<Salle> toutessalles = salleDAO.getData();
+
+
+            Set set = new HashSet() ;
+            set.addAll(resultat) ;
+            ArrayList<Salle> distinctList = new ArrayList(set) ;
+            for(Salle salle: distinctList) {
+                int idx = toutessalles.indexOf(salle);
+                toutessalles.remove(idx);
+
+            }
+
+
+            System.out.println(distinctList);
+            System.out.println(toutessalles);
+            return toutessalles;
+        }
+
+    }
 }
 

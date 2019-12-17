@@ -2,6 +2,7 @@ package fr.univtln.group_aha;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Salle {
     private String nom;
@@ -77,8 +78,14 @@ public class Salle {
 
         Salle salle = (Salle)o;
 
-        if (id != salle.id) return false;
+        //if (nom != salle.nom) return false;
+        if (nom.equals(salle.nom)) return true;
+        else
+            return false;
+    }
 
-        return true;
+    @Override
+    public int hashCode() {
+        return Objects.hash(nom);
     }
 }
