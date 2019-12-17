@@ -253,10 +253,10 @@ public class SeanceDAO extends DAO<Seance> {
     }
 
     public ArrayList<Salle> getSalleDispo(GregorianCalendar debutH, GregorianCalendar finH){
-
+        // FinH est inutile on a juste besoin de la date contenu dans debutH ou finH, j'ai choisi debutH
         ArrayList<Salle> resultat = new ArrayList();
-        Time debut_seance = new Time(debutH.getTimeInMillis());
-        Time fin_seance = new Time(finH.getTimeInMillis());
+        //Time debut_seance = new Time(debutH.getTimeInMillis());
+        //Time fin_seance = new Time(finH.getTimeInMillis());
         java.sql.Date date = new java.sql.Date(debutH.getTime().getTime());
         SalleDAO salleDAO = new SalleDAO();
 
