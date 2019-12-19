@@ -118,9 +118,7 @@ public class SalleDAO extends DAO<Salle> {
 
     @Override
     public Salle find(int id) {
-        Salle salle = new Salle();
-
-
+        Salle salle = new Salle() ;
         try {
 
             Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -129,6 +127,7 @@ public class SalleDAO extends DAO<Salle> {
             ResultSet resultat = st.executeQuery(String.format(query, id));
 
             if (resultat.first()) {
+
                 ArrayList<Materiel.TypeMateriel> resultat2 = new ArrayList<>();
 
                 String query2 = "SELECT * FROM Materiel WHERE id_salle = ?";
@@ -137,6 +136,7 @@ public class SalleDAO extends DAO<Salle> {
                 state2.setInt(1,resultat.getInt("id"));
                 ResultSet result2 = state2.executeQuery();
                 while (result2.next()){
+                    
                     if(result2.getString("type").equals("IMPRIMANTE")){resultat2.add(Materiel.TypeMateriel.IMPRIMANTE);}
                     if(result2.getString("type").equals("ORDINATEUR")){resultat2.add(Materiel.TypeMateriel.ORDINATEUR);}
                     if(result2.getString("type").equals("VIDEO_PROJECTEUR")){resultat2.add(Materiel.TypeMateriel.VIDEO_PROJECTEUR);}
@@ -144,7 +144,7 @@ public class SalleDAO extends DAO<Salle> {
                     //System.out.println(result.getInt("id")+result2.getString("type"));
 
                 }
-                salle = new Salle(resultat.getString("nom"),resultat2 ,resultat.getInt("capacite"));
+                return salle = new Salle(resultat.getString("nom"),resultat2 ,resultat.getInt("capacite"),resultat.getInt("id"));
 
             }
         }
@@ -152,9 +152,8 @@ public class SalleDAO extends DAO<Salle> {
         catch (SQLException e) {
             e.printStackTrace();
 
-        } finally {
-            return salle;
         }
+        return salle;
     }
 
     @Override

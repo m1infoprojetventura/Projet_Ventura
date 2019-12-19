@@ -53,7 +53,28 @@ public class ReservationDAO extends DAO<Reservation> {
 
     @Override
     public void update(Reservation obj) {
-
+        try {
+            String query = "UPDATE Reservation SET etat_reservation =? WHERE id = ?";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setString(1, "Confirmé");
+            state.setInt(2, obj.getId());
+            state.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void refuseupdate(Reservation obj) {
+        try {
+            String query = "UPDATE Reservation SET etat_reservation =? WHERE id = ?";
+            PreparedStatement state = connect.prepareStatement(query);
+            state.setString(1, "Refusé");
+            state.setInt(2, obj.getId());
+            state.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -80,6 +101,28 @@ public class ReservationDAO extends DAO<Reservation> {
                 resultat.add(reservation);
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            return resultat;
+        }
+
+
+    }
+    public ArrayList<Reservation> getAllData() {
+        ArrayList<Reservation> resultat = new ArrayList();
+        try {
+            String query = "SELECT * FROM Reservation  ";
+            PreparedStatement state = connect.prepareStatement(query);
+            ResultSet result = state.executeQuery();
+            while(result.next()) {
+                Reservation reservation = new Reservation(result.getInt("id"),result.getInt("id_enseignant"),result.getInt("id_salle"),
+                        result.getDate("date_reservation"),result.getString("etat_reservation"));
+                resultat.add(reservation);
+
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -38,6 +38,10 @@ public class Seance {
         this.matiere = matiere;
         this.formation = formation;
     }
+    public Seance (Salle s,Calendar hdebut){
+        this.salle = s;
+        this.hdebut=hdebut;
+    }
 
     public Seance(int idSeance) {
         id= idSeance;

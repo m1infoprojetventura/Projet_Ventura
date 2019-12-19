@@ -46,6 +46,32 @@ public class SeanceDAO extends DAO<Seance> {
         }
 
     }
+    public void createFakeSeance(Seance obj) {
+        try {
+
+            String query = "INSERT INTO Seance(id_salle,date) VALUES(?,?)";
+            // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            int id_salle = obj.getSalle().getId();
+            java.sql.Date date = new java.sql.Date(obj.getHdebut().getTime().getTime());
+            state.setInt(1,  id_salle);
+            state.setDate(2,  date);
+            state.executeUpdate();
+
+            // Obtenir la clé autogénéré par INSERT
+            ResultSet key = state.getGeneratedKeys();
+
+            if(key.first())
+                obj.setId(key.getInt(1));
+        }
+
+        catch (SQLException e) {
+            lgr.log(Level.WARNING, e.getMessage(), e);
+            e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public void delete(Seance obj) {

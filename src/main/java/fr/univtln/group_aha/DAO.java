@@ -19,9 +19,9 @@ public abstract class DAO<T> {
 
     public DAO() {
         try {
-            String url = "jdbc:mysql://localhost/scolaire";
-            String user = "adrien";
-            String password = "password";
+            String url = "jdbc:mysql://localhost/planning_db";
+            String user = "student";
+            String password = "student";
             this.connect = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             e.printStackTrace();

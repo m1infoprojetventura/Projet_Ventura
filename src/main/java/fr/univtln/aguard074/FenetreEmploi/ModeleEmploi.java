@@ -18,6 +18,7 @@ public class ModeleEmploi extends Observable {
     final List<Enseignant> enseignants = new ArrayList<>();
     private List<Formation> formations = new ArrayList<>();
     private List<Reservation> reservations = new ArrayList<>();
+    private List<Reservation> totalReservations = new ArrayList<>();
     private final int semaines = 53;
     private List<Integer> semainesSelectionnees;
 
@@ -41,6 +42,8 @@ public class ModeleEmploi extends Observable {
             formations.add(formation);
         for(int i = 0; i < semaines; i++) {
             emploiDuTemps[i] = new ArrayList<>();}
+        for(Reservation reservation: reservationDAO.getAllData())
+            totalReservations.add(reservation);
 
     }
 
@@ -218,6 +221,12 @@ public class ModeleEmploi extends Observable {
     public List<Reservation> getReservations() {
         return reservations;
     }
+    public List<Reservation> getTotalReservations() {
+        System.out.println("marche");
+        return totalReservations;
+
+    }
+
 
     public void setSemainesSelectionnees(List<Integer> semainesSelectionnees) {
         this.semainesSelectionnees = semainesSelectionnees;
@@ -249,5 +258,17 @@ public class ModeleEmploi extends Observable {
 
     public List<Salle> getEnseignantDispo() {
         return enseignantDispo;
+    }
+    public void confirmerReservation(Reservation resv){
+        reservationDAO.update(resv);
+    }
+    public void refuserReservation(Reservation resv){
+        reservationDAO.refuseupdate(resv);
+    }
+    public Salle getSalleById(int id){
+        return salleDAO.find(id);
+    }
+    public void createFakeSeance(Seance s){
+        seanceDAO.createFakeSeance(s);
     }
 }
