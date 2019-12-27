@@ -81,7 +81,7 @@ CREATE TABLE `Enseignant` (
   `nom` varchar(40) NOT NULL,
   `prenom` varchar(40) NOT NULL,
   `date_naissance` date NOT NULL,
-  `mdp` bigint(20) DEFAULT NULL,
+  `mdp` varchar(64) DEFAULT NULL,
   `login` varchar(40) DEFAULT NULL,
   `id_departement` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -94,7 +94,7 @@ CREATE TABLE `Enseignant` (
 
 LOCK TABLES `Enseignant` WRITE;
 /*!40000 ALTER TABLE `Enseignant` DISABLE KEYS */;
-INSERT INTO `Enseignant` VALUES (4,'Jack','Jean','2019-11-14',-1499813715,'JJack788',1),(18,'miss','mister','2013-02-15',2134782028,'mmiss-28',1),(20,'peter','parker','2016-11-19',-166493559,'ppeter482',1),(21,'Adrienbg','Guard','2019-01-15',1563063939,'GAdrienbg288',1),(26,'zaada','adazdyttt','2019-11-09',1686191058,'azaada518',1),(32,'ezrt','azeaze','2022-11-06',-1056429475,'aezrt772',1),(33,'eeeeerico','eeeea','2019-11-10',-651991297,'eeeee164',1),(34,'eeee','eeeea','2019-11-29',1299163719,'eeeee133',1),(35,'eeeeerico','eeeea','2019-11-10',-651991297,'eeeeeerico603',1);
+INSERT INTO `Enseignant` VALUES (4,'Jack','Jean','2019-11-14','-1499813715','JJack788',1),(18,'miss','mister','2013-02-15','2134782028','mmiss-28',1),(20,'peter','parker','2016-11-19','-166493559','ppeter482',1),(21,'Adrienbg','Guard','2019-01-15','1563063939','GAdrienbg288',1),(26,'zaada','adazdyttt','2019-11-09','1686191058','azaada518',1),(32,'ezrt','azeaze','2022-11-06','-1056429475','aezrt772',1),(33,'eeeeerico','eeeea','2019-11-10','-651991297','eeeee164',1),(34,'eeee','eeeea','2019-11-29','1299163719','eeeee133',1),(35,'eeeeerico','eeeea','2019-11-10','-651991297','eeeeeerico603',1);
 /*!40000 ALTER TABLE `Enseignant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +113,7 @@ CREATE TABLE `Etudiant` (
   `groupe` tinyint(3) unsigned DEFAULT NULL,
   `nom` varchar(40) NOT NULL,
   `prenom` varchar(40) NOT NULL,
-  `mdp` bigint(20) DEFAULT NULL,
+  `mdp` varchar(64) DEFAULT NULL,
   `login` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_id_etudiant` (`id`)
@@ -126,7 +126,7 @@ CREATE TABLE `Etudiant` (
 
 LOCK TABLES `Etudiant` WRITE;
 /*!40000 ALTER TABLE `Etudiant` DISABLE KEYS */;
-INSERT INTO `Etudiant` VALUES (6,'2019-11-14',NULL,1,NULL,'Jack','Paul',1682802253,'PJack875'),(7,'2019-11-23',NULL,1,NULL,'Perecic','Georgesano',-1906414871,'GPerecic-778'),(12,'2019-11-15',NULL,1,NULL,'az','aze',-1873814567,'aaz286'),(13,'2019-12-20',NULL,1,NULL,'bourboul','chomeur',-524537801,'cbourboul223'),(15,'2019-11-15',NULL,1,NULL,'chameau','poisson',-1785752953,'pchameau460'),(17,'2013-02-15',NULL,1,NULL,'miss','mister',2134782028,'mmiss-28'),(18,'2019-01-15',NULL,1,NULL,'Adrien','Guard',-1952878488,'GAdrien288'),(19,'2019-11-22',NULL,1,NULL,'100','99',721137975,'9100-726'),(20,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg',-598542565,'yninbin773'),(21,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg',-598542565,'yninbin742'),(22,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg',-598542565,'yninbin711'),(23,'2019-11-29',NULL,1,NULL,'ninbin','edrfgty',226724619,'yninbin680'),(24,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg',-598542565,'yninbin649'),(25,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg',-598542565,'yninbin618'),(26,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg',-598542565,'yninbin587'),(27,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg',-598542565,'yninbin556');
+INSERT INTO `Etudiant` VALUES (6,'2019-11-14',NULL,1,NULL,'Jack','Paul','1682802253','PJack875'),(7,'2019-11-23',NULL,1,NULL,'Perecic','Georgesano','-1906414871','GPerecic-778'),(12,'2019-11-15',NULL,1,NULL,'az','aze','-1873814567','aaz286'),(13,'2019-12-20',NULL,1,NULL,'bourboul','chomeur','-524537801','cbourboul223'),(15,'2019-11-15',NULL,1,NULL,'chameau','poisson','-1785752953','pchameau460'),(17,'2013-02-15',NULL,1,NULL,'miss','mister','2134782028','mmiss-28'),(18,'2019-01-15',NULL,1,NULL,'Adrien','Guard','-1952878488','GAdrien288'),(19,'2019-11-22',NULL,1,NULL,'100','99','721137975','9100-726'),(20,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg','-598542565','yninbin773'),(21,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg','-598542565','yninbin742'),(22,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg','-598542565','yninbin711'),(23,'2019-11-29',NULL,1,NULL,'ninbin','edrfgty','226724619','yninbin680'),(24,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg','-598542565','yninbin649'),(25,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg','-598542565','yninbin618'),(26,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg','-598542565','yninbin587'),(27,'2019-11-29',NULL,1,NULL,'ninbin','yvuvgyvg','-598542565','yninbin556');
 /*!40000 ALTER TABLE `Etudiant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,11 +273,12 @@ CREATE TABLE `Reservation` (
   `id_salle` int(10) unsigned DEFAULT NULL,
   `date_reservation` date NOT NULL,
   `etat_reservation` varchar(10) DEFAULT 'en Cours',
+  `id_seance` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_enseignant` (`id_enseignant`),
   KEY `fk_salle` (`id_salle`),
   CONSTRAINT `fk_salle` FOREIGN KEY (`id_salle`) REFERENCES `Salle` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +287,7 @@ CREATE TABLE `Reservation` (
 
 LOCK TABLES `Reservation` WRITE;
 /*!40000 ALTER TABLE `Reservation` DISABLE KEYS */;
-INSERT INTO `Reservation` VALUES (1,4,13,'2019-12-10','en Cours'),(2,4,12,'2019-12-14','en Cours'),(3,4,12,'2019-12-10','en Cours'),(4,4,13,'2019-12-14','en Cours'),(8,21,3,'2019-12-13','en Cours'),(9,21,11,'2019-12-13','en Cours'),(10,4,13,'2019-12-13','en Cours'),(11,4,9,'2019-12-15','en Cours');
+INSERT INTO `Reservation` VALUES (1,4,13,'2019-12-10','Confirmé',NULL),(2,4,12,'2019-12-14','en Cours',NULL),(3,4,12,'2019-12-10','en Cours',NULL),(4,4,13,'2019-12-14','en Cours',NULL),(8,21,3,'2019-12-13','en Cours',NULL),(9,21,11,'2019-12-13','Confirmé',NULL),(10,4,13,'2019-12-13','en Cours',NULL),(11,4,9,'2019-12-15','en Cours',NULL),(12,4,1,'2019-12-27','Confirmé',16),(13,4,9,'2019-12-27','Confirmé',32),(14,20,13,'2019-12-27','en Cours',9),(15,20,11,'2019-12-27','en Cours',7),(16,4,8,'2019-12-27','Confirmé',19),(17,4,3,'2019-12-27','Refusé',18);
 /*!40000 ALTER TABLE `Reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -302,7 +303,7 @@ CREATE TABLE `Responsable` (
   `nom` varchar(50) DEFAULT NULL,
   `prenom` varchar(50) DEFAULT NULL,
   `date_naissance` date DEFAULT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(64) DEFAULT NULL,
   `login` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -361,7 +362,7 @@ CREATE TABLE `Seance` (
   `etat` varchar(1) DEFAULT NULL,
   `id_formation` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -370,7 +371,7 @@ CREATE TABLE `Seance` (
 
 LOCK TABLES `Seance` WRITE;
 /*!40000 ALTER TABLE `Seance` DISABLE KEYS */;
-INSERT INTO `Seance` VALUES (1,'2019-05-08','08:00:56','11:00:56',3,20,9,NULL,1),(2,'2019-05-06','12:00:50','18:00:50',3,20,9,NULL,1),(4,'2019-05-07','08:00:43','15:00:43',3,20,9,NULL,1),(5,'2018-12-26','08:00:33','11:00:33',3,20,9,NULL,1),(6,'2018-12-26','08:00:37','11:00:37',3,20,9,NULL,1),(7,'2018-12-26','08:00:38','11:00:38',3,20,9,NULL,1),(8,'2018-12-26','08:00:38','11:00:38',3,20,9,NULL,1),(9,'2018-12-24','08:00:44','11:00:44',3,20,9,NULL,1),(10,'2019-01-14','08:00:01','11:00:01',3,20,1,NULL,2),(11,'2019-01-16','08:00:02','11:00:02',3,20,1,NULL,2),(12,'2019-01-18','08:00:04','11:00:04',3,20,1,NULL,2),(13,'2019-01-14','08:00:01','11:00:01',3,20,1,NULL,2),(14,'2019-01-16','08:00:02','11:00:02',3,20,1,NULL,2),(15,'2019-01-18','08:00:04','11:00:04',3,20,1,NULL,2),(16,'2018-12-31','12:00:52','15:00:52',4,4,12,NULL,1),(17,'2019-02-14','12:00:59','15:00:59',4,4,12,NULL,1),(18,'2018-12-31','12:00:52','15:00:52',4,4,12,NULL,1),(19,'2019-02-14','12:00:59','15:00:59',4,4,12,NULL,1),(20,'2019-05-08','08:00:36','11:11:36',3,20,0,NULL,1),(21,'2019-05-06','12:00:36','18:18:36',3,20,0,NULL,1),(22,'2019-05-07','08:00:36','15:15:36',3,20,0,NULL,1),(23,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(24,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(25,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(26,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(27,'2019-12-23','08:00:36','11:11:36',3,20,0,NULL,1),(28,'2018-12-24','08:00:27','21:00:27',3,20,1,NULL,1),(29,'2018-12-24','08:00:39','20:00:39',3,20,1,NULL,1),(30,'2018-12-24','11:00:41','20:00:41',3,20,1,NULL,1),(31,'2019-01-21','11:00:48','21:00:48',3,20,1,NULL,1);
+INSERT INTO `Seance` VALUES (1,'2019-05-08','08:00:56','11:00:56',3,20,9,NULL,1),(2,'2019-05-06','12:00:50','18:00:50',3,20,9,NULL,1),(4,'2019-05-07','08:00:43','15:00:43',3,20,9,NULL,1),(5,'2018-12-26','08:00:33','11:00:33',3,20,9,NULL,1),(6,'2018-12-26','08:00:37','11:00:37',3,20,9,NULL,1),(7,'2018-12-26','08:00:38','11:00:38',3,20,9,NULL,1),(8,'2018-12-26','08:00:38','11:00:38',3,20,9,NULL,1),(9,'2018-12-24','08:00:44','11:00:44',3,20,9,NULL,1),(10,'2019-01-14','08:00:01','11:00:01',3,20,1,NULL,2),(11,'2019-01-16','08:00:02','11:00:02',3,20,1,NULL,2),(12,'2019-01-18','08:00:04','11:00:04',3,20,1,NULL,2),(13,'2019-01-14','08:00:01','11:00:01',3,20,1,NULL,2),(14,'2019-01-16','08:00:02','11:00:02',3,20,1,NULL,2),(15,'2019-01-18','08:00:04','11:00:04',3,20,1,NULL,2),(16,'2018-12-31','12:00:17','15:15:17',4,4,12,NULL,1),(17,'2019-02-14','12:00:59','15:00:59',4,4,12,NULL,1),(18,'2018-12-31','12:00:18','15:15:18',4,4,3,NULL,1),(19,'2019-02-14','12:00:33','15:15:33',4,4,8,NULL,1),(20,'2019-05-08','08:00:36','11:11:36',3,20,0,NULL,1),(21,'2019-05-06','12:00:36','18:18:36',3,20,0,NULL,1),(22,'2019-05-07','08:00:36','15:15:36',3,20,0,NULL,1),(23,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(24,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(25,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(26,'2019-12-25','08:00:36','11:11:36',3,20,0,NULL,1),(27,'2019-12-23','08:00:36','11:11:36',3,20,0,NULL,1),(28,'2018-12-24','08:00:27','21:00:27',3,20,1,NULL,1),(29,'2018-12-24','08:00:39','20:00:39',3,20,1,NULL,1),(30,'2018-12-24','11:00:41','20:00:41',3,20,1,NULL,1),(31,'2019-01-21','11:00:48','21:00:48',3,20,1,NULL,1),(32,'2019-01-01','08:00:16','11:11:16',4,4,9,NULL,1),(33,'2019-01-02','11:00:13','14:00:13',4,4,1,NULL,1),(34,'2019-01-04','11:00:16','14:00:16',4,4,1,NULL,1),(35,'2019-02-05','11:00:19','14:00:19',4,4,1,NULL,1),(36,'2019-02-08','11:00:21','14:00:21',4,4,1,NULL,1),(37,'2019-02-06','11:00:22','14:00:22',4,4,1,NULL,1),(38,'2019-07-23','11:00:25','14:00:25',4,4,1,NULL,1),(39,'2019-07-26','11:00:28','14:00:28',4,4,1,NULL,1),(40,'2019-07-22','11:00:31','15:00:31',4,4,1,NULL,1),(41,'2019-06-19','11:00:35','15:00:35',4,4,1,NULL,1),(42,'2019-06-17','11:00:36','15:00:36',4,4,1,NULL,1),(43,'2019-06-21','11:00:37','15:00:37',4,4,1,NULL,1),(44,'2019-12-13',NULL,NULL,NULL,NULL,11,NULL,NULL),(45,'2019-12-10',NULL,NULL,NULL,NULL,13,NULL,NULL);
 /*!40000 ALTER TABLE `Seance` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -408,4 +409,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-13 14:23:23
+-- Dump completed on 2019-12-27 18:44:06

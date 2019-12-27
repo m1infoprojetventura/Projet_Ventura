@@ -9,6 +9,7 @@ public class Reservation {
     private int id;
     private int id_enseignant;
     private int id_salle;
+    private int id_seance;
     private Date date_reservation;
     private String etat_reservation;
 
@@ -17,6 +18,14 @@ public class Reservation {
         this.id_salle = id_salle;
         this.date_reservation = date_reservation;
         this.etat_reservation = etat_reservation;
+    }
+
+    public Reservation( int id_enseignant, int id_salle, Date date_reservation, int id_seance) {
+
+        this.id_enseignant = id_enseignant;
+        this.id_salle = id_salle;
+        this.id_seance = id_seance;
+        this.date_reservation = date_reservation;
     }
 
     public Reservation(int id, int id_enseignant, int id_salle, Date date_reservation, String etat_reservation) {
@@ -31,6 +40,15 @@ public class Reservation {
         this.id_enseignant = id_enseignant;
         this.id_salle = id_salle;
         this.date_reservation = date_reservation;
+    }
+
+    public Reservation(int id, int id_enseignant, int id_salle, Date date_reservation, String etat_reservation, int id_seance) {
+        this.id = id;
+        this.id_enseignant = id_enseignant;
+        this.id_salle = id_salle;
+        this.id_seance = id_seance;
+        this.date_reservation = date_reservation;
+        this.etat_reservation = etat_reservation;
     }
 
     public int getId() {
@@ -61,6 +79,10 @@ public class Reservation {
         return date_reservation;
     }
 
+    public int getId_seance() {
+        return id_seance;
+    }
+
     public void setDate_reservation(Date date_reservation) {
         this.date_reservation = date_reservation;
     }
@@ -80,6 +102,7 @@ public class Reservation {
         resultat.add(this.id_enseignant);
         resultat.add(this.date_reservation);
         resultat.add(this.etat_reservation);
+        resultat.add(this.id_seance);
         return resultat;
     }
 }

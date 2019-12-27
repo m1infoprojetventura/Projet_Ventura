@@ -1,6 +1,8 @@
 package fr.univtln.group_aha;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class Seance {
     private int id;
@@ -105,5 +107,18 @@ public class Seance {
         if (this.id != seance.id) return false;
 
         return true;
+    }
+
+    public List getAttributs() {
+        List resultat= new ArrayList();
+        resultat.add(this.id);
+        resultat.add(this.salle);
+        resultat.add(this.enseignant);
+        resultat.add(this.matiere);
+        resultat.add(String.valueOf(this.hdebut.get(Calendar.HOUR_OF_DAY)));
+        resultat.add(String.valueOf(this.hfin.get(Calendar.HOUR_OF_DAY)));
+        //resultat.add(String.valueOf(this.hfin.get(Calendar.M)));
+        resultat.add(this.hdebut.get(Calendar.DAY_OF_MONTH) + "/" + (this.hdebut.get(Calendar.MONTH)+1)+ "/" + this.hdebut.get(Calendar.YEAR));
+        return resultat;
     }
 }

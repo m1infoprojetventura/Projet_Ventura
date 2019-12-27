@@ -79,8 +79,8 @@ public class ControleurEmploi{
         return this.modele.getTypeLogin(login);
     }
 
-    public void creerReservation(int id_enseignant, int id_salle, Date date_reservation) {
-        this.modele.creerReservation(id_enseignant,id_salle,date_reservation);
+    public void creerReservation(int id_enseignant, int id_salle, Date date_reservation, int id_seance) {
+        this.modele.creerReservation(id_enseignant,id_salle,date_reservation, id_seance);
     }
 
     public void setSemainesSelectionnees(List<Integer> semainesSelectionnees) {

@@ -22,7 +22,7 @@ public class ReservationDAO extends DAO<Reservation> {
     @Override
     public void create(Reservation obj) {
         try {
-            String query = "INSERT INTO Reservation (id_enseignant, id_salle,  date_reservation) VALUES(?, ?, ?)";
+            String query = "INSERT INTO Reservation (id_enseignant, id_salle,  date_reservation, id_seance) VALUES(?, ?, ?, ?)";
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
             PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -31,6 +31,7 @@ public class ReservationDAO extends DAO<Reservation> {
             state.setInt(1, obj.getId_enseignant());
             state.setInt(2, obj.getId_salle());
             state.setDate(3, d2);
+            state.setInt(4, obj.getId_seance());
             state.executeUpdate();
 
             // Obtenir la clé autogénéré par INSERT
@@ -97,7 +98,7 @@ public class ReservationDAO extends DAO<Reservation> {
             while(result.next()) {
 
                 Reservation reservation = new Reservation(result.getInt("id"),result.getInt("id_enseignant"),result.getInt("id_salle"),
-                        result.getDate("date_reservation"),result.getString("etat_reservation"));
+                        result.getDate("date_reservation"),result.getString("etat_reservation"), result.getInt("id_seance"));
                 resultat.add(reservation);
             }
 
@@ -119,7 +120,7 @@ public class ReservationDAO extends DAO<Reservation> {
             ResultSet result = state.executeQuery();
             while(result.next()) {
                 Reservation reservation = new Reservation(result.getInt("id"),result.getInt("id_enseignant"),result.getInt("id_salle"),
-                        result.getDate("date_reservation"),result.getString("etat_reservation"));
+                        result.getDate("date_reservation"),result.getString("etat_reservation"),result.getInt("id_seance"));
                 resultat.add(reservation);
 
             }

@@ -166,6 +166,7 @@ public class ModeleEmploi extends Observable {
         seanceDAO.update(seance);
         int semaine = seance.getHdebut().get(Calendar.WEEK_OF_YEAR);
 
+
         int idx = emploiDuTemps[seance.getHdebut().get(Calendar.WEEK_OF_YEAR)].indexOf(seance);
         emploiDuTemps[semaine].remove(idx);
         emploiDuTemps[semaine].add(seance);
@@ -173,6 +174,13 @@ public class ModeleEmploi extends Observable {
 
         setChanged();
         notifyObservers();
+    }
+
+    // Nom de Methode un peu troll je l'avoue
+    public void modifierSeanceBDDsansAffichage(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation){
+        Seance seance = new Seance(idSalle,salle,enseignant,matiere,debutH,finH,formation);
+        seanceDAO.update(seance);
+
     }
 
     public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
@@ -212,8 +220,8 @@ public class ModeleEmploi extends Observable {
         return etudiantDAO.getEtudiantByLogin(sessionPersonne);
     }
 
-    public void creerReservation(int id_enseignant, int id_salle, Date date_reservation) {
-        Reservation reservation = new Reservation(id_enseignant,id_salle,date_reservation);
+    public void creerReservation(int id_enseignant, int id_salle, Date date_reservation, int id_seance) {
+        Reservation reservation = new Reservation(id_enseignant,id_salle,date_reservation, id_seance);
         reservationDAO.create(reservation);
         notifyObservers();
     }
@@ -256,6 +264,11 @@ public class ModeleEmploi extends Observable {
         return seanceDAO.getSalleDispo(debutH,finH);
     }
 
+    public List<Seance> getSeancesEnseignant(int id_enseignant) {
+
+        return seanceDAO.getSeanceEnseignant(id_enseignant);
+    }
+
     public List<Salle> getEnseignantDispo() {
         return enseignantDispo;
     }
@@ -270,5 +283,9 @@ public class ModeleEmploi extends Observable {
     }
     public void createFakeSeance(Seance s){
         seanceDAO.createFakeSeance(s);
+    }
+
+    public Seance getSeanceById(int id_seance) {
+        return seanceDAO.find(id_seance);
     }
 }
