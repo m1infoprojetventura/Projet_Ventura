@@ -1,5 +1,6 @@
 package fr.univtln.group_aha;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -7,7 +8,7 @@ import java.util.logging.Level;
 public class EtudiantDAO extends DAO<Etudiant> {
 
     public EtudiantDAO() {
-        super();
+        super(connect);
     }
 
     /**
@@ -16,6 +17,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
      * @param connect Objet permettant de se connecter à la base de données
      */
     public EtudiantDAO(Connection connect) {
+        super(connect);
     }
 
 
@@ -170,6 +172,25 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
         finally {
             return resultat;
+        }
+    }
+
+    public void modifierMotDePasse(Etudiant etudiant, String mdp) {
+        String query = "UPDATE Etudiant SET mdp = ?, WHERE id=?;";
+        try {
+            PreparedStatement state = connect.prepareStatement(query);
+            String mdpEncode = Hachage.toHexString(Hachage.getSHA(mdp));
+
+            state.setString(1, mdpEncode);
+            state.setInt(2, etudiant.getId());
+
+            state.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
     }
 

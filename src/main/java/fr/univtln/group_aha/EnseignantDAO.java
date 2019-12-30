@@ -1,10 +1,19 @@
 package fr.univtln.group_aha;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class EnseignantDAO extends DAO<Enseignant> {
+
+    public EnseignantDAO() {
+        super(connect);
+    }
+
+    public EnseignantDAO(Connection connect) {
+        super(connect);
+    }
 
     @Override
     public void create(Enseignant obj) {
@@ -121,7 +130,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
     public ArrayList<String> getMatieres(Enseignant obj) {
         ArrayList<String> matieres = new ArrayList<>();
-        MatiereDAO matiereDAO = new MatiereDAO();
+        MatiereDAO matiereDAO = new MatiereDAO(this.connect);
         try {
             String query = "SELECT * FROM Matiere_Enseignant where id_enseignant =? ";
             PreparedStatement state = connect.prepareStatement(query);
@@ -172,14 +181,19 @@ public class EnseignantDAO extends DAO<Enseignant> {
     public Boolean verifierAuthResponsable(String login, String password) {
         try {
             String query = "SELECT * FROM Responsable where login = ? and password = ?";
+            String passwordEncode = Hachage.toHexString(Hachage.getSHA(password));
             PreparedStatement state = connect.prepareStatement(query);
+
             state.setString(1, login);
-            state.setString(2, password);
+            state.setString(2, passwordEncode);
             ResultSet result = state.executeQuery();
             while (result.next()) {
                 return true;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return false;
@@ -216,6 +230,25 @@ public class EnseignantDAO extends DAO<Enseignant> {
         }
         return resultat;
 
+    }
+
+    public void modifierMotDePasse(Enseignant enseignant, String mdp) {
+        String query = "UPDATE Enseignant SET mdp = ?, WHERE id=?;";
+        try {
+            PreparedStatement state = connect.prepareStatement(query);
+            String mdpEncode = Hachage.toHexString(Hachage.getSHA(mdp));
+
+            state.setString(1, mdpEncode);
+            state.setInt(2, enseignant.getId());
+
+            state.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     public Enseignant getEnseignantByLogin(String loginEseignant) {

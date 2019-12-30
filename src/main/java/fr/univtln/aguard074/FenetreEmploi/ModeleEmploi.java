@@ -6,6 +6,10 @@ import fr.univtln.group_aha.MatiereDAO;
 import fr.univtln.group_aha.Seance;
 import fr.univtln.group_aha.SeanceDAO;
 
+import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class ModeleEmploi extends Observable {
@@ -20,16 +24,17 @@ public class ModeleEmploi extends Observable {
     private List<Reservation> reservations = new ArrayList<>();
     private List<Reservation> totalReservations = new ArrayList<>();
     private final int semaines = 53;
+    private int anneeEnCours;
     private List<Integer> semainesSelectionnees;
 
-    private MatiereDAO matiereDAO = new MatiereDAO();
+    private MatiereDAO matiereDAO;
     private List<Seance>[] emploiDuTemps = new List[semaines];
-    private static SeanceDAO seanceDAO = new SeanceDAO();
-    private static SalleDAO salleDAO = new SalleDAO();
-    private static EnseignantDAO enseignantDAO = new EnseignantDAO();
-    private static EtudiantDAO etudiantDAO = new EtudiantDAO();
-    private static FormationDAO formationDAO = new FormationDAO();
-    private static ReservationDAO reservationDAO= new ReservationDAO();
+    private static SeanceDAO seanceDAO;
+    private static SalleDAO salleDAO;
+    private static EnseignantDAO enseignantDAO;
+    private static EtudiantDAO etudiantDAO;
+    private static FormationDAO formationDAO;
+    private static ReservationDAO reservationDAO;
 
     public ModeleEmploi(){
         for(Salle salle: salleDAO.getData())
@@ -44,6 +49,50 @@ public class ModeleEmploi extends Observable {
             emploiDuTemps[i] = new ArrayList<>();}
         for(Reservation reservation: reservationDAO.getAllData())
             totalReservations.add(reservation);
+
+        GregorianCalendar dateActuelle = new GregorianCalendar();
+        if(dateActuelle.get(Calendar.MONTH) >= Calendar.SEPTEMBER) {
+            anneeEnCours = dateActuelle.get(Calendar.YEAR);
+        }
+
+        else {
+            anneeEnCours = dateActuelle.get(Calendar.YEAR) - 1;
+        }
+
+    }
+
+    public ModeleEmploi(Connection connect) {
+        emploiDuTemps = new List[semaines];
+        matiereDAO = new MatiereDAO(connect);
+        seanceDAO = new SeanceDAO(connect);
+        salleDAO = new SalleDAO(connect);
+        enseignantDAO = new EnseignantDAO(connect);
+        etudiantDAO = new EtudiantDAO(connect);
+        formationDAO = new FormationDAO(connect);
+        reservationDAO= new ReservationDAO(connect);
+
+        for(Salle salle: salleDAO.getData())
+            salles.add(salle);
+        for(Matiere matiere: matiereDAO.getData())
+            matieres.add(matiere);
+        for(Enseignant enseignant: enseignantDAO.getData())
+            enseignants.add(enseignant);
+        for(Formation formation: formationDAO.getData())
+            formations.add(formation);
+        for(int i = 0; i < semaines; i++) {
+            emploiDuTemps[i] = new ArrayList<>();}
+        for(Reservation reservation: reservationDAO.getAllData())
+            totalReservations.add(reservation);
+
+
+        GregorianCalendar dateActuelle = new GregorianCalendar();
+        if(dateActuelle.get(Calendar.MONTH) >= Calendar.SEPTEMBER) {
+            anneeEnCours = dateActuelle.get(Calendar.YEAR);
+        }
+
+        else {
+            anneeEnCours = dateActuelle.get(Calendar.YEAR) - 1;
+        }
 
     }
 
@@ -92,12 +141,38 @@ public class ModeleEmploi extends Observable {
         return matiereDAO.getAssocTeachers(matiere);
     }
 
+    /**
+     *
+     * @param calendar date dont on souhaite la semaine (shifté)
+     *                 la semaine du 2 septembre est à 0
+     * @return l'indice de la structure emploi du temps
+     */
+    public int getIndiceEmploi(Calendar calendar) {
+        GregorianCalendar calendar1 = new GregorianCalendar();
+
+        calendar1.set(Calendar.DAY_OF_MONTH, 2);
+        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar1.set(Calendar.YEAR, anneeEnCours);
+
+        Date input = calendar.getTime();
+        LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        Date input1 = calendar1.getTime();
+        LocalDate date1 = input1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        long x = ChronoUnit.WEEKS.between(date1, date);
+
+        return (int) x;
+
+    }
     public void creerSeance(int id, Salle salle, Enseignant enseignant, Matiere matiere, Calendar debutCours, Calendar finCours, Formation formation) {
         Seance seance = new Seance(id,salle, enseignant, matiere, debutCours, finCours, formation);
-        int x = debutCours.get(Calendar.WEEK_OF_YEAR);
+        GregorianCalendar calendar = new GregorianCalendar();
 
-        System.out.println(x);
+        int x = getIndiceEmploi(debutCours);
+
         emploiDuTemps[x].add(seance);
+
         setChanged();
         notifyObservers();
     }
@@ -106,11 +181,12 @@ public class ModeleEmploi extends Observable {
         for(int i = 0; i < semaines; i++) {
             emploiDuTemps[i] = new ArrayList<>();}
         listSeances = seanceDAO.getSeanceFormation(id);
-        for (Seance seance : listSeances) {
-            int x = seance.getHdebut().get(Calendar.WEEK_OF_YEAR);
-            emploiDuTemps[x].add(seance);
 
+        for (Seance seance : listSeances) {
+            int x = getIndiceEmploi(seance.getHdebut());
+            emploiDuTemps[x].add(seance);
         }
+
         setChanged();
         notifyObservers();
     }
@@ -118,7 +194,7 @@ public class ModeleEmploi extends Observable {
 
     public void modifierSeance(int idSeance, Salle salle, Enseignant enseignant, GregorianCalendar debutH, GregorianCalendar finH,Formation formation) {
         //System.out.println("et en fait"+ debutH.get(Calendar.DAY_OF_WEEK));
-        int x = debutH.get(Calendar.WEEK_OF_YEAR);
+        int x = getIndiceEmploi(debutH);
         Seance seance = new Seance(idSeance);
         int idx = emploiDuTemps[x].indexOf(seance);
         emploiDuTemps[x].get(idx).setId(idSeance);
@@ -135,7 +211,6 @@ public class ModeleEmploi extends Observable {
     }
 
     public void supprimerSeance(int idSeance, int jourSemaine) {
-        System.out.println(jourSemaine);
         Seance seance = new Seance(idSeance);
         int idx = emploiDuTemps[jourSemaine].indexOf(seance);
         //System.out.println(idx);
@@ -164,13 +239,11 @@ public class ModeleEmploi extends Observable {
     public void modifierSeanceBDD(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
         Seance seance = new Seance(idSalle,salle,enseignant,matiere,debutH,finH,formation);
         seanceDAO.update(seance);
-        int semaine = seance.getHdebut().get(Calendar.WEEK_OF_YEAR);
+        int semaine = getIndiceEmploi(seance.getHdebut());
 
-
-        int idx = emploiDuTemps[seance.getHdebut().get(Calendar.WEEK_OF_YEAR)].indexOf(seance);
+        int idx = emploiDuTemps[semaine].indexOf(seance);
         emploiDuTemps[semaine].remove(idx);
         emploiDuTemps[semaine].add(seance);
-
 
         setChanged();
         notifyObservers();
@@ -186,7 +259,7 @@ public class ModeleEmploi extends Observable {
     public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
         Seance seance = new Seance(salle,enseignant,matiere,debutH,finH,formation);
         seanceDAO.create(seance);
-        int x = seance.getHdebut().get(Calendar.WEEK_OF_YEAR);
+        int x = getIndiceEmploi(seance.getHdebut());
         emploiDuTemps[x].add(seance);
         setChanged();
         notifyObservers();

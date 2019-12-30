@@ -2,9 +2,16 @@ package fr.univtln.group_aha;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FormationDAO extends DAO<Formation> {
+    public FormationDAO() {
+        super(connect);
+    }
+
+    public FormationDAO(Connection connect) {
+        super(connect);
+    }
+
     @Override
     public void create(Formation obj) {
 

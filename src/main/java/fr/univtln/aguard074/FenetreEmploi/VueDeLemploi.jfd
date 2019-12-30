@@ -1,155 +1,320 @@
-JFDML JFormDesigner: "7.0.0.6.255" Java: "11.0.4" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.0.6.255" Java: "11.0.5" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq t {space ::305:x, comp validerEmploi:::p:129:p, space :p:76:p, comp vSpacer1:::p::p, space :p:117:p, comp annulerEmploi:::p:129:p, space :p:243:p}, seq l {par l {seq l {space :p:32:p, par l {comp semaineActuelle:::p::p, seq {space :p:156:p, comp label22:::p::p, space :p:99:p, comp label23:::p::p, space :p:83:p, comp label24:::p::p, space :p:83:p, comp label25:::p::p, space :p:79:p, comp label26:::p::p, space :p:87:p, comp label27:::p::p}}}, seq l {space :::p, par l {comp scrollPane4:::p:1000:p, seq l {space :p:13:p, comp intituleFormation:::p::p}}}, seq t {space :::p, comp panel1:::p::p}}, space ::37:x}}"
-			"$verticalGroup": "par l {seq l {space :p:22:p, comp intituleFormation:::p::p, space :p:41:p, comp semaineActuelle:::p::p, space :::p, comp scrollPane4:::p:19:p, space :p:25:p, par b {comp label22::b:p::p, comp label23::b:p::p, comp label24::b:p::p, comp label25::b:p::p, comp label26::b:p::p, comp label27::b:p::p}, space :::p, comp panel1:::p::p, space :::p, comp vSpacer1:::::x, space :::p, par b {comp validerEmploi::b:p:40:p, comp annulerEmploi::b:p:38:p}, space :::p}}"
+			"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp intituleFormation:::p::p, space :::x}, seq t {space :0:0:x, comp vSpacer1:::p::p, space :p:489:p}}}, seq l {space :p:141:p, comp validerEmploi:::p:129:p, space :::x, comp annulerEmploi:::p:129:p, space :p:243:p}, seq l {space :::p, par l {seq {space :0:0:x, comp panel1:::p::p}, comp scrollPane4:::::x}, space :p:16:p, comp semaineActuelle:::p::p}}"
+			"$verticalGroup": "par l {seq l {space :p:15:p, comp intituleFormation:::p::p, par t {seq t {space :p:89:p, comp semaineActuelle:::p::p, space :p:674:p}, seq l {space u:::p, comp scrollPane4:::p:25:p, space :::p, comp panel1:::p::p, space :::p, par l {comp annulerEmploi:::p:38:p, comp validerEmploi::l:p:40:p}, space :::p}}, comp vSpacer1:::::x, space :p:44:p}}"
 		} ) {
 			name: "this"
 			"resizable": false
 			"iconImage": new com.jformdesigner.model.SwingIcon( 1, "/home/guard/Documents/M1/Projet/Projet_Ventura/fond_slide1.jpg" )
+			"$sizePolicy": 1
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq l {space :::p, comp panel2:::p::p, space :p:15:p, comp lundi:::p::p, space :::p, comp mardi:::p::p, space :::p, comp mercredi:::p::p, space :::p, comp jeudi:::p::p, space :::p, comp vendredi:::p::p, space :::p, comp samedi:::p::p, space ::53:x}}"
-				"$verticalGroup": "par l {seq {space :::p, par t:::p {comp mardi::l:::x, comp lundi::l:::x, comp mercredi::l:::x, comp jeudi::l:::x, comp vendredi::l:::x, comp panel2:::::x, comp samedi::l:::x}, space ::38:x}}"
+				"$horizontalGroup": "par l {seq l {comp panel2:::p:39:p, space :::p, comp panel11:::p:200:p, space :::p, comp panel10:::p:200:p, space :::p, comp panel12:::p:200:p, space :::p, comp panel13:::p:200:p, space :::p, comp panel14:::p:200:p, space :::p, comp panel15:::p:200:p, space :::x}}"
+				"$verticalGroup": "par l {seq {space :::x, par l {comp panel2::t:p:483:p, par l:t::p {comp panel15:::::x, comp panel11::l:::x, comp panel10::l:::x, comp panel12::t:::x, comp panel13::l:::x, comp panel14::l:::x}}, space :::p}}"
 			} ) {
 				name: "panel1"
 				"background": new java.awt.Color( 153, 153, 153, 255 )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:127:x}"
-					"$verticalGroup": "par l {space :0:0:x}"
-				} ) {
-					name: "lundi"
-					"background": &ColorUIResource0 new javax.swing.plaf.ColorUIResource( 238, 238, 238 )
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "panel2MouseClicked", true ) )
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:127:x}"
-					"$verticalGroup": "par l {space :0:0:x}"
-				} ) {
-					name: "mardi"
-					"background": #ColorUIResource0
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "mardiMouseClicked", true ) )
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:127:x}"
-					"$verticalGroup": "par l {space :0:0:x}"
-				} ) {
-					name: "mercredi"
-					"background": #ColorUIResource0
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "mercrediMouseClicked", true ) )
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:127:x}"
-					"$verticalGroup": "par l {space :0:0:x}"
-				} ) {
-					name: "jeudi"
-					"background": #ColorUIResource0
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "jeudiMouseClicked", true ) )
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:127:x}"
-					"$verticalGroup": "par l {space :0:0:x}"
-				} ) {
-					name: "vendredi"
-					"background": #ColorUIResource0
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "vendrediMouseClicked", true ) )
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {space :0:127:x}"
-					"$verticalGroup": "par l {space :0:0:x}"
-				} ) {
-					name: "samedi"
-					"background": #ColorUIResource0
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "samediMouseClicked", true ) )
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq l {space :p:65:p, par t {comp label4:::p::p, comp label9:::p::p, comp label10::t:p::p, comp label11::t:p::p, comp label12::t:p::p, comp label13::t:p::p}, space ::8:x}, seq t {space :::x, par l {comp label14::t:p::p, comp label15::t:p::p, comp label16::t:p::p, comp label17::t:p::p, comp label18::t:p::p, comp label19::t:p::p, comp label20::t:p::p}, space :::p}}"
-					"$verticalGroup": "par l {seq l {comp label4:::p::p, space s:::p, comp label9:::p::p, space s:::p, comp label10:::p::p, space :p:24:p, comp label11:::p::p, space :p:24:p, comp label12:::p::p, space :p:30:p, comp label13:::p::p, space :p:28:p, comp label14:::p::p, space :p:26:p, comp label15:::p::p, space :p:26:p, comp label16:::p::p, space s:::p, comp label17:::p::p, space :p:24:p, comp label18:::p::p, space :p:26:p, comp label19:::p::p, space s:::p, comp label20:::p::p, space :::x}}"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
 				} ) {
 					name: "panel2"
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer2"
+						"preferredSize": new java.awt.Dimension( 7, 7 )
+						"minimumSize": new java.awt.Dimension( 7, 7 )
+						"maximumSize": new java.awt.Dimension( 32762, 19 )
+					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label4"
 						"text": "8h"
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer14"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label9"
 						"text": "9h"
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer3"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label10"
 						"text": "10h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer4"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label11"
 						"text": "11h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer5"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label12"
 						"text": "12h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer6"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label13"
 						"text": "13h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer7"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label14"
 						"text": "14h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer8"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label15"
 						"text": "15h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer9"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label16"
 						"text": "16h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer10"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label17"
 						"text": "17h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer11"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label18"
 						"text": "18h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer12"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label19"
 						"text": "19h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+					add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+						name: "vSpacer13"
+						"preferredSize": new java.awt.Dimension( 7, 17 )
+						"minimumSize": new java.awt.Dimension( 7, 17 )
+						"maximumSize": new java.awt.Dimension( 32762, 17 )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label20"
 						"text": "20h"
+						"preferredSize": new java.awt.Dimension( 25, 21 )
+						"minimumSize": new java.awt.Dimension( 25, 21 )
+						"maximumSize": new java.awt.Dimension( 25, 21 )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel10"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelMardi"
+						"text": "Mardi"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {space :0:200:x}"
+						"$verticalGroup": "par l {space :0:484:x}"
+					} ) {
+						name: "mardi"
+						"background": &ColorUIResource0 new javax.swing.plaf.ColorUIResource( 238, 238, 238 )
+						auxiliary() {
+							"JavaCodeGenerator.customCreateCode": "new JPanel() {\n\tprotected void paintComponent(Graphics g) {\n\t\tsuper.paintComponent(g);\n\t\tint x  = 18;\n\t\tint y = 38;\n\t\tfor(int i = 0; i < 13; i++) {\n\t\t\tg.drawLine(0, x + y*i, 200, x + y*i); \n\t\t}\n\t}\n};"
+						}
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "mardiMouseClicked", true ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel11"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelLundi"
+						"text": "Lundi"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {space :0:200:x}"
+						"$verticalGroup": "par l {space :0:484:x}"
+					} ) {
+						name: "lundi"
+						"background": #ColorUIResource0
+						auxiliary() {
+							"JavaCodeGenerator.customCreateCode": "new JPanel() {\n\tprotected void paintComponent(Graphics g) {\n\t\tsuper.paintComponent(g);\n\t\tint x  = 18;\n\t\tint y = 38;\n\t\tfor(int i = 0; i < 13; i++) {\n\t\t\tg.drawLine(0, x + y*i, 200, x + y*i); \n\t\t}\n\t}\n};"
+						}
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "panel2MouseClicked", true ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel12"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelMercredi"
+						"text": "Mercredi"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {space :0:200:x}"
+						"$verticalGroup": "par l {space :0:484:x}"
+					} ) {
+						name: "mercredi"
+						"background": #ColorUIResource0
+						auxiliary() {
+							"JavaCodeGenerator.customCreateCode": "new JPanel() {\n\tprotected void paintComponent(Graphics g) {\n\t\tsuper.paintComponent(g);\n\t\tint x  = 18;\n\t\tint y = 38;\n\t\tfor(int i = 0; i < 13; i++) {\n\t\t\tg.drawLine(0, x + y*i, 200, x + y*i); \n\t\t}\n\t}\n};"
+						}
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "mercrediMouseClicked", true ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel13"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelJeudi"
+						"text": "Jeudi"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {space :0:200:x}"
+						"$verticalGroup": "par l {space :0:0:x}"
+					} ) {
+						name: "jeudi"
+						"background": #ColorUIResource0
+						auxiliary() {
+							"JavaCodeGenerator.customCreateCode": "new JPanel() {\n\tprotected void paintComponent(Graphics g) {\n\t\tsuper.paintComponent(g);\n\t\tint x  = 18;\n\t\tint y = 38;\n\t\tfor(int i = 0; i < 13; i++) {\n\t\t\tg.drawLine(0, x + y*i, 200, x + y*i); \n\t\t}\n\t}\n};"
+						}
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "jeudiMouseClicked", true ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel14"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelVendredi"
+						"text": "Vendredi"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {space :0:200:x}"
+						"$verticalGroup": "par l {space :0:0:x}"
+					} ) {
+						name: "vendredi"
+						"background": #ColorUIResource0
+						auxiliary() {
+							"JavaCodeGenerator.customCreateCode": "new JPanel() {\n\tprotected void paintComponent(Graphics g) {\n\t\tsuper.paintComponent(g);\n\t\tint x  = 18;\n\t\tint y = 38;\n\t\tfor(int i = 0; i < 13; i++) {\n\t\t\tg.drawLine(0, x + y*i, 200, x + y*i); \n\t\t}\n\t}\n};"
+						}
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "vendrediMouseClicked", true ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel15"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelSamedi"
+						"text": "Samedi"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {space :0:200:x}"
+						"$verticalGroup": "par l {space :0:0:x}"
+					} ) {
+						name: "samedi"
+						"background": #ColorUIResource0
+						auxiliary() {
+							"JavaCodeGenerator.customCreateCode": "new JPanel() {\n\tprotected void paintComponent(Graphics g) {\n\t\tsuper.paintComponent(g);\n\t\tint x  = 18;\n\t\tint y = 38;\n\t\tfor(int i = 0; i < 13; i++) {\n\t\t\tg.drawLine(0, x + y*i, 200, x + y*i); \n\t\t}\n\t}\n};"
+						}
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "samediMouseClicked", true ) )
 					} )
 				} )
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "intituleFormation"
 				"text": "text"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label22"
-				"text": "Lundi"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label23"
-				"text": "Mardi"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label24"
-				"text": "Mercredi"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label25"
-				"text": "Jeudi"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label26"
-				"text": "Vendredi"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label27"
-				"text": "Samedi"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "validerEmploi"
@@ -171,6 +336,7 @@ new FormModel {
 					"font": new java.awt.Font( "Tibetan Machine Uni", 0, 14 )
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "affichageSemaineMouseClicked", true ) )
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseReleased", "affichageSemaineMouseReleased", true ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyReleased", "affichageSemaineKeyReleased", true ) )
 				} )
 			} )
 			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
@@ -178,31 +344,31 @@ new FormModel {
 				"preferredSize": new java.awt.Dimension( 44, 10 )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 15, 1065 )
-			"size": new java.awt.Dimension( 1045, 800 )
+			"location": new java.awt.Point( 10, 760 )
+			"size": new java.awt.Dimension( 1305, 675 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label5::l:p::p, comp label6::l:p::p, comp label2:::p::p, comp label7:::p::p, comp label8:::p::p}, space :p:15:p, par l {seq {par l {comp nomMatiere:::p::p, comp nomEnseignant:::p::p}, space :0:278:x}, seq {par l {par t:::p {seq {comp hFinH:::p:53:p, space :p:34:p, comp hFinM:::p:53:p}, seq {comp hDebutH:::p:53:p, space :::x, comp hDebutM:::p:53:p}}, comp nomSalle:::p::p}, space :85:231:x}}}, seq l {space :p:139:p, comp validercours2:::p::p, space :0:273:x}}"
-			"$verticalGroup": "par l {seq l {space :p:9:p, par t {comp label5:::p::p, comp nomMatiere:::p::p}, space :::p, par b {comp label6::b:p::p, comp nomEnseignant::b:p::p}, space :::p, par b {comp label2::b:p::p, comp nomSalle::b:p::p}, par l {seq {space :p:11:p, par b {comp hDebutM::b:p::p, comp hDebutH::b:p::p}}, seq l {space u:::p, comp label7:::p::p}}, space s:::p, par l {comp hFinM:::p::p, par b {comp hFinH::b:p::p, comp label8::b:p::p}}, space :::x, comp validercours2:::p::p}}"
+			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label5::l:p::p, comp label6::l:p::p, comp label2:::p::p, comp label7:::p::p, comp label8:::p::p}, space :p:12:p, par l {comp validercours2:::p::p, par t {comp nomSalle:::p::p, seq {par t {comp hDebutH:::p:53:p, comp hFinH:::p:53:p}, space :p:18:p, par l {comp hDebutM:::p:53:p, comp hFinM:::p:53:p}}, comp nomEnseignant::t:p::p, comp nomMatiere:::p::p}}, space ::103:x}}"
+			"$verticalGroup": "par l {seq l {space :p:15:p, par b {comp label5::b:p::p, comp nomMatiere::b:p::p}, space :::p, par b {comp label6::b:p::p, comp nomEnseignant::b:p::p}, space :::p, par b {comp label2::b:p::p, comp nomSalle::b:p::p}, space u:::p, par b {comp label7::b:p::p, comp hDebutM::b:p::p, comp hDebutH::b:p::p}, space s:::p, par b {comp label8::b:p::p, comp hFinM::b:p::p, comp hFinH::b:p::p}, space u:::p, comp validercours2:::p::p, space ::12:x}}"
 		} ) {
 			name: "creationSeance"
 			"title": "creer"
 			"resizable": false
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
-				"text": "nom matière"
+				"text": "Nom de la matière"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
-				"text": "proffeseur"
+				"text": "Professeur"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label7"
-				"text": "h debut"
+				"text": "Heure de debut"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label8"
-				"text": "h fin"
+				"text": "Heure de fin"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "hDebutH"
@@ -278,26 +444,28 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "validercoursActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 555, 1885 )
-			"size": &Dimension0 new java.awt.Dimension( 495, 265 )
+			"location": new java.awt.Point( 735, 1725 )
+			"size": new java.awt.Dimension( 365, 290 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {comp tabbedPane1::t:::x}"
-			"$verticalGroup": "par l {seq {space :::p, comp tabbedPane1::::387:x, space :p:38:p}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp tabbedPane1:::p:316:p, space :::x}}"
 		} ) {
 			name: "fenetreDebut"
 			"resizable": false
 			"background": new java.awt.Color( 0, 0, 0, 255 )
+			"$sizePolicy": 1
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq {space :p:94:p, comp boutonCreerEmploi:::p:130:p, space :p:51:p, comp bouttonMofierEmploi:::p:104:p, space :p:57:p, comp button2:::p:122:p, space ::90:x}, seq {space :p:193:p, comp label3:::p:248:p, space :0:0:x}, seq t {space ::139:x, par l {seq t {comp label1:::p::p, space :p:77:p, comp choixFormationBox:::p::p, space :p:161:p}, seq t {comp logoutButton:::p:48:p, space :p:44:p}}}}"
-					"$verticalGroup": "par l {seq {space :p:21:p, comp logoutButton:::p::p, space :p:72:p, comp label3:::p:43:p, space u:::p, par b {comp choixFormationBox::b:p::p, comp label1::b:p::p}, space :::x, par b {comp boutonCreerEmploi::b:p:68:p, comp bouttonMofierEmploi::b:p:68:p, comp button2::b:p:68:p}, space :p:99:p}}"
+					"$horizontalGroup": "par l {seq {space :p:192:p, comp label3:::p:248:p, space ::208:x}, seq l {space :p:184:p, comp label1:::p::p, space :p:77:p, comp choixFormationBox:::p::p, space :0:161:x}, seq t {space ::102:x, par l {seq t {comp logoutButton:::p:48:p, space :p:44:p}, seq t {comp boutonCreerEmploi:::p:130:p, space :p:52:p, comp bouttonMofierEmploi:::p:116:p, space :p:44:p, comp button2:::p:122:p, space :p:82:p}}}}"
+					"$verticalGroup": "par l {seq {space :p:21:p, comp logoutButton:::p::p, space :p:4:p, comp label3:::p:43:p, space s:::p, par b {comp label1::b:p::p, comp choixFormationBox::b:p::p}, space ::48:x, par b {comp boutonCreerEmploi::b:p:40:p, comp button2::b:p:40:p, comp bouttonMofierEmploi::b:p:40:p}, space :p:50:p}}"
 				} ) {
 					name: "panel3"
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label3"
 						"text": "Gestion emploi du temps"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label1"
@@ -335,15 +503,15 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "logoutButton"
-						"icon": new com.jformdesigner.model.SwingIcon( 1, "/home/guard/Documents/M1/Projet/Projet_Ventura/logout.png" )
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/logout.png" )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "logoutButtonActionPerformed", true ) )
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "Creation Emploi"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq l {space :p:29:p, comp nomMatiere2:::p::p, space ::255:x, comp associerBouton:::p::p, space :p:179:p}, seq l {comp scrollPane1:::p::p, space :::p, comp scrollPane2::::184:x, space :::p}}"
-					"$verticalGroup": "par l {seq l {space :::x, par l:::p {comp scrollPane2::::287:x, comp scrollPane1::::287:x}, space :p:28:p, par b {comp nomMatiere2::b:p::p, comp associerBouton::b:p::p}, space :::p}}"
+					"$horizontalGroup": "par l {seq l {space :p:29:p, comp nomMatiere2:::p::p, space ::265:x, comp associerBouton:::p::p, space :p:179:p}, seq l {comp scrollPane1:::p::p, space :::p, comp scrollPane2::::184:x, space :::p}}"
+					"$verticalGroup": "par l {seq l {space :::x, par l:::p {comp scrollPane2::::259:x, comp scrollPane1::::259:x}, space :p:56:p, par b {comp nomMatiere2::b:p::p, comp associerBouton::b:p::p}, space :::p}}"
 				} ) {
 					name: "panel4"
 					add( new FormComponent( "javax.swing.JComboBox" ) {
@@ -386,19 +554,20 @@ new FormModel {
 					"title": "Association Matieres/Profs"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-					"$horizontalGroup": "par l {seq l {space :p:48:p, comp panel9:::p::p, space ::35:x}}"
-					"$verticalGroup": "par l {seq l {space :p:35:p, comp panel9:::p::p, space :::x}}"
+					"$horizontalGroup": "par l {seq l {space :::p, comp panel9:::::x, space :::p}}"
+					"$verticalGroup": "par l {seq l {space :::p, comp panel9::::272:x, space :::p}}"
 				} ) {
 					name: "panelListeReservation2"
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {comp scrollPane5::l::565:x, seq l {space :p:89:p, comp bouttonConfirmReservation:::p:105:p, space :p:126:p, comp boutonRefuseReservation:::p:105:p, space ::140:x}}"
-						"$verticalGroup": "par l {seq {space :::p, comp scrollPane5::::253:x, space s:::p, par b {comp bouttonConfirmReservation::b:p::p, comp boutonRefuseReservation::b:p::p}, space :p:29:p}}"
+						"$horizontalGroup": "par l {seq l {space :p:124:p, comp bouttonConfirmReservation:::p:105:p, space ::167:x, comp boutonRefuseReservation:::p:105:p, space :p:135:p}, seq l {space :::p, comp scrollPane5::::624:x, space :::p}}"
+						"$verticalGroup": "par l {seq l {space :::p, comp scrollPane5:::p:226:p, space :::x, par b {comp bouttonConfirmReservation::b:p::p, comp boutonRefuseReservation::b:p::p}, space :p:29:p}}"
 					} ) {
 						name: "panel9"
 						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 							name: "scrollPane5"
 							add( new FormComponent( "javax.swing.JTable" ) {
 								name: "tableListeReservation2"
+								addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tableListeReservation2MouseClicked", true ) )
 							} )
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
@@ -418,31 +587,31 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 380 )
-			"size": new java.awt.Dimension( 650, 460 )
+			"location": new java.awt.Point( 285, 380 )
+			"size": new java.awt.Dimension( 650, 345 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label21::l:p::p, comp label28::l:p::p, comp label31:::p::p, comp label29:::p::p, comp label30:::p::p}, space :p:15:p, par l {seq l {par l {par t:::p {seq {comp hFinH2:::p:53:p, space :p:34:p, comp hFinM2:::p:53:p}, seq {comp hDebutH2:::p:53:p, space :::x, comp hDebutM2:::p:53:p}}, comp nomSalle2:::p::p}, space :45:231:x}, seq {par l {comp nomMatiere3:::p::p, comp nomEnseignant2:::p::p, seq l {comp button3:::p::p, space :::p, comp button1:::p::p, space s:::p, comp suppSeanceBouton:::p::p}}, space :0:62:x}}}}"
-			"$verticalGroup": "par l {seq l {par l {seq {space :p:9:p, par t {comp label21:::p::p, comp nomMatiere3:::p::p}, space :::p, par b {comp label28::b:p::p, comp nomEnseignant2::b:p::p}, space :::p, par b {comp label31::b:p::p, comp nomSalle2::b:p::p}, par l {seq {space :p:11:p, par b {comp hDebutM2::b:p::p, comp hDebutH2::b:p::p}}, seq l {space u:::p, comp label29:::p::p}}, space s:::p, par l {comp hFinM2:::p::p, par b {comp hFinH2::b:p::p, comp label30::b:p::p}}, space :::x, par l {comp button1::t:p::p, comp button3::t:p::p}}, seq t {space :::x, comp suppSeanceBouton:::p::p}}, space :::p}}"
+			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label21::l:p::p, comp label28::l:p::p, comp label30:::p::p, comp button3::l:p::p, comp label29:::p::p, comp label31::l:p::p}, par l {seq l {space :p:61:p, par t {comp nomSalle2:::p::p, par t:::p {seq {comp hFinH2:::p:53:p, space :p:34:p, comp hFinM2:::p:53:p}, seq {comp hDebutH2:::p:53:p, space :::x, comp hDebutM2:::p:53:p}}, comp nomEnseignant2::t:p::p, comp nomMatiere3::t:p::p}}, seq l {space :p:10:p, comp button1:::p::p, space :p:41:p, comp suppSeanceBouton:::p::p}}, space ::100:x}}"
+			"$verticalGroup": "par l {seq l {space :p:15:p, par b {comp label21::b:p::p, comp nomMatiere3::b:p::p}, space :::p, par b {comp label28::b:p::p, comp nomEnseignant2::b:p::p}, par l {seq l {space :p:11:p, par b {comp label31::b:p::p, comp nomSalle2::b:p::p}, space :p:60:p, par l {comp hFinM2:::p::p, par b {comp hFinH2::b:p::p, comp label30::b:p::p}}}, seq l {space :p:67:p, par b {comp label29::b:p::p, comp hDebutH2::b:p::p, comp hDebutM2::b:p::p}}}, space u::16:x, par l {par b {comp button3::b:p::p, comp button1::b:p::p}, comp suppSeanceBouton::l:p::p}, space ::18:x}}"
 		} ) {
 			name: "modifierSeance"
 			"title": "modifiercde Creer"
 			"resizable": false
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label21"
-				"text": "nom matière"
+				"text": "Nom de la matière"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label28"
-				"text": "proffeseur"
+				"text": "Professeur"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label29"
-				"text": "h debut"
+				"text": "Heure de début"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label30"
-				"text": "h fin"
+				"text": "Heure de fin"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "hDebutH2"
@@ -505,12 +674,12 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "suppSeanceBoutonActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"size": #Dimension0
-			"location": new java.awt.Point( 15, 1890 )
+			"size": new java.awt.Dimension( 450, 305 )
+			"location": new java.awt.Point( 95, 1715 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:29:p, comp panel5:::p::p, space ::21:x}}"
-			"$verticalGroup": "par l {seq l {space :::p, comp panel5:::p::p, space ::12:x}}"
+			"$horizontalGroup": "par l {seq l {space :p:29:p, comp panel5:::p::p, space ::36:x}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp panel5:::p::p, space ::14:x}}"
 		} ) {
 			name: "fenetreAuthentification"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -555,19 +724,19 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 70, 5 )
+			"location": new java.awt.Point( 355, 5 )
 			"size": new java.awt.Dimension( 520, 305 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {comp parentPanel::l:::x}"
-			"$verticalGroup": "par l {comp parentPanel::l:::x}"
+			"$verticalGroup": "par l {seq l {comp parentPanel:::p:426:p, space :0:0:x}}"
 		} ) {
 			name: "fenetreEnseignant"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.CardLayout ) ) {
 				name: "parentPanel"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {space :0:788:x}"
-					"$verticalGroup": "par l {space :0:462:x}"
+					"$verticalGroup": "par l {space :0:426:x}"
 				} ) {
 					name: "panelEmploi"
 				}, new FormLayoutConstraints( class java.lang.String ) {
@@ -575,12 +744,12 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {seq l {space :::p, comp panelSalle:::::x, space :::p}}"
-					"$verticalGroup": "par l {seq l {space :::p, comp panelSalle:::::x, space :p:37:p}}"
+					"$verticalGroup": "par l {seq l {space :::p, comp panelSalle:::p::p, space ::54:x}}"
 				} ) {
 					name: "panelReserverSalle"
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-						"$horizontalGroup": "par l {seq {space :p:64:p, comp inputdateReSalle:::p:19:p, space :p:195:p, comp buttonDemandeReserv:::p::p, space :0:331:x}, seq l {space :::p, comp panel6::::754:x, space :::p}}"
-						"$verticalGroup": "par l {seq l {comp panel6:::p::p, space ::58:x, par b {comp buttonDemandeReserv::b:p::p, comp inputdateReSalle::b:p:7:p}, space :::p}}"
+						"$horizontalGroup": "par l {seq {space :p:64:p, comp inputdateReSalle:::p:19:p, space :p:233:p, comp buttonDemandeReserv:::p::p, space :0:315:x}, seq l {space :::p, comp panel6::::754:x, space :::p}}"
+						"$verticalGroup": "par l {seq l {comp panel6:::p::p, par l {seq {space :::x, comp inputdateReSalle:::p:7:p, space :::p}, seq l {space :::p, comp buttonDemandeReserv:::p::p, space :::x}}}}"
 					} ) {
 						name: "panelSalle"
 						"border": new javax.swing.border.TitledBorder( "Réserver une salle" )
@@ -592,7 +761,7 @@ new FormModel {
 						} )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 							"$horizontalGroup": "par l {seq t {space :0:0:x, par l {comp label35::l:p::p, seq l {comp scrollPane6:::p:427:p, space s:::p, comp scrollPaneSalle:::p:304:p}}, space :p:35:p, comp button4:::p:106:p, space :::x}, seq l {space :p:171:p, comp label36:::p::p, space :::x, comp label37:::p::p, space :p:272:p}}"
-							"$verticalGroup": "par l {seq t {comp label35:::p::p, par l {seq {space :p:198:p, comp button4:::p:0:p, space :0:96:x}, seq l {space :p:8:p, par b {comp label36::b:p::p, comp label37::b:p::p}, space :::p, par l {comp scrollPaneSalle::::262:x, comp scrollPane6::::0:x}}}, space :::p}}"
+							"$verticalGroup": "par l {seq t {comp label35:::p::p, par l {seq {space :p:198:p, comp button4:::p:0:p, space :0:96:x}, seq l {space :p:8:p, par b {comp label36::b:p::p, comp label37::b:p::p}, space :::p, par l {comp scrollPaneSalle::::0:x, comp scrollPane6::::0:x}}}, space :::p}}"
 						} ) {
 							name: "panel6"
 							"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
@@ -635,7 +804,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 					"$horizontalGroup": "par l {seq l {space :p:48:p, comp panel7:::p::p, space ::175:x}}"
-					"$verticalGroup": "par l {seq l {space :p:35:p, comp panel7:::p::p, space ::91:x}}"
+					"$verticalGroup": "par l {seq l {space :p:35:p, comp panel7:::p::p, space ::55:x}}"
 				} ) {
 					name: "panelListeReservation"
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -699,8 +868,61 @@ new FormModel {
 				} )
 			}
 		}, new FormLayoutConstraints( null ) {
-			"size": new java.awt.Dimension( 790, 515 )
-			"location": new java.awt.Point( 110, 2175 )
+			"size": new java.awt.Dimension( 790, 420 )
+			"location": new java.awt.Point( 395, 2175 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {par l {seq l {space :p:25:p, par l:::p {comp label22::l:::x, seq t {par l {comp label23:::p::p, comp formattedTextField2:::p:79:p}, space ::82:x, par l {comp label24:::p::p, comp formattedTextField3:::p:89:p}, space :0:22:x}, seq {comp label25:::p::p, space u:::p, comp formattedTextField4:::p:149:p}, comp label27:::p::p, seq l {comp label38:::p::p, space s:::p, comp textArea2:::p:195:p}}}, seq l {space :p:107:p, comp scrollPane7:::p:197:p}}, space ::54:x}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp label22:::p:40:p, space u:::p, par b {comp label23::b:p::p, comp label24::b:p::p}, space :::p, par b {comp formattedTextField2::b:p::p, comp formattedTextField3::b:p::p}, space s:::p, par b {comp label25::b:p::p, comp formattedTextField4::b:p::p}, space u:::p, par l {comp label27:::p::p, comp scrollPane7:::p:63:p}, space :p:31:p, par b {comp textArea2::b:p:93:p, comp label38::b:p::p}, space ::17:x}}"
+		} ) {
+			name: "descriptionReservation"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label22"
+				"text": "Réservation n° "
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 13, false )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label23"
+				"text": "Nom de la salle"
+			} )
+			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
+				name: "formattedTextField2"
+				"editable": false
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label24"
+				"text": "Enseignant"
+			} )
+			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
+				name: "formattedTextField3"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label25"
+				"text": "Date de Réservation"
+			} )
+			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
+				name: "formattedTextField4"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label27"
+				"text": "Séance"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane7"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea1"
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label38"
+				"text": "Justification"
+			} )
+			add( new FormComponent( "javax.swing.JTextArea" ) {
+				name: "textArea2"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 960, 155 )
+			"size": new java.awt.Dimension( 360, 405 )
 		} )
 	}
 }
