@@ -17,15 +17,8 @@ public abstract class DAO<T> {
     Logger lgr = Logger.getLogger(DAO.class.getName());
     static Connection connect;
 
-    public DAO() {
-        try {
-            String url = "jdbc:mysql://localhost/scolaire";
-            String user = "adrien";
-            String password = "password";
-            this.connect = DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public DAO(Connection connect) {
+        this.connect = connect;
     }
     // throws sera à discuter
     /**

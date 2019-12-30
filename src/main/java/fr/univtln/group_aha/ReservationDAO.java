@@ -1,14 +1,19 @@
 package fr.univtln.group_aha;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class ReservationDAO extends DAO<Reservation> {
     String personneAuthentifiee ="";
+
+    public ReservationDAO() {
+        super(connect);
+    }
+
+    public ReservationDAO(Connection connect) {
+        super(connect);
+    }
 
 
     public String getPersonneAuthentifiee() {

@@ -17,6 +17,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>spring-plugin</id>
+      <name>Spring Plugins Repository</name>
+      <url>https://repo.spring.io/plugins-release/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
 <!-- https://mvnrepository.com/artifact/com.toedter/jcalendar -->
 <dependency>
@@ -35,9 +43,22 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.17</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.bulenkov/darcula -->
+    <dependency>
+      <groupId>com.bulenkov</groupId>
+      <artifactId>darcula</artifactId>
+      <version>2018.2</version>
+    </dependency>
+
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+      </resource>
+    </resources>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>

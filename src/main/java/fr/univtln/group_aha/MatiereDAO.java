@@ -1,16 +1,17 @@
 package fr.univtln.group_aha;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
 public class MatiereDAO extends DAO<Matiere> {
     private static EnseignantDAO enseignantDAO = new EnseignantDAO();
+
+    public MatiereDAO(Connection connect) {
+        super(connect);
+    }
+
     @Override
     public void create(Matiere obj) {
         try {
@@ -41,7 +42,6 @@ public class MatiereDAO extends DAO<Matiere> {
                 state.executeUpdate();
 
             }
-
         }
 
         catch (SQLException e) {

@@ -1,15 +1,20 @@
 package fr.univtln.group_aha;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
 public class SalleDAO extends DAO<Salle> {
+    public SalleDAO() {
+        super(connect);
+    }
+
+    public SalleDAO(Connection connect) {
+        super(connect);
+    }
+
     @Override
     public void create(Salle obj) {
         List<String> listemateriel = new ArrayList<>();

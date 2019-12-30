@@ -6,6 +6,10 @@ import java.util.*;
 import java.util.logging.Level;
 
 public class SeanceDAO extends DAO<Seance> {
+    public SeanceDAO(Connection connect) {
+        super(connect);
+    }
+
     // J'ai pensé pour un jour, un jour lointain (le plus possible) où à le create renverrai l'ID.
     @Override
     public void create(Seance obj) {
@@ -91,8 +95,6 @@ public class SeanceDAO extends DAO<Seance> {
 
     }
 
-
-
     @Override
     public void update(Seance obj) {
         try {
@@ -125,15 +127,16 @@ public class SeanceDAO extends DAO<Seance> {
 
     }
 
+    @Override
     public Seance find(int id) {
         Seance seance = null;
 
 
         try {
-            SalleDAO salleDAO = new SalleDAO();
-            EnseignantDAO enseignantDAO= new EnseignantDAO();
-            MatiereDAO matiereDAO = new MatiereDAO();
-            FormationDAO formationDAO = new FormationDAO();
+            SalleDAO salleDAO = new SalleDAO(this.connect);
+            EnseignantDAO enseignantDAO= new EnseignantDAO(this.connect);
+            MatiereDAO matiereDAO = new MatiereDAO(this.connect);
+            FormationDAO formationDAO = new FormationDAO(this.connect);
             Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             String query = "SELECT * FROM  Seance WHERE id = %d;";
 
@@ -152,10 +155,9 @@ public class SeanceDAO extends DAO<Seance> {
                 Calendar cal = new GregorianCalendar();
 
                 cal.setTime(date);
-                int day = cal.get(Calendar.DAY_OF_WEEK);
-                int week = cal.get(Calendar.WEEK_OF_YEAR);
-
-
+                int day = cal.get(Calendar.DAY_OF_YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int year = cal.get(Calendar.YEAR);
 
                 GregorianCalendar debutH = new GregorianCalendar();
                 GregorianCalendar finH = new GregorianCalendar();
@@ -167,17 +169,19 @@ public class SeanceDAO extends DAO<Seance> {
                 aux = debut_seance.toString().substring(3,5);
                 debutH.set(GregorianCalendar.MINUTE,  Integer.parseInt(aux));
                 //semaine , jour
-                debutH.set(GregorianCalendar.WEEK_OF_YEAR, week);
-                debutH.set(GregorianCalendar.DAY_OF_WEEK,  day);
+                debutH.set(GregorianCalendar.DAY_OF_YEAR,  day);
+                debutH.set(GregorianCalendar.MONTH, month);
+                debutH.set(GregorianCalendar.YEAR, year);
+
                 // fin seance
                 aux = fin_seance.toString().substring(0,2);
                 finH.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(aux));
                 aux = fin_seance.toString().substring(0,2);
                 finH.set(GregorianCalendar.MINUTE, Integer.parseInt(aux));
                 //semaine jour
-                finH.set(GregorianCalendar.WEEK_OF_YEAR, week);
-                finH.set(GregorianCalendar.DAY_OF_WEEK,  day);
-
+                finH.set(GregorianCalendar.DAY_OF_YEAR,  day);
+                finH.set(GregorianCalendar.MONTH, month);
+                finH.set(GregorianCalendar.YEAR, year);
 
                 seance = new Seance(resultat.getInt("id"),salleDAO.find(resultat.getInt("id_salle")), enseignantDAO.find(resultat.getInt("id_enseignant")),
                         matiereDAO.find(resultat.getInt("id_matiere")),debutH,finH, formation);
@@ -204,13 +208,12 @@ public class SeanceDAO extends DAO<Seance> {
             PreparedStatement state = connect.prepareStatement(query);
             state.setInt(1, id);
             ResultSet result = state.executeQuery();
-            FormationDAO formationDAO = new FormationDAO();
-            SalleDAO salleDAO = new SalleDAO();
-            EnseignantDAO enseignantDAO = new EnseignantDAO();
-            MatiereDAO matiereDAO = new MatiereDAO();
+            FormationDAO formationDAO = new FormationDAO(this.connect);
+            SalleDAO salleDAO = new SalleDAO(this.connect);
+            EnseignantDAO enseignantDAO = new EnseignantDAO(this.connect);
+            MatiereDAO matiereDAO = new MatiereDAO(this.connect);
             String aux;
             while (result.next()) {
-
                 Formation formation = formationDAO.find(result.getInt("id_formation"));
                 Time debut_seance = result.getTime("debut_seance");
                 Time fin_seance = result.getTime("fin_seance");
@@ -219,10 +222,9 @@ public class SeanceDAO extends DAO<Seance> {
                 Calendar cal = new GregorianCalendar();
 
                 cal.setTime(date);
-                int day = cal.get(Calendar.DAY_OF_WEEK);
-                int week = cal.get(Calendar.WEEK_OF_YEAR);
-
-
+                int day = cal.get(Calendar.DAY_OF_YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int year = cal.get(Calendar.YEAR);
 
                 GregorianCalendar debutH = new GregorianCalendar();
                 GregorianCalendar finH = new GregorianCalendar();
@@ -234,16 +236,18 @@ public class SeanceDAO extends DAO<Seance> {
                 aux = debut_seance.toString().substring(3,5);
                 debutH.set(GregorianCalendar.MINUTE,  Integer.parseInt(aux));
                 //semaine , jour
-                debutH.set(GregorianCalendar.WEEK_OF_YEAR, week);
-                debutH.set(GregorianCalendar.DAY_OF_WEEK,  day);
+                debutH.set(GregorianCalendar.DAY_OF_YEAR, day);
+                debutH.set(GregorianCalendar.MONTH,  month);
+                debutH.set(GregorianCalendar.YEAR, year);
                 // fin seance
                 aux = fin_seance.toString().substring(0,2);
                 finH.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(aux));
                 aux = fin_seance.toString().substring(0,2);
                 finH.set(GregorianCalendar.MINUTE, Integer.parseInt(aux));
                 //semaine jour
-                finH.set(GregorianCalendar.WEEK_OF_YEAR, week);
-                finH.set(GregorianCalendar.DAY_OF_WEEK,  day);
+                finH.set(GregorianCalendar.DAY_OF_YEAR, day);
+                finH.set(GregorianCalendar.MONTH,  month);
+                finH.set(GregorianCalendar.YEAR, year);
 
 
                 //System.out.println(result.getInt("id"));
@@ -273,10 +277,10 @@ public class SeanceDAO extends DAO<Seance> {
             PreparedStatement state = connect.prepareStatement(query);
             state.setInt(1, id);
             ResultSet result = state.executeQuery();
-            FormationDAO formationDAO = new FormationDAO();
-            SalleDAO salleDAO = new SalleDAO();
-            EnseignantDAO enseignantDAO = new EnseignantDAO();
-            MatiereDAO matiereDAO = new MatiereDAO();
+            FormationDAO formationDAO = new FormationDAO(this.connect);
+            SalleDAO salleDAO = new SalleDAO(this.connect);
+            EnseignantDAO enseignantDAO = new EnseignantDAO(this.connect);
+            MatiereDAO matiereDAO = new MatiereDAO(this.connect);
             String aux;
             while (result.next()) {
 
@@ -288,10 +292,9 @@ public class SeanceDAO extends DAO<Seance> {
                 Calendar cal = new GregorianCalendar();
 
                 cal.setTime(date);
-                int day = cal.get(Calendar.DAY_OF_WEEK);
-                int week = cal.get(Calendar.WEEK_OF_YEAR);
-
-
+                int day = cal.get(Calendar.DAY_OF_YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int year = cal.get(Calendar.YEAR);
 
                 GregorianCalendar debutH = new GregorianCalendar();
                 GregorianCalendar finH = new GregorianCalendar();
@@ -303,27 +306,23 @@ public class SeanceDAO extends DAO<Seance> {
                 aux = debut_seance.toString().substring(3,5);
                 debutH.set(GregorianCalendar.MINUTE,  Integer.parseInt(aux));
                 //semaine , jour
-                debutH.set(GregorianCalendar.WEEK_OF_YEAR, week);
-                debutH.set(GregorianCalendar.DAY_OF_WEEK,  day);
+                debutH.set(GregorianCalendar.DAY_OF_YEAR,  day);
+                debutH.set(GregorianCalendar.MONTH, month);
+                debutH.set(GregorianCalendar.YEAR, year);
+
                 // fin seance
                 aux = fin_seance.toString().substring(0,2);
                 finH.set(GregorianCalendar.HOUR_OF_DAY, Integer.parseInt(aux));
                 aux = fin_seance.toString().substring(0,2);
                 finH.set(GregorianCalendar.MINUTE, Integer.parseInt(aux));
                 //semaine jour
-                finH.set(GregorianCalendar.WEEK_OF_YEAR, week);
-                finH.set(GregorianCalendar.DAY_OF_WEEK,  day);
-
-
-
-
-
-
+                finH.set(GregorianCalendar.DAY_OF_YEAR,  day);
+                finH.set(GregorianCalendar.MONTH, month);
+                finH.set(GregorianCalendar.YEAR, year);
 
                 //System.out.println(result.getInt("id"));
                 Seance seance = new Seance(result.getInt("id"),salleDAO.find(result.getInt("id_salle")), enseignantDAO.find(result.getInt("id_enseignant")),
                         matiereDAO.find(result.getInt("id_matiere")),debutH,finH, formation);
-
 
                 resultat.add(seance);
             }
@@ -380,10 +379,7 @@ public class SeanceDAO extends DAO<Seance> {
 
         finally {
 
-
-
             ArrayList<Salle> toutessalles = salleDAO.getData();
-
 
             Set set = new HashSet() ;
             set.addAll(resultat) ;
@@ -393,7 +389,6 @@ public class SeanceDAO extends DAO<Seance> {
                 toutessalles.remove(idx);
 
             }
-
 
             System.out.println(distinctList);
             System.out.println(toutessalles);

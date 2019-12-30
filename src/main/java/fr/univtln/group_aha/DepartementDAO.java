@@ -1,11 +1,13 @@
 package fr.univtln.group_aha;
 
 import java.sql.*;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.ArrayList;
 
 public class DepartementDAO extends DAO<Departement> {
+    public DepartementDAO() {
+        super(connect);
+    }
+
     @Override
     public void create(Departement obj) {
     }
