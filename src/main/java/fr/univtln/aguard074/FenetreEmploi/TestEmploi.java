@@ -31,9 +31,9 @@ public class TestEmploi
         }
 
         try {
-            String url = "jdbc:mysql://localhost/planning_db";
-            String user = "student";
-            String password = "student";
+            String url = "jdbc:mysql://localhost/scolaire";
+            String user = "adrien";
+            String password = "password";
             Connection connect = DriverManager.getConnection(url, user, password);
             ModeleEmploi modele = new ModeleEmploi(connect);
             //Création du contrôleur
