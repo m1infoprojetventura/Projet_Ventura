@@ -14,7 +14,6 @@ public class FormationDAO extends DAO<Formation> {
 
     @Override
     public void create(Formation obj) {
-
     }
 
     @Override
@@ -34,10 +33,11 @@ public class FormationDAO extends DAO<Formation> {
 
         try {
 
-            Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            String query = "SELECT * FROM Formation WHERE id = %d;";
+            String query = "SELECT * FROM Formation WHERE id = ?;";
+            PreparedStatement st = connect.prepareStatement(query);
+            st.setInt(1, id);
 
-            ResultSet resultat = st.executeQuery(String.format(query, id));
+            ResultSet resultat = st.executeQuery();
 
             if (resultat.first()) {
                 Departement departement = departementDAO.find(resultat.getInt("id_departement"));

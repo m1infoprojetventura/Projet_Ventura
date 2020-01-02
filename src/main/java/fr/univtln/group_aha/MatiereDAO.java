@@ -6,10 +6,23 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class MatiereDAO extends DAO<Matiere> {
-    private static EnseignantDAO enseignantDAO = new EnseignantDAO();
+    private static EnseignantDAO enseignantDAO;
+    PreparedStatement statementMatiere;
+    PreparedStatement statementMatiereEnseignant;
 
     public MatiereDAO(Connection connect) {
         super(connect);
+        enseignantDAO = new EnseignantDAO(connect);
+        try {
+            String query = "SELECT * FROM Matiere WHERE id = ?";
+            statementMatiere = connect.prepareStatement(query);
+
+            query = "SELECT * FROM Matiere_Enseignant WHERE id_matiere = ?";
+            statementMatiereEnseignant = connect.prepareStatement(query);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -40,7 +53,6 @@ public class MatiereDAO extends DAO<Matiere> {
                 state.setInt(2, enseignant.getId());
 
                 state.executeUpdate();
-
             }
         }
 
@@ -116,20 +128,16 @@ public class MatiereDAO extends DAO<Matiere> {
         Matiere matiere = null;
 
         try {
-            String query = "SELECT * FROM Matiere WHERE id = ?";
-            PreparedStatement state = connect.prepareStatement(query);
+            String query;
+            statementMatiere.setInt(1, id);
 
-            state.setInt(1, id);
-
-            ResultSet resultSet = state.executeQuery();
+            ResultSet resultSet = statementMatiere.executeQuery();
 
             if(resultSet.first()) {
-                query = "SELECT * FROM Matiere_Enseignant WHERE id_matiere = ?";
                 // Je saus pas si affecter de nouveau une nouvellle variable à ce truc
                 // ne va pas le casser
-                state = connect.prepareStatement(query);
-                state.setInt(1, id);
-                ResultSet resultSet1 = state.executeQuery();
+                statementMatiereEnseignant.setInt(1, id);
+                ResultSet resultSet1 = statementMatiereEnseignant.executeQuery();
                 List<Enseignant> enseignants = new ArrayList<>();
 
                 while (resultSet1.next()) {

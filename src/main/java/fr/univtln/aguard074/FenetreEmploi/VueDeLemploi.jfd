@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp intituleFormation:::p::p, space :::x}, seq t {space :0:0:x, comp vSpacer1:::p::p, space :p:489:p}}}, seq l {space :p:141:p, comp validerEmploi:::p:129:p, space :::x, comp annulerEmploi:::p:129:p, space :p:243:p}, seq l {space :::p, par l {seq {space :0:0:x, comp panel1:::p::p}, comp scrollPane4:::::x}, space :p:16:p, comp semaineActuelle:::p::p}}"
-			"$verticalGroup": "par l {seq l {space :p:15:p, comp intituleFormation:::p::p, par t {seq t {space :p:89:p, comp semaineActuelle:::p::p, space :p:674:p}, seq l {space u:::p, comp scrollPane4:::p:25:p, space :::p, comp panel1:::p::p, space :::p, par l {comp annulerEmploi:::p:38:p, comp validerEmploi::l:p:40:p}, space :::p}}, comp vSpacer1:::::x, space :p:44:p}}"
+			"$horizontalGroup": "par l {seq {space :::x, comp vSpacer1:::p::p, space :p:489:p}, seq l {space :p:141:p, comp validerEmploi:::p:129:p, space :::x, comp annulerEmploi:::p:129:p, space :p:243:p}, seq l {space :::p, par l {seq {space :0:0:x, comp panel1:::p::p}, comp scrollPane4:::::x}, space :p:16:p, comp semaineActuelle:::p::p}, seq l {space :p:25:p, comp listeFormation:::p::p, space s:::p, comp listeEnseignant:::p::p, space :::x}}"
+			"$verticalGroup": "par l {seq l {par t {seq t {space :p:121:p, comp semaineActuelle:::p::p, space :p:674:p}, seq l {space :p:12:p, par b {comp listeFormation::b:p::p, comp listeEnseignant::b:p::p}, space u:::p, comp scrollPane4:::p:25:p, space :::p, comp panel1:::p::p, space :::p, par l {comp annulerEmploi:::p:38:p, comp validerEmploi::l:p:40:p}, space :::p}}, comp vSpacer1:::::x, space :p:44:p}}"
 		} ) {
 			name: "this"
 			"resizable": false
@@ -312,10 +312,6 @@ new FormModel {
 					} )
 				} )
 			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "intituleFormation"
-				"text": "text"
-			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "validerEmploi"
 				"text": "Valider"
@@ -343,9 +339,17 @@ new FormModel {
 				name: "vSpacer1"
 				"preferredSize": new java.awt.Dimension( 44, 10 )
 			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "listeFormation"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "listeFormationActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "listeEnseignant"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "listeEnseignantActionPerformed", true ) )
+			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 10, 760 )
-			"size": new java.awt.Dimension( 1305, 675 )
+			"location": new java.awt.Point( 0, 760 )
+			"size": new java.awt.Dimension( 1305, 695 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {seq l {space :p:20:p, par l {comp label5::l:p::p, comp label6::l:p::p, comp label2:::p::p, comp label7:::p::p, comp label8:::p::p}, space :p:12:p, par l {comp validercours2:::p::p, par t {comp nomSalle:::p::p, seq {par t {comp hDebutH:::p:53:p, comp hFinH:::p:53:p}, space :p:18:p, par l {comp hDebutM:::p:53:p, comp hFinM:::p:53:p}}, comp nomEnseignant::t:p::p, comp nomMatiere:::p::p}}, space ::103:x}}"
@@ -444,7 +448,7 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "validercoursActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 735, 1725 )
+			"location": new java.awt.Point( 735, 1785 )
 			"size": new java.awt.Dimension( 365, 290 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -587,7 +591,7 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 285, 380 )
+			"location": new java.awt.Point( 290, 320 )
 			"size": new java.awt.Dimension( 650, 345 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -675,7 +679,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"size": new java.awt.Dimension( 450, 305 )
-			"location": new java.awt.Point( 95, 1715 )
+			"location": new java.awt.Point( 165, 1780 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {seq l {space :p:29:p, comp panel5:::p::p, space ::36:x}}"
@@ -683,8 +687,8 @@ new FormModel {
 		} ) {
 			name: "fenetreAuthentification"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-				"$horizontalGroup": "par l {seq l {space :p:94:p, par l {comp label34:::p::p, seq {comp loginButton:::p:120:p, space s:::p, comp button5:::p:120:p}, seq {par l {comp label32:::p::p, comp label33:::p::p}, space :p:78:p, par l:::p {comp inputLogin:::::x, comp inputPassword::::165:x}}}, space ::31:x}}"
-				"$verticalGroup": "par l {seq l {space :p:20:p, comp label34:::p::p, space :::p, par b {comp inputLogin::b:p::p, comp label32::b:p::p}, space u:::p, par b {comp inputPassword::b:p::p, comp label33::b:p::p}, space :p:42:p, par b {comp loginButton::b:p::p, comp button5::b:p::p}, space ::45:x}}"
+				"$horizontalGroup": "par l {seq l {space :p:94:p, par l {seq {par l {comp label34:::p::p, seq {par l {comp label32:::p::p, comp label33:::p::p}, space :p:78:p, par l:::p {comp inputLogin:::::x, comp inputPassword::::165:x}}}, space ::31:x}, seq {comp loginButton:::p:146:p, space ::30:x, comp button5:::p:120:p, space :p:53:p}}}}"
+				"$verticalGroup": "par l {seq l {space :p:20:p, comp label34:::p::p, space :::p, par b {comp inputLogin::b:p::p, comp label32::b:p::p}, space u:::p, par b {comp inputPassword::b:p::p, comp label33::b:p::p}, space :p:42:p, par b {comp button5::b:p::p, comp loginButton::b:p::p}, space ::45:x}}"
 			} ) {
 				name: "panel5"
 				"border": new javax.swing.border.TitledBorder( null, "Authentification", 4, 0, null, sfield java.awt.Color blue )
@@ -724,7 +728,7 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 355, 5 )
+			"location": new java.awt.Point( 360, 5 )
 			"size": new java.awt.Dimension( 520, 305 )
 		} )
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -853,6 +857,15 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem2ActionPerformed", true ) )
 					} )
 				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu4"
+					"text": "Disponibilité"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem4"
+						"text": "Renseigner les disponibilités"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem4ActionPerformed", true ) )
+					} )
+				} )
 				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 					name: "hSpacer1"
 					"preferredSize": new java.awt.Dimension( 500, 10 )
@@ -869,7 +882,7 @@ new FormModel {
 			}
 		}, new FormLayoutConstraints( null ) {
 			"size": new java.awt.Dimension( 790, 420 )
-			"location": new java.awt.Point( 200, 2080 )
+			"location": new java.awt.Point( 205, 2080 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {seq l {par l {seq l {space :p:25:p, par l:::p {comp label22::l:::x, seq t {par l {comp label23:::p::p, comp formattedTextField2:::p:79:p}, space ::82:x, par l {comp label24:::p::p, comp formattedTextField3:::p:89:p}, space :0:22:x}, seq {comp label25:::p::p, space u:::p, comp formattedTextField4:::p:149:p}, comp label27:::p::p, seq l {comp label38:::p::p, space s:::p, comp textArea2:::p:195:p}}}, seq l {space :p:107:p, comp scrollPane7:::p:197:p}}, space ::54:x}}"
@@ -921,8 +934,112 @@ new FormModel {
 				name: "textArea2"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 960, 155 )
+			"location": new java.awt.Point( 965, 155 )
 			"size": new java.awt.Dimension( 360, 405 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:25:p, par l {seq l {comp validerContrainte:::p::p, space :p:59:p, comp button7:::p::p}, seq {par l {comp label39:::p::p, comp label40::l:p::p}, space :p:41:p, par l:::p {comp spinner1:::p:47:p, comp spinner3::::0:x}, space :35:35:p, par l:::p {comp spinner2:::p:48:p, comp spinner4::::0:x}}, comp label26::l:p::p, comp scrollPane8::l:p:280:p}, space ::88:x}}"
+			"$verticalGroup": "par l {seq l {space :p:20:p, par b {comp label39::b:p::p, comp spinner1::b:p::p, comp spinner2::b:p::p}, space s:::p, par l {par b {comp spinner3::b:p::p, comp spinner4::b:p::p}, comp label40::l:p::p}, space s:::p, comp label26:::p::p, space u:::p, comp scrollPane8:::p:98:p, space s:::p, par b {comp validerContrainte::b:p::p, comp button7::b:p::p}, space :p:22:p}}"
+		} ) {
+			name: "creationContrainte"
+			"title": "Création d'une contrainte"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label39"
+				"text": "Heure de début"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner1"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner2"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label40"
+				"text": "Heure de fin"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner3"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner4"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label26"
+				"text": "Motif"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "validerContrainte"
+				"text": "Valider"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "validerContrainteActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button7"
+				"text": "Annuler"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane8"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea3"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 550, 1475 )
+			"size": &Dimension0 new java.awt.Dimension( 395, 345 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:25:p, par l {seq {par l {comp label41:::p::p, comp label42::l:p::p}, space :p:41:p, par l:::p {comp spinner5:::p:47:p, comp spinner7::::0:x}, space :p:35:p, par l:::p {comp spinner6:::p:48:p, comp spinner8::::0:x}}, comp label43::l:p::p, seq l {comp modifierContrainteBouton:::p::p, space s:::p, comp supprimerContrainteBouton:::p::p, space s:::p, comp button9:::p::p}, comp scrollPane9::l:::x}, space ::80:x}}"
+			"$verticalGroup": "par l {seq l {space :p:20:p, par b {comp label41::b:p::p, comp spinner5::b:p::p, comp spinner6::b:p::p}, space s:::p, par l {par b {comp spinner7::b:p::p, comp spinner8::b:p::p}, comp label42::l:p::p}, space s:::p, comp label43:::p::p, space :::p, comp scrollPane9:::p:116:p, space :::p, par b {comp modifierContrainteBouton::b:p::p, comp supprimerContrainteBouton::b:p::p, comp button9::b:p::p}, space :p:22:p}}"
+		} ) {
+			name: "modifierContrainte"
+			"title": "Modification d'une contrainte"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label41"
+				"text": "Heure de début"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner5"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner6"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label42"
+				"text": "Heure de fin"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner7"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner8"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label43"
+				"text": "Motif"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "modifierContrainteBouton"
+				"text": "Modifier"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "modifierContrainteBoutonActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button9"
+				"text": "Annuler"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "supprimerContrainteBouton"
+				"text": "Supprimer"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button6ActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "supprimerContrainteActionPerformed", true ) )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane9"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea4"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": #Dimension0
+			"location": new java.awt.Point( 155, 2565 )
 		} )
 	}
 }

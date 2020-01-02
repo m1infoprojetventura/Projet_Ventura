@@ -64,7 +64,7 @@ public class ControleurEmploi{
         this.modele.modifierSeanceBDD(idSalle,salle,enseignant,matiere,debutH,finH,formation);
     }
 
-    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
+    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) throws EchecChangementTableException {
         this.modele.creerSeanceBDD(salle, enseignant, matiere, debutH, finH, formation);
     }
 
@@ -97,5 +97,29 @@ public class ControleurEmploi{
 
     public List<Salle> getSallesDispo(GregorianCalendar debutH, GregorianCalendar finH) {
         return this.modele.getSallesDispo(debutH,finH);
+    }
+
+    public void changerSemaine(List<Integer> temp) {
+        this.modele.setSemainesSelectionnees(temp);
+    }
+
+    public void changerEmploiDutemps(Formation formation, Enseignant enseignant) {
+        modele.changerEmploiDutemps(formation, enseignant);
+    }
+
+    public void creerContrainte(Enseignant enseignant, Calendar debutH, Calendar finH, String motif) throws EchecChangementTableException {
+        modele.creerContrainte(enseignant, debutH, finH, motif);
+    }
+
+    public void changerEmploiDutempsContrainte(Enseignant enseignant) {
+        modele.initEmploiContrainteEnseignant(enseignant);
+    }
+
+    public void supprimerContrainte(int idContrainte, int semaineAnnee) {
+        modele.supprimerContrainte(idContrainte, semaineAnnee);
+    }
+
+    public void modifierContrainte(int id, Enseignant enseignant, GregorianCalendar debutH, GregorianCalendar finH, String motif) {
+        this.modele.modifierContrainte(id, enseignant, debutH, finH,  motif);
     }
 }

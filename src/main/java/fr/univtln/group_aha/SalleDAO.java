@@ -11,8 +11,20 @@ public class SalleDAO extends DAO<Salle> {
         super(connect);
     }
 
+    PreparedStatement statementFindSalle;
+    PreparedStatement statementFindSalleMateriel;
     public SalleDAO(Connection connect) {
         super(connect);
+        try {
+            String query = "SELECT * FROM Salle WHERE id =?";
+            statementFindSalle = connect.prepareStatement(query);
+
+            String query2 = "SELECT * FROM Materiel WHERE id_salle = ?";
+            statementFindSalleMateriel = connect.prepareStatement(query2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -46,16 +58,14 @@ public class SalleDAO extends DAO<Salle> {
             for (String item : listemateriel){
                 state.setString(2,item);
                 state.executeUpdate();
-
             }
-
         }
 
         catch (SQLException e) {
             lgr.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
-        }
 
+        }
     }
 
     @Override
@@ -118,28 +128,19 @@ public class SalleDAO extends DAO<Salle> {
         }
     }
 
-
-
-
     @Override
     public Salle find(int id) {
         Salle salle = new Salle() ;
         try {
-
-            Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            String query = "SELECT * FROM Salle WHERE id = %d;";
-
-            ResultSet resultat = st.executeQuery(String.format(query, id));
+            statementFindSalle.setInt(1,  id);
+            ResultSet resultat = statementFindSalle.executeQuery();
 
             if (resultat.first()) {
 
                 ArrayList<Materiel.TypeMateriel> resultat2 = new ArrayList<>();
 
-                String query2 = "SELECT * FROM Materiel WHERE id_salle = ?";
-                PreparedStatement state2 = connect.prepareStatement(query2);
-
-                state2.setInt(1,resultat.getInt("id"));
-                ResultSet result2 = state2.executeQuery();
+                statementFindSalleMateriel.setInt(1,resultat.getInt("id"));
+                ResultSet result2 = statementFindSalleMateriel.executeQuery();
                 while (result2.next()){
                     
                     if(result2.getString("type").equals("IMPRIMANTE")){resultat2.add(Materiel.TypeMateriel.IMPRIMANTE);}

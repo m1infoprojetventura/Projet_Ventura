@@ -49,7 +49,6 @@ public class ReservationDAO extends DAO<Reservation> {
             lgr.log(Level.WARNING, e.getMessage(), e);
             e.printStackTrace();
         }
-
     }
 
     @Override

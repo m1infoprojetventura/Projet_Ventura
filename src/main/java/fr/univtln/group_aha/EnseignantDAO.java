@@ -1,5 +1,7 @@
 package fr.univtln.group_aha;
 
+import sun.awt.X11.XStateProtocol;
+
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -7,12 +9,20 @@ import java.util.logging.Level;
 
 public class EnseignantDAO extends DAO<Enseignant> {
 
+    PreparedStatement statementEnseignant;
     public EnseignantDAO() {
         super(connect);
     }
 
     public EnseignantDAO(Connection connect) {
         super(connect);
+
+        try {
+            String query = "SELECT * FROM  Enseignant WHERE id=?";
+            statementEnseignant = connect.prepareStatement(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -102,10 +112,8 @@ public class EnseignantDAO extends DAO<Enseignant> {
             // ResultSet.CONCUR_READ_ONLY indique que les changements sur le ResultSet n'affecteront pas
             // la base de données
 
-            Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            String query = "SELECT * FROM  Enseignant WHERE id = %d;";
-
-            ResultSet resultat = st.executeQuery(String.format(query, id));
+            statementEnseignant.setInt(1, id);
+            ResultSet resultat = statementEnseignant.executeQuery();
 
             // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
             // Departement departement = new Departement(resultat.getString("departement"),);
