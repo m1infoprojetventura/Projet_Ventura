@@ -25,7 +25,9 @@ public class ContrainteDAO  extends DAO<Contrainte> {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte)";
 
-            PreparedStatement statement = connect.prepareStatement(query1);
+            PreparedStatement statement = connect.prepareStatement(query1,
+                                                                    ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                    ResultSet.CONCUR_UPDATABLE);
 
             int id_enseignant = obj.getEnseignant().getId();
             Time debut_seance = new Time(obj.getHdebut().getTimeInMillis());
@@ -49,7 +51,10 @@ public class ContrainteDAO  extends DAO<Contrainte> {
             if(nombre == 0) {
                 String query = "INSERT INTO Contrainte (id_enseignant, date, debut_contrainte, fin_contrainte, motif) " + "VALUES(?, ?, ?, ?, ?)";
                 // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-                PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
+                                                                            ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                            ResultSet.CONCUR_UPDATABLE);
+
                 state.setInt(1,  id_enseignant);
                 state.setDate(2,  date);
                 state.setTime(3,  debut_seance);
@@ -61,7 +66,7 @@ public class ContrainteDAO  extends DAO<Contrainte> {
                 // Obtenir la clé autogénéré par INSERT
                 ResultSet key = state.getGeneratedKeys();
 
-                if(key.first())
+                if(key.next())
                     obj.setId(key.getInt(1));
             }
 
@@ -96,7 +101,10 @@ public class ContrainteDAO  extends DAO<Contrainte> {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte) AND id !=?";
 
-            PreparedStatement statement = connect.prepareStatement(query1);
+            PreparedStatement statement = connect.prepareStatement(query1,
+                                                                    ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                    ResultSet.CONCUR_UPDATABLE);
+
 
             int id_enseignant = obj.getEnseignant().getId();
             Time debut_seance = new Time(obj.getHdebut().getTimeInMillis());

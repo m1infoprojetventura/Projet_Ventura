@@ -20,6 +20,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.*;
 import fr.univtln.aguard074.FenetreAdmin.Controleur;
+import fr.univtln.aguard074.FenetreAdmin.Icontroleur;
+import fr.univtln.aguard074.FenetreAdmin.Modele;
 import fr.univtln.aguard074.FenetreAdmin.VueGestionaire;
 import fr.univtln.group_aha.*;
 
@@ -911,33 +913,48 @@ public class VueDeLemploi extends JFrame implements Observer {
             personneAuthentifiee = login;
             modele.sendAuthentification(login);
             sessionActive=true;
+            System.out.println(typePersonne);
             switch(typePersonne) {
                 case"Etudiant":
                     etatEmploi = EtatEmploi.CONSULTABLE;
-                    Formation formation = this.controleur.getEtudiantbyLogin(personneAuthentifiee).getFormation();
-                    int id_formation = formation.getId();
-                    this.controleur.initEmploi(id_formation);
+                    if(this.controleur.verifierAuthEtudiant(login, password)) {
+                        Formation formation = this.controleur.getEtudiantbyLogin(personneAuthentifiee).getFormation();
+                        int id_formation = formation.getId();
+                        this.controleur.initEmploi(id_formation);
 
-                    listeFormation.setSelectedItem(formation);
-                    listeFormationActionPerformed(null);
-                    listeFormation.setEnabled(false);
-                    listeEnseignant.setSelectedItem(null);
-                    listeEnseignantActionPerformed(null);
-                    listeEnseignant.setVisible(false);
-                    this.setVisible(true);
-                    annulerEmploi.setVisible(false);
-                    validerEmploi.setVisible(false);
-                    validerEmploi.setVisible(false);
+                        listeFormation.setSelectedItem(formation);
+                        listeFormationActionPerformed(null);
+                        listeFormation.setEnabled(false);
+                        listeEnseignant.setSelectedItem(null);
+                        listeEnseignantActionPerformed(null);
+                        listeEnseignant.setVisible(false);
+                        this.setVisible(true);
+                        annulerEmploi.setVisible(false);
+                        validerEmploi.setVisible(false);
+                        validerEmploi.setVisible(false);
+                    }
+
+                    else {
+                        JOptionPane.showMessageDialog(panel5,"Veuillez vérifier vos coordonnées","Erreur", JOptionPane.ERROR_MESSAGE);
+                    }
 
                     break;
                 case"Enseignant":
                     etatEmploi = EtatEmploi.CONSULTABLE;
-                    fenetreEnseignant.setVisible(true);
-                    // intituleFormation.setText("Votre emploi du Temps");
-                    ((CardLayout)parentPanel.getLayout()).show(parentPanel,"panelReserverSalle");
-                    fenetreAuthentification.dispose();
-                    gererTabSeances();
+                    if(this.controleur.verifierAuthEnseignant(login, password)) {
+                        fenetreEnseignant.setVisible(true);
+                        // intituleFormation.setText("Votre emploi du Temps");
+                        ((CardLayout) parentPanel.getLayout()).show(parentPanel, "panelReserverSalle");
+                        fenetreAuthentification.dispose();
+                        gererTabSeances();
+                    }
+
+                    else {
+                        JOptionPane.showMessageDialog(panel5,"Veuillez vérifier vos coordonnées","Erreur", JOptionPane.ERROR_MESSAGE);
+                    }
+
                     break;
+
                 case"Responsable":
                     etatEmploi = EtatEmploi.MODIFIABLE;
                     consultationModifiable = true;
@@ -946,9 +963,24 @@ public class VueDeLemploi extends JFrame implements Observer {
                         this.fenetreAuthentification.dispose();
                         this.fenetreDebut.setVisible(true);
 
-                    }else {
+                    }
+                    else {
                         JOptionPane.showMessageDialog(panel5,"Veuillez vérifier vos coordonnées","Erreur", JOptionPane.ERROR_MESSAGE);
                     }
+                    break;
+                case "Administrateur":
+                    if(this.controleur.verifierAuthAdministrateur(login, password)) {
+                        this.fenetreAuthentification.setVisible(false);
+                        this.fenetreAuthentification.dispose();
+                        Modele modele = new Modele();
+                        Icontroleur controler = new Controleur(modele);
+                        VueGestionaire gestionaire = new VueGestionaire(controler, modele);
+                    }
+
+                    else {
+                        JOptionPane.showMessageDialog(panel5,"Veuillez vérifier vos coordonnées","Erreur", JOptionPane.ERROR_MESSAGE);
+                    }
+
                     break;
                 default:  JOptionPane.showMessageDialog(panel5,"Veuillez vérifier vos coordonnées","Erreur", JOptionPane.ERROR_MESSAGE);
 
@@ -1401,7 +1433,7 @@ public class VueDeLemploi extends JFrame implements Observer {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Adrien Guard
+        // Generated using JFormDesigner Evaluation license - Haribou Abdallah
         panel1 = new JPanel();
         panel2 = new JPanel();
         vSpacer2 = new JPanel(null);
@@ -1650,12 +1682,13 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-            EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
-            . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
-            java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-            { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
-            throw new RuntimeException( ); }} );
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
+            javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax
+            . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
+            . awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
+            . Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .
+            PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .
+            equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
 
             //======== panel2 ========
             {
@@ -2314,11 +2347,14 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-                    0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-                    . BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-                    red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-                    beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+                    panel3.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder (
+                    new javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion"
+                    , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
+                    , new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 )
+                    ,java . awt. Color .red ) ,panel3. getBorder () ) ); panel3. addPropertyChangeListener(
+                    new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+                    ) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
+                    ;} } );
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -2559,7 +2595,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                 .addComponent(associerBouton)))
                         .addContainerGap(17, Short.MAX_VALUE))
             );
-            fenetreDebut.setSize(735, 410);
+            fenetreDebut.setSize(650, 345);
             fenetreDebut.setLocationRelativeTo(fenetreDebut.getOwner());
         }
 
@@ -2742,13 +2778,12 @@ public class VueDeLemploi extends JFrame implements Observer {
                         panel5KeyPressed(e);
                     }
                 });
-                panel5.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax
-                .swing.border.EmptyBorder(0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing
-                .border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.
-                Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt.Color.red
-                ),panel5. getBorder()));panel5. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override
-                public void propertyChange(java.beans.PropertyChangeEvent e){if("\u0062or\u0064er".equals(e.getPropertyName(
-                )))throw new RuntimeException();}});
+                panel5.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
+                border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER
+                , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
+                .BOLD ,12 ), java. awt. Color. red) ,panel5. getBorder( )) ); panel5. addPropertyChangeListener (
+                new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r"
+                .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
                 //---- inputLogin ----
                 inputLogin.setText("asayadi246");
@@ -2923,13 +2958,13 @@ public class VueDeLemploi extends JFrame implements Observer {
 
             //======== parentPanel ========
             {
-                parentPanel.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing
-                .border.EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder
-                .CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.
-                awt.Font.BOLD,12),java.awt.Color.red),parentPanel. getBorder()))
-                ;parentPanel. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-                ){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException();}})
-                ;
+                parentPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
+                javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
+                . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
+                .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+                . Color. red) ,parentPanel. getBorder( )) ); parentPanel. addPropertyChangeListener (new java. beans.
+                PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
+                equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
                 parentPanel.setLayout(new CardLayout());
 
                 //======== panelEmploi ========
@@ -3417,7 +3452,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Adrien Guard
+    // Generated using JFormDesigner Evaluation license - Haribou Abdallah
     private JPanel panel1;
     private JPanel panel2;
     private JPanel vSpacer2;

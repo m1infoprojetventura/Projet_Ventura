@@ -15,7 +15,7 @@ public class MatiereDAO extends DAO<Matiere> {
         enseignantDAO = new EnseignantDAO(connect);
         try {
             String query = "SELECT * FROM Matiere WHERE id = ?";
-            statementMatiere = connect.prepareStatement(query);
+            statementMatiere = connect.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             query = "SELECT * FROM Matiere_Enseignant WHERE id_matiere = ?";
             statementMatiereEnseignant = connect.prepareStatement(query);

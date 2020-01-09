@@ -43,6 +43,11 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.17</version>
     </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.5.0</version>
+    </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.bulenkov/darcula -->
     <dependency>
@@ -50,6 +55,7 @@
       <artifactId>darcula</artifactId>
       <version>2018.2</version>
     </dependency>
+
 
   </dependencies>
 
@@ -66,7 +72,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainclass>fr.univtln.aguard074.FenetreAdmin.App</mainclass>
+                <mainClass>fr.univtln.aguard074.FenetreEmploi.TestEmploi</mainClass>
               </manifest>
             </archive>
           </configuration>
@@ -76,8 +82,39 @@
 
     <plugins>
       <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>application-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <archive>
+                <index>true</index>
+                <manifest>
+                  <addClasspath>true</addClasspath>
+                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                  <mainClass>fr.univtln.aguard074.FenetreEmploi.TestEmploi</mainClass>
+                </manifest>
+                <manifestEntries>
+                  <Application-Name>${project.name}</Application-Name>
+                  <Permissions>all-permissions</Permissions>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>

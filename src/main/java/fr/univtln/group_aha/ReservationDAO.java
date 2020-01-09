@@ -30,7 +30,11 @@ public class ReservationDAO extends DAO<Reservation> {
             String query = "INSERT INTO Reservation (id_enseignant, id_salle,  date_reservation, id_seance) VALUES(?, ?, ?, ?)";
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
+                                                                        ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                        ResultSet.CONCUR_UPDATABLE);
+
+
             java.sql.Date d2 = new java.sql.Date(obj.getDate_reservation().getTime());
 
             state.setInt(1, obj.getId_enseignant());
@@ -41,7 +45,7 @@ public class ReservationDAO extends DAO<Reservation> {
 
             // Obtenir la clé autogénéré par INSERT
             ResultSet key = state.getGeneratedKeys();
-            if(key.first())
+            if(key.next())
                 obj.setId(key.getInt(1));
         }
 
@@ -60,7 +64,10 @@ public class ReservationDAO extends DAO<Reservation> {
     public void update(Reservation obj) {
         try {
             String query = "UPDATE Reservation SET etat_reservation =? WHERE id = ?";
-            PreparedStatement state = connect.prepareStatement(query);
+            PreparedStatement state = connect.prepareStatement(query,
+                                                                ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                ResultSet.CONCUR_UPDATABLE);
+
             state.setString(1, "Confirmé");
             state.setInt(2, obj.getId());
             state.executeUpdate();
@@ -72,7 +79,10 @@ public class ReservationDAO extends DAO<Reservation> {
     public void refuseupdate(Reservation obj) {
         try {
             String query = "UPDATE Reservation SET etat_reservation =? WHERE id = ?";
-            PreparedStatement state = connect.prepareStatement(query);
+            PreparedStatement state = connect.prepareStatement(query,
+                                                                ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                ResultSet.CONCUR_UPDATABLE);
+
             state.setString(1, "Refusé");
             state.setInt(2, obj.getId());
             state.executeUpdate();
@@ -96,7 +106,10 @@ public class ReservationDAO extends DAO<Reservation> {
 
             int id_enseignant =((Enseignant)enseignantDAO.getEnseignantByLogin(personneAuthentifiee)).getId();
             String query = "SELECT * FROM Reservation where id_enseignant=? ";
-            PreparedStatement state = connect.prepareStatement(query);
+            PreparedStatement state = connect.prepareStatement(query,
+                                                                ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                ResultSet.CONCUR_UPDATABLE);
+
             state.setInt(1,id_enseignant);
             ResultSet result = state.executeQuery();
             while(result.next()) {
@@ -120,7 +133,10 @@ public class ReservationDAO extends DAO<Reservation> {
         ArrayList<Reservation> resultat = new ArrayList();
         try {
             String query = "SELECT * FROM Reservation  ";
-            PreparedStatement state = connect.prepareStatement(query);
+            PreparedStatement state = connect.prepareStatement(query,
+                                                                ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                ResultSet.CONCUR_UPDATABLE);
+
             ResultSet result = state.executeQuery();
             while(result.next()) {
                 Reservation reservation = new Reservation(result.getInt("id"),result.getInt("id_enseignant"),result.getInt("id_salle"),

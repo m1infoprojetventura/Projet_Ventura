@@ -57,7 +57,7 @@ public class ControleurEmploi{
     }
 
     public boolean verifierAuthResponsable(String login, String password) {
-    return this.modele.verifierAuthResponsable(login,password);
+        return this.modele.verifierAuthResponsable(login,password);
     }
 
     public void modifierSeanceBDD(int idSalle, Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) {
@@ -121,5 +121,17 @@ public class ControleurEmploi{
 
     public void modifierContrainte(int id, Enseignant enseignant, GregorianCalendar debutH, GregorianCalendar finH, String motif) {
         this.modele.modifierContrainte(id, enseignant, debutH, finH,  motif);
+    }
+
+    public boolean verifierAuthEtudiant(String login, String password) {
+        return this.modele.verifierAuthEtudiant(login, password);
+    }
+
+    public boolean verifierAuthEnseignant(String login, String password) {
+        return this.modele.verifierAuthEnseignant(login, password);
+    }
+
+    public boolean verifierAuthAdministrateur(String login, String password) {
+        return this.modele.verifierAuthAdministrateur(login, password);
     }
 }

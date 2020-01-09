@@ -19,10 +19,32 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
         try {
             String query = "SELECT * FROM  Enseignant WHERE id=?";
-            statementEnseignant = connect.prepareStatement(query);
+            statementEnseignant = connect.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean verifierAuthEnseignant(String login, String password) {
+        try {
+            String query = "SELECT * FROM Enseignant where login = ? and mdp= ?";
+            String passwordEncode = Hachage.toHexString(Hachage.getSHA(password));
+            PreparedStatement state = connect.prepareStatement(query);
+
+            state.setString(1, login);
+            state.setString(2, passwordEncode);
+            ResultSet result = state.executeQuery();
+            while (result.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override
@@ -33,7 +55,9 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
 
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
+                                                                      ResultSet.CONCUR_UPDATABLE,
+                                                                      Statement.RETURN_GENERATED_KEYS);
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
             state.setString(1, obj.getNom());
@@ -43,7 +67,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             state.executeUpdate();
             // Obtenir la clé autogénéré par INSERT
             ResultSet key = state.getGeneratedKeys();
-            if (key.first())
+            if (key.next())
                 obj.setId(key.getInt(1));
 
             // J'ai besoin de l'id pour la génération du login donc voila pourquoi cela a été fait séparament.
@@ -68,7 +92,9 @@ public class EnseignantDAO extends DAO<Enseignant> {
         try {
             String query = "DELETE FROM Enseignant WHERE id = ?";
 
-            PreparedStatement state = connect.prepareStatement(query);
+            PreparedStatement state = connect.prepareStatement(query,
+                                                               ResultSet.CONCUR_UPDATABLE,
+                                                               Statement.RETURN_GENERATED_KEYS);
             state.setInt(1, obj.getId());
 
             state.executeUpdate();
@@ -84,7 +110,11 @@ public class EnseignantDAO extends DAO<Enseignant> {
         try {
             String query = "UPDATE Enseignant SET nom=?, prenom=?, date_naissance=?," +
                     "id_departement=?, mdp=? WHERE id=?;";
-            PreparedStatement state = connect.prepareStatement(query);
+
+            PreparedStatement state = connect.prepareStatement(query,
+                                                               ResultSet.CONCUR_UPDATABLE,
+                                                               Statement.RETURN_GENERATED_KEYS);
+
             Departement departement = obj.getDepartement();
 
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
@@ -204,6 +234,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+
         return false;
     }
 
@@ -232,6 +263,13 @@ public class EnseignantDAO extends DAO<Enseignant> {
                 resultat = "Enseignant";
             }
 
+            String query4 = "SELECT * FROM Administrateur where login =? ";
+            state = connect.prepareStatement(query4);
+            state.setString(1, login);
+            result = state.executeQuery();
+            while (result.next()) {
+                resultat = "Administrateur";
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -274,8 +312,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return enseignant;
     }
-
-
 }

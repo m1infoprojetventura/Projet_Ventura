@@ -35,6 +35,7 @@ public class ModeleEmploi extends Observable {
     private static SalleDAO salleDAO;
     private static EnseignantDAO enseignantDAO;
     private static EtudiantDAO etudiantDAO;
+    private static AdmnistrateurDAO admnistrateurDAO;
     private static FormationDAO formationDAO;
     private static ReservationDAO reservationDAO;
     private static ContrainteDAO contrainteDAO;
@@ -80,6 +81,7 @@ public class ModeleEmploi extends Observable {
         enseignantDAO = new EnseignantDAO(connect);
         etudiantDAO = new EtudiantDAO(connect);
         formationDAO = new FormationDAO(connect);
+        admnistrateurDAO = new AdmnistrateurDAO(connect);
         reservationDAO = new ReservationDAO(connect);
         contrainteDAO = new ContrainteDAO(connect);
 
@@ -529,5 +531,17 @@ public class ModeleEmploi extends Observable {
             e.printStackTrace();
         }
 
+    }
+
+    public boolean verifierAuthEtudiant(String login, String password) {
+        return etudiantDAO.verifierAuthEtudiant(login, password);
+    }
+
+    public boolean verifierAuthEnseignant(String login, String password) {
+        return enseignantDAO.verifierAuthEnseignant(login, password);
+    }
+
+    public boolean verifierAuthAdministrateur(String login, String password) {
+        return admnistrateurDAO.verifierAuthAdministrateur(login, password);
     }
 }

@@ -20,6 +20,27 @@ public class EtudiantDAO extends DAO<Etudiant> {
         super(connect);
     }
 
+    public boolean verifierAuthEtudiant(String login, String password) {
+        try {
+            String query = "SELECT * FROM Etudiant where login = ? and mdp= ?";
+            String passwordEncode = Hachage.toHexString(Hachage.getSHA(password));
+            PreparedStatement state = connect.prepareStatement(query);
+
+            state.setString(1, login);
+            state.setString(2, passwordEncode);
+            ResultSet result = state.executeQuery();
+            while (result.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
 
     @Override
@@ -29,7 +50,9 @@ public class EtudiantDAO extends DAO<Etudiant> {
             Formation formation = obj.getFormation();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
+                                                                      ResultSet.CONCUR_UPDATABLE,
+                                                                      Statement.RETURN_GENERATED_KEYS);
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
             state.setString(1, obj.getNom());
@@ -40,7 +63,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
             // Obtenir la clé autogénéré par INSERT
             ResultSet key = state.getGeneratedKeys();
-            if(key.first())
+            if(key.next())
                 obj.setId(key.getInt(1));
 
             // J'ai besoin de l'id pour la génération du login donc voila pourquoi l'ajout de le login a été fait séparament.
@@ -204,7 +227,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
             PreparedStatement state = connect.prepareStatement(query);
             state.setString(1, loginEtudiant);
             ResultSet resultat = state.executeQuery();
-            if (resultat.first()) {
+            if (resultat.next()) {
                 etudiant = find(resultat.getInt("id"));
             }
         } catch (SQLException e) {

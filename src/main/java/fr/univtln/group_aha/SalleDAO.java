@@ -17,7 +17,7 @@ public class SalleDAO extends DAO<Salle> {
         super(connect);
         try {
             String query = "SELECT * FROM Salle WHERE id =?";
-            statementFindSalle = connect.prepareStatement(query);
+            statementFindSalle = connect.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             String query2 = "SELECT * FROM Materiel WHERE id_salle = ?";
             statementFindSalleMateriel = connect.prepareStatement(query2);
@@ -38,7 +38,10 @@ public class SalleDAO extends DAO<Salle> {
 
             String query = "INSERT INTO Salle (capacite, nom) VALUES(?, ?)";
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
+                                                                        ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                        ResultSet.CONCUR_UPDATABLE);
+
             String nom = obj.getNom();
             int capacite = obj.getCapacite();
 
@@ -48,7 +51,7 @@ public class SalleDAO extends DAO<Salle> {
             state.executeUpdate();
             // Obtenir la clé autogénéré par INSERT
             ResultSet key = state.getGeneratedKeys();
-            if(key.first())
+            if(key.next())
                 obj.setId(key.getInt(1));
             int id_salle = obj.getId();
 

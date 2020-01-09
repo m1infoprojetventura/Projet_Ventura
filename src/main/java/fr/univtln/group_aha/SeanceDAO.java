@@ -23,7 +23,9 @@ public class SeanceDAO extends DAO<Seance> {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte)";
 
-            PreparedStatement statement = connect.prepareStatement(query1);
+            PreparedStatement statement = connect.prepareStatement(query1,
+                                                                ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                ResultSet.CONCUR_UPDATABLE);
 
             int id_salle = obj.getSalle().getId();
             int id_enseignant = obj.getEnseignant().getId();
@@ -50,7 +52,9 @@ public class SeanceDAO extends DAO<Seance> {
                 String query = "INSERT INTO Seance (id_salle, id_enseignant, id_matiere, date, debut_seance, fin_seance, id_formation) " +
                         "VALUES(?, ?, ?, ?, ?, ?,?)";
                 // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-                PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement state = connect.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                          ResultSet.CONCUR_UPDATABLE,
+                                                                          Statement.RETURN_GENERATED_KEYS);
 
                 state.setInt(1, id_salle);
                 state.setInt(2, id_enseignant);
@@ -64,7 +68,7 @@ public class SeanceDAO extends DAO<Seance> {
                 // Obtenir la clé autogénéré par INSERT
                 ResultSet key = state.getGeneratedKeys();
 
-                if (key.first())
+                if (key.next())
                     obj.setId(key.getInt(1));
 
             }

@@ -28,7 +28,7 @@ public class DepartementDAO extends DAO<Departement> {
         EnseignantDAO enseignantDAO = new EnseignantDAO();
 
         try {
-            Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String query = "SELECT * FROM Departement WHERE id = %d;";
 
             ResultSet resultat = st.executeQuery(String.format(query, id));

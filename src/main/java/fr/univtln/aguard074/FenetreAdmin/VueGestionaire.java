@@ -95,7 +95,7 @@ public class VueGestionaire extends JFrame {
         JPanel childPane1 =getFormStudentPanel() ;
         JPanel childPane2 = getformSallePanel();
         JMenuBar menuBar = new JMenuBar();
-        childPane2.setBackground(Color.white);
+        // childPane2.setBackground(Color.white);
         globalPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         //setContentPane(globalPane);
         globalPane.setLayout(null);
@@ -146,15 +146,15 @@ public class VueGestionaire extends JFrame {
         panelBouton.setLayout(new BoxLayout(panelBouton, BoxLayout.X_AXIS));
 
         panelBouton.setBounds(7, 246, 290, 41);
-        panelBouton.setBackground(Color.WHITE);
+        // panelBouton.setBackground(Color.WHITE);
         // ici on rajouter le tabbedPane
         JTabbedPane paneltableStudent = getListTable();
         Border lineborder = BorderFactory.createLineBorder(Color.black, 1);
-        container.setBackground(Color.WHITE);
+        // container.setBackground(Color.WHITE);
         container.setLayout(null);
 
         panelFormAddPersonne.setBorder(lineborder);
-        panelFormAddPersonne.setBackground(Color.WHITE);
+        // panelFormAddPersonne.setBackground(Color.WHITE);
         panelFormAddPersonne.setBounds(46, 60, 304, 304);
         panelFormAddPersonne.setLayout(null);
 
@@ -251,8 +251,8 @@ public class VueGestionaire extends JFrame {
 
         panelTableEtudiant.setLayout(new BoxLayout(panelTableEtudiant, BoxLayout.Y_AXIS));
 
-        panelTabEtudiant.setBackground(Color.WHITE);
-        panelTableEtudiant.setBackground(Color.WHITE);
+       // panelTabEtudiant.setBackground(Color.WHITE);
+       // panelTableEtudiant.setBackground(Color.WHITE);
 
         panelTabEtudiant.setLayout(null);
 
@@ -264,7 +264,7 @@ public class VueGestionaire extends JFrame {
 
         JPanel panelBouton = new JPanel();
         panelBouton.setBounds(160, 335, 260, 32);
-        panelBouton.setBackground(Color.WHITE);
+        // panelBouton.setBackground(Color.WHITE);
 
         JButton suppBouton = new JButton("Supprimer");
         // suppBouton.setBounds(104, 346, 126, 32);
@@ -338,8 +338,8 @@ public class VueGestionaire extends JFrame {
 
         panelTableEnseignant.setLayout(new BoxLayout(panelTableEnseignant, BoxLayout.Y_AXIS));
 
-        panelTabEnseignant.setBackground(Color.WHITE);
-        panelTableEnseignant.setBackground(Color.WHITE);
+       // panelTabEnseignant.setBackground(Color.WHITE);
+       // panelTableEnseignant.setBackground(Color.WHITE);
 
         panelTabEnseignant.setLayout(null);
 
@@ -351,7 +351,7 @@ public class VueGestionaire extends JFrame {
 
         JPanel panelBouton = new JPanel();
         panelBouton.setBounds(160, 335, 260, 32);
-        panelBouton.setBackground(Color.WHITE);
+        // panelBouton.setBackground(Color.WHITE);
 
         JButton suppBouton = new JButton("Supprimer");
         // suppBouton.setBounds(104, 346, 126, 32);
@@ -428,7 +428,7 @@ public class VueGestionaire extends JFrame {
 
         JPanel panelFormAddSalle = new JPanel();
         panelFormAddSalle.setBorder(lineborder);
-        panelFormAddSalle.setBackground(Color.WHITE);
+        // panelFormAddSalle.setBackground(Color.WHITE);
         panelFormAddSalle.setBounds(33, 65, 279, 335);
         panel2.add(panelFormAddSalle);
         panelFormAddSalle.setLayout(null);
@@ -473,28 +473,28 @@ public class VueGestionaire extends JFrame {
 
         video_Materiel = new JCheckBox("Video projecteur");
         video_Materiel.setBounds(10, 150, 150, 21);
-        video_Materiel.setBackground(Color.WHITE);
+        // video_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(video_Materiel);
 
         ordi_Materiel = new JCheckBox("Ordinateur");
         ordi_Materiel.setBounds(10, 174, 150, 21);
-        ordi_Materiel.setBackground(Color.WHITE);
+        // ordi_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(ordi_Materiel);
 
         tableau_Materiel = new JCheckBox("Tableau tactile");
         tableau_Materiel.setBounds(10, 198, 150, 21);
-        tableau_Materiel.setBackground(Color.WHITE);
+        // tableau_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(tableau_Materiel);
 
         imprimante_Materiel = new JCheckBox("Imprimante");
         imprimante_Materiel.setBounds(10, 222, 150, 21);
-        imprimante_Materiel.setBackground(Color.WHITE);
+        // imprimante_Materiel.setBackground(Color.WHITE);
         panelFormAddSalle.add(imprimante_Materiel);
 
         JPanel panelBouton = new JPanel();
         panelBouton.setLayout(new BoxLayout(panelBouton, BoxLayout.X_AXIS));
         panelBouton.setBounds(3, 285, 270, 21);
-        panelBouton.setBackground(Color.WHITE);
+        // panelBouton.setBackground(Color.WHITE);
 
         JButton addSalleBouton = new JButton("Ajouter");
         // addSalleBouton.setBounds(3, 285, 85, 21);
@@ -513,7 +513,7 @@ public class VueGestionaire extends JFrame {
 
         JPanel panelListeSalles = new JPanel();
         panelListeSalles.setLayout(null);
-        panelListeSalles.setBackground(Color.WHITE);
+        // panelListeSalles.setBackground(Color.WHITE);
         panelListeSalles.setBorder(lineborder);
 
         panelListeSalles.setBounds(325, 39, 620, 361);
@@ -522,7 +522,7 @@ public class VueGestionaire extends JFrame {
         JPanel panelBouton_1 = new JPanel();
         // panelBouton_1.setLayout(new BoxLayout(panelBouton_1, BoxLayout.X_AXIS));
         panelBouton_1.setBounds(160, 320, 300, 30);
-        panelBouton_1.setBackground(Color.WHITE);
+        // panelBouton_1.setBackground(Color.WHITE);
 
         JButton supSalleBouton = new JButton("Supprimer");
         // supSalleBouton.setBounds(20, 330, 240, 31);
@@ -547,8 +547,8 @@ public class VueGestionaire extends JFrame {
 
         panelTabSalles.setLayout(new BoxLayout(panelTabSalles, BoxLayout.Y_AXIS));
 
-        panelTabSalles.setBackground(Color.white);
-        panelListeSalles.setBackground(Color.white);
+       // panelTabSalles.setBackground(Color.white);
+       // panelListeSalles.setBackground(Color.white);
 
         panelTabSalles.setBounds(1, 1, 618, 320);
         panelTabSalles.add(tableSalles.getTableHeader());
