@@ -136,8 +136,12 @@ public class ModeleEmploi extends Observable {
                     seanceDAO.create(seance);
                 } catch (EchecContrainteException e) {
                     e.printStackTrace();
-                } catch (EchecSeancexception echecSeancexception) {
-                    echecSeancexception.printStackTrace();
+                } catch (EchecSeanceFormationException e) {
+                    e.printStackTrace();
+                } catch (EchecSeanceEnseignantException e) {
+                    e.printStackTrace();
+                } catch (EchecHeureException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -300,7 +304,7 @@ public class ModeleEmploi extends Observable {
 
     }
 
-    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) throws EchecContrainteException, EchecSeancexception {
+    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) throws EchecContrainteException, EchecSeanceEnseignantException, EchecSeanceFormationException, EchecHeureException {
         Seance seance = new Seance(salle, enseignant, matiere, debutH, finH, formation);
         seanceDAO.create(seance);
         int x = getIndiceEmploi(seance.getHdebut());
@@ -351,7 +355,6 @@ public class ModeleEmploi extends Observable {
     public List<Reservation> getTotalReservations() {
         System.out.println("marche");
         return totalReservations;
-
     }
 
     public void setSemainesSelectionnees(List<Integer> semainesSelectionnees) {
@@ -549,5 +552,43 @@ public class ModeleEmploi extends Observable {
 
     public Connection getConnect() {
         return connect;
+    }
+
+    public List<List> getReservationsAffiche() {
+        List<List> resultat = new ArrayList();
+
+        for(Reservation reservation: reservations) {
+            List attributs = new ArrayList();
+            attributs.add(reservation.getId());
+            attributs.add(salleDAO.find(reservation.getId_salle()));
+            attributs.add(enseignantDAO.find(reservation.getId_enseignant()));
+            attributs.add(reservation.getDate_reservation());
+            attributs.add(reservation.getEtat_reservation());
+            Seance seance = seanceDAO.find(reservation.getId_seance());
+            Calendar hdebut = seance.getHdebut();
+            attributs.add(hdebut.get(Calendar.DAY_OF_MONTH) + "/" + (hdebut.get(Calendar.MONTH)+1)+ "/" + hdebut.get(Calendar.YEAR));
+            resultat.add(attributs);
+        }
+
+        return resultat;
+    }
+
+    public List<List> getTotalReservationsAffiche() {
+        List<List> resultat = new ArrayList();
+
+        for(Reservation reservation: totalReservations) {
+            List attributs = new ArrayList();
+            attributs.add(reservation.getId());
+            attributs.add(salleDAO.find(reservation.getId_salle()));
+            attributs.add(enseignantDAO.find(reservation.getId_enseignant()));
+            attributs.add(reservation.getDate_reservation());
+            attributs.add(reservation.getEtat_reservation());
+            Seance seance = seanceDAO.find(reservation.getId_seance());
+            Calendar hdebut = seance.getHdebut();
+            attributs.add(hdebut.get(Calendar.DAY_OF_MONTH) + "/" + (hdebut.get(Calendar.MONTH)+1)+ "/" + hdebut.get(Calendar.YEAR));
+            resultat.add(attributs);
+        }
+
+        return resultat;
     }
 }

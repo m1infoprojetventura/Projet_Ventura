@@ -64,7 +64,7 @@ public class ControleurEmploi{
         this.modele.modifierSeanceBDD(idSalle,salle,enseignant,matiere,debutH,finH,formation);
     }
 
-    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) throws EchecContrainteException, EchecSeancexception {
+    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) throws EchecContrainteException, EchecSeanceEnseignantException, EchecSeanceFormationException, EchecHeureException {
         this.modele.creerSeanceBDD(salle, enseignant, matiere, debutH, finH, formation);
     }
 

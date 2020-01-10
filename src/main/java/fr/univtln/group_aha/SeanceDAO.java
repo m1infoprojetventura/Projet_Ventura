@@ -19,7 +19,7 @@ public class SeanceDAO extends DAO<Seance> {
 
     // J'ai pensé pour un jour, un jour lointain (le plus possible) où à le create renverrai l'ID... et finalement ça renvoie un booléen
     @Override
-    public void create(Seance obj) throws EchecContrainteException, EchecSeancexception {
+    public void create(Seance obj) throws EchecContrainteException, EchecSeanceEnseignantException, EchecSeanceFormationException, EchecHeureException {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte)";
 
@@ -49,7 +49,7 @@ public class SeanceDAO extends DAO<Seance> {
                 System.out.println("On va voir " + nombre1);
             }
 
-            String query2 = "SELECT COUNT(*) FROM Seance WHERE (id_enseignant=? OR id_formation=? ) AND (date=?) AND NOT(?<=debut_seance OR ?>=fin_seance)";
+            String query2 = "SELECT COUNT(*) FROM Seance WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_seance OR ?>=fin_seance)";
 
             PreparedStatement statement1 = connect.prepareStatement(query2,
                     ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -57,10 +57,9 @@ public class SeanceDAO extends DAO<Seance> {
 
 
             statement1.setInt(1,  id_enseignant);
-            statement1.setInt(2,  id_formation);
-            statement1.setDate(3,  date);
-            statement1.setTime(4,  fin_seance);
-            statement1.setTime(5,  debut_seance);
+            statement1.setDate(2,  date);
+            statement1.setTime(3,  fin_seance);
+            statement1.setTime(4,  debut_seance);
 
 
             ResultSet resultSet1 = statement1.executeQuery();
@@ -71,12 +70,41 @@ public class SeanceDAO extends DAO<Seance> {
                 System.out.println("On va voir " + nombre2);
             }
 
+
+            String query3 = "SELECT COUNT(*) FROM Seance WHERE id_formation=? AND (date=?) AND NOT(?<=debut_seance OR ?>=fin_seance)";
+
+            PreparedStatement statement2 = connect.prepareStatement(query3,
+                    ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+
+            statement2.setInt(1,  id_formation);
+            statement2.setDate(2,  date);
+            statement2.setTime(3,  fin_seance);
+            statement2.setTime(4,  debut_seance);
+
+
+            ResultSet resultSet2 = statement2.executeQuery();
+            int nombre3 = 0;
+
+            if(resultSet2.next()) {
+                nombre3 = resultSet2.getInt(1);
+                System.out.println("On va voir " + nombre2);
+            }
+
+
             if(nombre1 != 0) {
                 throw new EchecContrainteException("Seance");
             }
 
             else if(nombre2 != 0)
-                throw new EchecSeancexception();
+                throw new EchecSeanceEnseignantException();
+
+            else if(nombre3 != 0)
+                throw new EchecSeanceFormationException();
+
+            else if(debut_seance.getTime() >= fin_seance.getTime())
+                throw new EchecHeureException();
 
             else {
                 String query = "INSERT INTO Seance (id_salle, id_enseignant, id_matiere, date, debut_seance, fin_seance, id_formation) " +

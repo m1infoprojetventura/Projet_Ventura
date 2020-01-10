@@ -227,8 +227,8 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     private void gererTabReservation(){
-        tmodelReservation = new TmodelReservation(modele.getReservations());
-        tmodelTotalReservation = new TmodelReservation(modele.getTotalReservations());
+        tmodelReservation = new TmodelReservation(modele.getReservations(), modele.getReservationsAffiche());
+        tmodelTotalReservation = new TmodelReservation(modele.getTotalReservations(), modele.getTotalReservationsAffiche());
         tableListeReservation.setModel(tmodelReservation);
         tableSalles.getColumnModel().getColumn(0).setMinWidth(0);
         tableSalles.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -250,7 +250,7 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     private void gererTabTotalReservation(){
-        tmodelTotalReservation = new TmodelReservation(modele.getTotalReservations());
+        tmodelTotalReservation = new TmodelReservation(modele.getTotalReservations(), modele.getTotalReservationsAffiche());
         tableListeReservation2.setModel(tmodelTotalReservation);
         scrollPane5.getViewport().add(tableListeReservation2);
     }
@@ -672,9 +672,18 @@ public class VueDeLemploi extends JFrame implements Observer {
                         JOptionPane.showMessageDialog(this, "Les créneaux sélectionnés ne sont pas disponibles", "Avertissement", JOptionPane.INFORMATION_MESSAGE);
                         message = true;
                     }
-                } catch (EchecSeancexception echecSeancexception) {
-                    JOptionPane.showMessageDialog(this, "Le créneau de l'enseignant ou de la formation n'est pas disponible", "Avertissement", JOptionPane.INFORMATION_MESSAGE);
+                } catch (EchecSeanceFormationException ex) {
+                    JOptionPane.showMessageDialog(this, "Le créneau n'est pas disponible pour cette formation ", "Avertissement", JOptionPane.INFORMATION_MESSAGE);
                     message = true;
+                    ex.printStackTrace();
+                } catch (EchecSeanceEnseignantException ex) {
+                    JOptionPane.showMessageDialog(this, "L'enseignant n'est pas disponible à ce créneau", "Avertissement", JOptionPane.INFORMATION_MESSAGE);
+                    message = true;
+                    ex.printStackTrace();
+                } catch (EchecHeureException ex) {
+                    JOptionPane.showMessageDialog(this, "L'heure de fin est inférieur à l'heure de début", "Avertissement", JOptionPane.INFORMATION_MESSAGE);
+                    message = true;
+                    ex.printStackTrace();
                 }
             }
         }
@@ -1331,6 +1340,10 @@ public class VueDeLemploi extends JFrame implements Observer {
         }
     }
 
+    private void nomMatiereActionPerformed(ActionEvent e) {
+        // TODO add your code here
+    }
+
     public static class TmodelSeance extends AbstractTableModel implements Observer {
         private final String[] entetes = {"ID","Salle", "enseignant","matiere" ,"h debut", "h fin", "date"};
         private final List<Seance> seances;
@@ -1378,11 +1391,13 @@ public class VueDeLemploi extends JFrame implements Observer {
     }
 
     public static class TmodelReservation extends AbstractTableModel implements Observer {
-        private final String[] entetes = {"ID","id_salle", "id_enseignant","date" ,"etat", "id seance"};
+        private final String[] entetes = {"ID","Salle", "Enseignant","Date" ,"Etat", "Jour séance"};
         private final List<Reservation> reservations;
+        private final List<List> reservationsAffiche;
 
-        public TmodelReservation (List<Reservation> reservations) {
+        public TmodelReservation (List<Reservation> reservations, List<List> reservationsAffiche) {
             this.reservations = reservations;
+            this.reservationsAffiche = reservationsAffiche;
         }
 
 
@@ -1403,8 +1418,8 @@ public class VueDeLemploi extends JFrame implements Observer {
 
         @Override
         public int getRowCount() {
-            if(reservations != null)
-                return reservations.size();
+            if(reservationsAffiche != null)
+                return reservationsAffiche.size();
             else
                 return 0;
         }
@@ -1418,7 +1433,7 @@ public class VueDeLemploi extends JFrame implements Observer {
         public Object getValueAt(int i, int i1) {
             Reservation reservation = getRowValue(i);
             //System.out.println(salle);
-            Object[] o = reservation.getAttributs().toArray();
+            Object[] o = reservationsAffiche.get(i).toArray();
             return o[i1];
         }
     }
@@ -1721,12 +1736,12 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder
-            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .
-            awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) )
-            ; panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-            ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
+            . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder
+            . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .
+            awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,panel1. getBorder () ) )
+            ; panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+            ) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
             ;
 
             //======== panel2 ========
@@ -2308,6 +2323,7 @@ public class VueDeLemploi extends JFrame implements Observer {
 
             //---- nomMatiere ----
             nomMatiere.addItemListener(e -> nomMatiereItemStateChanged(e));
+            nomMatiere.addActionListener(e -> nomMatiereActionPerformed(e));
 
             //---- validercours2 ----
             validercours2.setText("valider");
@@ -2386,13 +2402,12 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
-                    swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border
-                    . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog"
-                    ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel3. getBorder
-                    ( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
-                    .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException
-                    ( ); }} );
+                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+                    ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+                    . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+                    . Color. red) ,panel3. getBorder( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+                    propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+                    ; }} );
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -2813,11 +2828,13 @@ public class VueDeLemploi extends JFrame implements Observer {
                         panel5KeyPressed(e);
                     }
                 });
-                panel5.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder( 0
-                , 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
-                , new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,
-                panel5. getBorder( )) ); panel5. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-                ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+                panel5.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
+                swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border
+                . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog"
+                ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel5. getBorder
+                ( )) ); panel5. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
+                .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException
+                ( ); }} );
 
                 //---- inputLogin ----
                 inputLogin.setText("asayadi246");
@@ -2992,11 +3009,12 @@ public class VueDeLemploi extends JFrame implements Observer {
 
             //======== parentPanel ========
             {
-                parentPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-                0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-                . BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-                red) ,parentPanel. getBorder( )) ); parentPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-                beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+                parentPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
+                border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER
+                , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
+                .BOLD ,12 ), java. awt. Color. red) ,parentPanel. getBorder( )) ); parentPanel. addPropertyChangeListener (
+                new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r"
+                .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
                 parentPanel.setLayout(new CardLayout());
 
                 //======== panelEmploi ========

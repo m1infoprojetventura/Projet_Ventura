@@ -27,7 +27,7 @@ public abstract class DAO<T> {
      *    objet à ajouter à la base de données
      * @throws java.sql.SQLException  echec de la création d'un champ T
      */
-    public abstract void create(T obj) throws EchecContrainteException, EchecSeancexception;
+    public abstract void create(T obj) throws EchecContrainteException, EchecSeanceEnseignantException, EchecSeanceFormationException, EchecHeureException;
 
     // throws sera à discuter
     /**
