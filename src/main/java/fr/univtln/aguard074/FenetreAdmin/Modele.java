@@ -3,6 +3,9 @@ package fr.univtln.aguard074.FenetreAdmin;
 
 import fr.univtln.group_aha.*;
 
+import javax.swing.*;
+import javax.swing.plaf.IconUIResource;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,17 +16,26 @@ public class Modele extends Observable implements Imodele {
     // Il faut que le modèle puisse accéder à la Vue comme sur le TP de Bibliotheque en ayant en attribut
     // des modèles des Componant (exemple modèle de JTextField: PlainDocument, ou Combobox: ComboboxModel)
     // la variable static est temporaire (ou pas)
-    private static EtudiantDAO etudiantDAO = new EtudiantDAO();
-    private static EnseignantDAO enseignantDAO = new EnseignantDAO();
-    private static FormationDAO formationDAO = new FormationDAO();
-    private static DepartementDAO departementDAO = new DepartementDAO();
-    private static SalleDAO salleDAO = new SalleDAO();
+    private  EtudiantDAO etudiantDAO;
+    private  EnseignantDAO enseignantDAO;
+    private  FormationDAO formationDAO;
+    private  DepartementDAO departementDAO;
+    private  SalleDAO salleDAO;
     final List<Etudiant> etudiants = new ArrayList<>() ;
     final List<Enseignant> enseignants = new ArrayList<>();
     final List<Salle> salles = new ArrayList<>();
+    private Connection connect;
 
-    public Modele() {
+    public Modele(Connection connect) {
         super();
+        this.connect = connect;
+
+        etudiantDAO = new EtudiantDAO(this.connect);
+        enseignantDAO = new EnseignantDAO(this.connect);
+        formationDAO = new FormationDAO(this.connect);
+        departementDAO = new DepartementDAO(this.connect);
+        salleDAO = new SalleDAO(this.connect);
+
         for(Etudiant etudiant: etudiantDAO.getData())
             etudiants.add(etudiant);
 

@@ -41,6 +41,18 @@ public class Formation {
         return intitule;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Formation formation = (Formation) o;
+
+        if (id != formation.id) return false;
+
+        return true;
+    }
+
     public int getId() {
         return id;
     }

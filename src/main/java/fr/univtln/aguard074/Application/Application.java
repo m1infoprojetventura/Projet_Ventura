@@ -12,7 +12,7 @@ public class Application {
     public static void main( String[] args )
     {
         // ADMIN
-        Modele modele = new Modele();
+        Modele modele = new Modele(null);
         Icontroleur controler = new Controleur(modele);
         VueGestionaire gestionaire = new VueGestionaire(controler, modele);
 

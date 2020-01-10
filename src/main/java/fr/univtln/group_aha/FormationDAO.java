@@ -5,17 +5,15 @@ import java.util.ArrayList;
 
 public class FormationDAO extends DAO<Formation> {
     PreparedStatement statementFormationFind;
-    public FormationDAO() {
-        super(connect);
-    }
+
     public FormationDAO(Connection connect) {
         super(connect);
 
         String query = "SELECT * FROM Formation WHERE id = ?;";
         try {
             statementFormationFind = connect.prepareStatement(query,
-                    ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
+                            ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,7 +36,7 @@ public class FormationDAO extends DAO<Formation> {
     @Override
     public Formation find(int id) {
         Formation formation = new Formation();
-        DepartementDAO departementDAO = new DepartementDAO();
+        DepartementDAO departementDAO = new DepartementDAO(connect);
 
         try {
             statementFormationFind.setInt(1, id);
@@ -48,7 +46,6 @@ public class FormationDAO extends DAO<Formation> {
             if (resultat.first()) {
                 Departement departement = departementDAO.find(resultat.getInt("id_departement"));
                 formation = new Formation(resultat.getInt("id"), resultat.getString("intitule"), departement);
-
             }
         }
 
@@ -72,7 +69,7 @@ public class FormationDAO extends DAO<Formation> {
                                                                ResultSet.CONCUR_UPDATABLE);
 
             ResultSet result = state.executeQuery();
-            DepartementDAO departementDAO = new DepartementDAO();
+            DepartementDAO departementDAO = new DepartementDAO(connect);
 
             while(result.next()) {
                 Departement departement = departementDAO.find(result.getInt("id_departement"));

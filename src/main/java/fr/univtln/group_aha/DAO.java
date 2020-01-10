@@ -27,7 +27,7 @@ public abstract class DAO<T> {
      *    objet à ajouter à la base de données
      * @throws java.sql.SQLException  echec de la création d'un champ T
      */
-    public abstract void create(T obj) throws EchecChangementTableException;
+    public abstract void create(T obj) throws EchecContrainteException, EchecSeancexception;
 
     // throws sera à discuter
     /**
@@ -45,7 +45,7 @@ public abstract class DAO<T> {
      *   objet à modifier dans la base de données T
      * @throws java.sql.SQLException echec de la mise à jour d'un champ T
      */
-    public abstract void update(T obj) throws EchecChangementTableException;
+    public abstract void update(T obj) throws EchecContrainteException;
 
     // Penser à peut-être surchargé find (dans le cas où la clé primaire ne serait pas un nombre, je sais pas encore
     // comment, je veux dire de façon propre).

@@ -94,7 +94,7 @@ public class MatiereDAO extends DAO<Matiere> {
             int id_mat = matiere.getId();
             state.setInt(1,id_mat );
             ResultSet result = state.executeQuery();
-            EnseignantDAO enseignantDAO = new EnseignantDAO();
+            EnseignantDAO enseignantDAO = new EnseignantDAO(connect);
             while (result.next()) {
                 Enseignant e = enseignantDAO.find(result.getInt("id_enseignant"));
                 enseignants.add(e);

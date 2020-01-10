@@ -6,7 +6,6 @@ import fr.univtln.group_aha.MatiereDAO;
 import fr.univtln.group_aha.Seance;
 import fr.univtln.group_aha.SeanceDAO;
 
-import java.awt.*;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -16,6 +15,7 @@ import java.util.List;
 
 public class ModeleEmploi extends Observable {
 
+    private Connection connect;
     private List<Seance> listSeances = new ArrayList<>();
     private List<Salle> salles = new ArrayList<>();
     private List<Salle> sallesDispo = new ArrayList<>();
@@ -74,7 +74,7 @@ public class ModeleEmploi extends Observable {
 
     public ModeleEmploi(Connection connect) {
         emploiDuTemps = new List[semaines];
-
+        this.connect = connect;
         matiereDAO = new MatiereDAO(connect);
         seanceDAO = new SeanceDAO(connect);
         salleDAO = new SalleDAO(connect);
@@ -134,8 +134,10 @@ public class ModeleEmploi extends Observable {
             for (Seance seance : listeSeances) {
                 try {
                     seanceDAO.create(seance);
-                } catch (EchecChangementTableException e) {
+                } catch (EchecContrainteException e) {
                     e.printStackTrace();
+                } catch (EchecSeancexception echecSeancexception) {
+                    echecSeancexception.printStackTrace();
                 }
             }
         }
@@ -282,7 +284,7 @@ public class ModeleEmploi extends Observable {
 
             setChanged();
             notifyObservers();
-        } catch (EchecChangementTableException e) {
+        } catch (EchecContrainteException e) {
             e.printStackTrace();
         }
     }
@@ -292,13 +294,13 @@ public class ModeleEmploi extends Observable {
         Seance seance = new Seance(idSalle, salle, enseignant, matiere, debutH, finH, formation);
         try {
             seanceDAO.update(seance);
-        } catch (EchecChangementTableException e) {
+        } catch (EchecContrainteException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) throws EchecChangementTableException {
+    public void creerSeanceBDD(Salle salle, Enseignant enseignant, Matiere matiere, GregorianCalendar debutH, GregorianCalendar finH, Formation formation) throws EchecContrainteException, EchecSeancexception {
         Seance seance = new Seance(salle, enseignant, matiere, debutH, finH, formation);
         seanceDAO.create(seance);
         int x = getIndiceEmploi(seance.getHdebut());
@@ -495,7 +497,7 @@ public class ModeleEmploi extends Observable {
         notifyObservers();
     }
 
-    public void creerContrainte(Enseignant enseignant, Calendar debutH, Calendar finH, String motif) throws EchecChangementTableException {
+    public void creerContrainte(Enseignant enseignant, Calendar debutH, Calendar finH, String motif) throws EchecContrainteException {
         Contrainte contrainte = new Contrainte(enseignant, debutH, finH, motif);
         contrainteDAO.create(contrainte);
         int x = getIndiceEmploi(contrainte.getHdebut());
@@ -527,7 +529,7 @@ public class ModeleEmploi extends Observable {
 
             setChanged();
             notifyObservers();
-        } catch (EchecChangementTableException e) {
+        } catch (EchecContrainteException e) {
             e.printStackTrace();
         }
 
@@ -543,5 +545,9 @@ public class ModeleEmploi extends Observable {
 
     public boolean verifierAuthAdministrateur(String login, String password) {
         return admnistrateurDAO.verifierAuthAdministrateur(login, password);
+    }
+
+    public Connection getConnect() {
+        return connect;
     }
 }

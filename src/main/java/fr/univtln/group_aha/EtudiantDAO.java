@@ -1,15 +1,12 @@
 package fr.univtln.group_aha;
 
+import javax.swing.*;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class EtudiantDAO extends DAO<Etudiant> {
-
-    public EtudiantDAO() {
-        super(connect);
-    }
 
     /**
      * Constructeur de la classe générique DAO
@@ -50,9 +47,7 @@ public class EtudiantDAO extends DAO<Etudiant> {
             Formation formation = obj.getFormation();
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
-                                                                      ResultSet.CONCUR_UPDATABLE,
-                                                                      Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
             state.setString(1, obj.getNom());
@@ -75,15 +70,21 @@ public class EtudiantDAO extends DAO<Etudiant> {
             obj.generationLogin();
             obj.generationMdp();
 
-            state.setString(1, obj.getLogin());
-            state.setInt(2, obj.getMdp());
-            state.setInt(3, obj.getId());
 
+            System.out.println(obj.getMdp());
+            String chaine = Hachage.toHexString(Hachage.getSHA(obj.getMdp()));
+
+            state.setString(1, obj.getLogin());
+            state.setString(2, chaine);
+            state.setInt(3, obj.getId());
+            System.out.println("ID " + obj.getId());
             state.executeUpdate();
         }
 
         catch (SQLException e) {
             lgr.log(Level.WARNING, e.getMessage(), e);
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -114,16 +115,21 @@ public class EtudiantDAO extends DAO<Etudiant> {
             Formation formation = obj.getFormation();
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
+            obj.generationMdp();
+            String chaine = Hachage.toHexString(Hachage.getSHA(obj.getMdp()));
+
             state.setString(1, obj.getNom());
             state.setString(2, obj.getPrenom());
             state.setDate(3,  d2);
             state.setInt(4, formation.getId());
-            state.setInt(5, obj.getMdp());
+            state.setString(5, chaine);
             state.setInt(6, obj.getId());
             state.executeUpdate();
         }
 
         catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -152,8 +158,8 @@ public class EtudiantDAO extends DAO<Etudiant> {
 
 
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
-            if (resultat.first()) {
-                FormationDAO formationDAO = new FormationDAO();
+            if (resultat.next()) {
+                FormationDAO formationDAO = new FormationDAO(connect);
                 // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
                 Formation formation = formationDAO.find(resultat.getInt("id_formation"));
                 java.util.Date date_naissance = resultat.getDate("date_naissance");
@@ -178,10 +184,11 @@ public class EtudiantDAO extends DAO<Etudiant> {
             String query = "SELECT * FROM Etudiant";
             PreparedStatement state = connect.prepareStatement(query);
             ResultSet result = state.executeQuery();
-            FormationDAO formationDAO = new FormationDAO();
+            FormationDAO formationDAO = new FormationDAO(connect);
 
             while(result.next()) {
                 Formation formation = formationDAO.find(result.getInt("id_formation"));
+                System.out.println(formation);
                 Etudiant etudiant = new Etudiant(result.getInt("id"), result.getString("nom"),
                         result.getString("prenom"), result.getDate("date_naissance"), formation);
                 etudiant.setLogin(result.getString("login"));

@@ -10,16 +10,14 @@ import java.util.logging.Level;
 public class EnseignantDAO extends DAO<Enseignant> {
 
     PreparedStatement statementEnseignant;
-    public EnseignantDAO() {
-        super(connect);
-    }
 
     public EnseignantDAO(Connection connect) {
         super(connect);
 
         try {
             String query = "SELECT * FROM  Enseignant WHERE id=?";
-            statementEnseignant = connect.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statementEnseignant = connect.prepareStatement(query,
+                    ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -55,9 +53,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
 
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
-                                                                      ResultSet.CONCUR_UPDATABLE,
-                                                                      Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
 
             state.setString(1, obj.getNom());
@@ -75,14 +71,16 @@ public class EnseignantDAO extends DAO<Enseignant> {
             state = connect.prepareStatement(query);
             obj.generationLogin();
             obj.generationMdp();
-
+            String chaine = Hachage.toHexString(Hachage.getSHA("azerty"));
             state.setString(1, obj.getLogin());
-            state.setInt(2, obj.getMdp());
+            state.setString(2, chaine);
             state.setInt(3, obj.getId());
 
             state.executeUpdate();
         } catch (SQLException e) {
             lgr.log(Level.WARNING, e.getMessage(), e);
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -117,16 +115,21 @@ public class EnseignantDAO extends DAO<Enseignant> {
 
             Departement departement = obj.getDepartement();
 
+            obj.generationMdp();
+            String chaine = Hachage.toHexString(Hachage.getSHA(obj.getMdp()));
+
             java.sql.Date d2 = new java.sql.Date(obj.getDate_naissance().getTime());
             state.setString(1, obj.getNom());
             state.setString(2, obj.getPrenom());
             state.setDate(3, d2);
             state.setInt(4, departement.getId());
-            state.setInt(5, obj.getMdp());
+            state.setString(5, chaine);
             state.setInt(6, obj.getId());
 
             state.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -151,7 +154,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             // resultat.first() bouge le curseur (oui il y a un curseur) sur la première ligne de <resultat>
             // new temporaire à remplacer par la ligne au dessus
             if (resultat.first()) {
-                DepartementDAO departementDAO = new DepartementDAO();
+                DepartementDAO departementDAO = new DepartementDAO(connect);
                 // Provisoire pour les tests à modifier selon les choix concernant l'existance de la classe Parcours
                 Departement departement = departementDAO.find(resultat.getInt("id_departement"));
                 enseignant = new Enseignant(resultat.getInt("id"), resultat.getString("nom"), resultat.getString("prenom"), resultat.getDate("date_naissance"), departement);
@@ -197,7 +200,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             String query = "SELECT * FROM Enseignant";
             PreparedStatement state = connect.prepareStatement(query);
             ResultSet result = state.executeQuery();
-            DepartementDAO departementDAO = new DepartementDAO();
+            DepartementDAO departementDAO = new DepartementDAO(connect);
 
             while (result.next()) {
                 Departement departement = departementDAO.find(result.getInt("id_departement"));
@@ -306,7 +309,7 @@ public class EnseignantDAO extends DAO<Enseignant> {
             PreparedStatement state = connect.prepareStatement(query);
             state.setString(1, loginEseignant);
             ResultSet resultat = state.executeQuery();
-            if (resultat.first()) {
+            if (resultat.next()) {
                 enseignant = find(resultat.getInt("id"));
             }
         } catch (SQLException e) {

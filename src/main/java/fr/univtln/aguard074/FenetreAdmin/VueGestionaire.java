@@ -695,6 +695,8 @@ public class VueGestionaire extends JFrame {
             }
 
             if (valider) {
+                personneNom.setText("");
+                personnePrenom.setText("");
                 Date dateNaissance = personneDateNaissance.getDate();
                 Formation formation = (Formation) listeFormation.getSelectedItem();
                 Departement departementEnseignant = (Departement) listeDepartements.getSelectedItem();

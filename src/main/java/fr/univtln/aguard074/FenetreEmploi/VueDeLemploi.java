@@ -8,14 +8,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.border.*;
-import javax.swing.plaf.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.*;
@@ -670,11 +667,14 @@ public class VueDeLemploi extends JFrame implements Observer {
             else {
                 try {
                     controleur.creerSeanceBDD(salle, enseignant, matiere, debutH, finH, formation);
-                } catch (EchecChangementTableException ex) {
+                } catch (EchecContrainteException ex) {
                     if(!message) {
                         JOptionPane.showMessageDialog(this, "Les créneaux sélectionnés ne sont pas disponibles", "Avertissement", JOptionPane.INFORMATION_MESSAGE);
                         message = true;
                     }
+                } catch (EchecSeancexception echecSeancexception) {
+                    JOptionPane.showMessageDialog(this, "Le créneau de l'enseignant ou de la formation n'est pas disponible", "Avertissement", JOptionPane.INFORMATION_MESSAGE);
+                    message = true;
                 }
             }
         }
@@ -701,6 +701,10 @@ public class VueDeLemploi extends JFrame implements Observer {
         this.jourSemaine = 2;
         switch (etatEmploi) {
             case MODIFIABLE:
+                Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
+                DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(matiere.getListeEnseignants().toArray());
+                nomEnseignant.setModel(comboBoxModel);
+                nomEnseignant2.setModel(comboBoxModel);
                 creationSeance.setVisible(true);
                 sallesDispoJour();
             break;
@@ -718,6 +722,10 @@ public class VueDeLemploi extends JFrame implements Observer {
         this.jourSemaine = 3;
         switch (etatEmploi) {
             case MODIFIABLE:
+                Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
+                DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(matiere.getListeEnseignants().toArray());
+                nomEnseignant.setModel(comboBoxModel);
+                nomEnseignant2.setModel(comboBoxModel);
                 creationSeance.setVisible(true);
                 sallesDispoJour();
                 break;
@@ -735,6 +743,10 @@ public class VueDeLemploi extends JFrame implements Observer {
         this.jourSemaine = 4;
         switch (etatEmploi) {
             case MODIFIABLE:
+                Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
+                DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(matiere.getListeEnseignants().toArray());
+                nomEnseignant.setModel(comboBoxModel);
+                nomEnseignant2.setModel(comboBoxModel);
                 creationSeance.setVisible(true);
                 sallesDispoJour();
                 break;
@@ -752,6 +764,10 @@ public class VueDeLemploi extends JFrame implements Observer {
         this.jourSemaine = 5;
         switch (etatEmploi) {
             case MODIFIABLE:
+                Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
+                DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(matiere.getListeEnseignants().toArray());
+                nomEnseignant.setModel(comboBoxModel);
+                nomEnseignant2.setModel(comboBoxModel);
                 creationSeance.setVisible(true);
                 sallesDispoJour();
                 break;
@@ -769,6 +785,10 @@ public class VueDeLemploi extends JFrame implements Observer {
         this.jourSemaine = 6;
         switch (etatEmploi) {
             case MODIFIABLE:
+                Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
+                DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(matiere.getListeEnseignants().toArray());
+                nomEnseignant.setModel(comboBoxModel);
+                nomEnseignant2.setModel(comboBoxModel);
                 creationSeance.setVisible(true);
                 sallesDispoJour();
                 break;
@@ -786,6 +806,10 @@ public class VueDeLemploi extends JFrame implements Observer {
         this.jourSemaine = 7;
         switch (etatEmploi) {
             case MODIFIABLE:
+                Matiere matiere = (Matiere) nomMatiere.getSelectedItem();
+                DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(matiere.getListeEnseignants().toArray());
+                nomEnseignant.setModel(comboBoxModel);
+                nomEnseignant2.setModel(comboBoxModel);
                 creationSeance.setVisible(true);
                 sallesDispoJour();
                 break;
@@ -921,6 +945,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                         Formation formation = this.controleur.getEtudiantbyLogin(personneAuthentifiee).getFormation();
                         int id_formation = formation.getId();
                         this.controleur.initEmploi(id_formation);
+                        System.out.println(formation);
 
                         listeFormation.setSelectedItem(formation);
                         listeFormationActionPerformed(null);
@@ -954,7 +979,6 @@ public class VueDeLemploi extends JFrame implements Observer {
                     }
 
                     break;
-
                 case"Responsable":
                     etatEmploi = EtatEmploi.MODIFIABLE;
                     consultationModifiable = true;
@@ -962,6 +986,10 @@ public class VueDeLemploi extends JFrame implements Observer {
                         this.fenetreAuthentification.setVisible(false);
                         this.fenetreAuthentification.dispose();
                         this.fenetreDebut.setVisible(true);
+                        this.listeFormation.setEnabled(true);
+                        this.listeEnseignant.setEnabled(true);
+                        this.listeFormation.setVisible(true);
+                        this.listeEnseignant.setVisible(true);
 
                     }
                     else {
@@ -972,7 +1000,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                     if(this.controleur.verifierAuthAdministrateur(login, password)) {
                         this.fenetreAuthentification.setVisible(false);
                         this.fenetreAuthentification.dispose();
-                        Modele modele = new Modele();
+                        Modele modele = new Modele(this.modele.getConnect());
                         Icontroleur controler = new Controleur(modele);
                         VueGestionaire gestionaire = new VueGestionaire(controler, modele);
                     }
@@ -1113,18 +1141,29 @@ public class VueDeLemploi extends JFrame implements Observer {
 
         for(int semaineAnnee: semainesAnnee) {
             GregorianCalendar finH = new GregorianCalendar();
-
             GregorianCalendar debutH = new GregorianCalendar();
-            debutH.set(GregorianCalendar.WEEK_OF_YEAR, semaineAnnee);
+
+            debutH.set(Calendar.YEAR, anneeEnCours);
+            debutH.set(Calendar.MONTH, Calendar.SEPTEMBER);
+            debutH.set(Calendar.DAY_OF_MONTH, 2);
+
+            debutH.add(GregorianCalendar.WEEK_OF_YEAR, semaineAnnee);
             debutH.set(GregorianCalendar.DAY_OF_WEEK, this.jourSemaine);
+            debutH.set(GregorianCalendar.WEEK_OF_YEAR, debutH.get(GregorianCalendar.WEEK_OF_YEAR));
             debutH.set(GregorianCalendar.HOUR_OF_DAY, hDebutH2.getSelectedIndex() + 8);
             debutH.set(GregorianCalendar.MINUTE, hDebutM2.getSelectedIndex() * 15);
+            System.out.println(debutH);
 
-            finH.set(GregorianCalendar.WEEK_OF_YEAR, semaineAnnee);
+            finH.set(GregorianCalendar.YEAR, anneeEnCours);
+            finH.set(GregorianCalendar.MONTH, Calendar.SEPTEMBER);
+            finH.set(GregorianCalendar.DAY_OF_MONTH, 2);
+
+            finH.add(GregorianCalendar.WEEK_OF_YEAR, semaineAnnee);
             finH.set(GregorianCalendar.DAY_OF_WEEK, this.jourSemaine);
             finH.set(GregorianCalendar.HOUR_OF_DAY, hFinH2.getSelectedIndex() + 8);
             finH.set(GregorianCalendar.MINUTE, hFinM2.getSelectedIndex() * 15);
-            List<Salle> sallesDispo = this.controleur.getSallesDispo(debutH, finH);
+
+            // List<Salle> sallesDispo = this.controleur.getSallesDispo(debutH, finH);
             // Temporaire: Je sais pas comment changer la liste en paramètre de combobox sans créer un nouveau modele
             DefaultComboBoxModel salleComboModel = new DefaultComboBoxModel(this.controleur.getSallesDispo(debutH, finH).toArray());
             nomSalle.setModel(salleComboModel);
@@ -1235,7 +1274,7 @@ public class VueDeLemploi extends JFrame implements Observer {
             try {
                 controleur.creerContrainte(enseignant, debutH, finH, motif);
                 creationContrainte.dispose();
-            } catch (EchecChangementTableException ex) {
+            } catch (EchecContrainteException ex) {
                 ex.printStackTrace();
             }
         }
@@ -1571,14 +1610,14 @@ public class VueDeLemploi extends JFrame implements Observer {
         tableEnseignants = new JTable();
         scrollPane2 = new JScrollPane();
         tableMatiere = new JTable();
+        nomMatiere2 = new JComboBox();
+        associerBouton = new JButton();
         panelListeReservation2 = new JPanel();
         panel9 = new JPanel();
         scrollPane5 = new JScrollPane();
         tableListeReservation2 = new JTable();
         bouttonConfirmReservation = new JButton();
         boutonRefuseReservation = new JButton();
-        nomMatiere2 = new JComboBox();
-        associerBouton = new JButton();
         modifierSeance = new JFrame();
         label21 = new JLabel();
         label28 = new JLabel();
@@ -1682,13 +1721,13 @@ public class VueDeLemploi extends JFrame implements Observer {
         //======== panel1 ========
         {
             panel1.setBackground(new Color(153, 153, 153));
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-            javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax
-            . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-            . awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,java . awt
-            . Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .
-            PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .
-            equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder
+            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .
+            awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) )
+            ; panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            ;
 
             //======== panel2 ========
             {
@@ -2301,7 +2340,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                         .addComponent(hFinM, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)))
                                 .addComponent(nomEnseignant, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addComponent(nomMatiere, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(83, Short.MAX_VALUE))
+                        .addContainerGap(103, Short.MAX_VALUE))
             );
             creationSeanceContentPaneLayout.setVerticalGroup(
                 creationSeanceContentPaneLayout.createParallelGroup()
@@ -2347,14 +2386,13 @@ public class VueDeLemploi extends JFrame implements Observer {
 
                 //======== panel3 ========
                 {
-                    panel3.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder (
-                    new javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion"
-                    , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
-                    , new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 )
-                    ,java . awt. Color .red ) ,panel3. getBorder () ) ); panel3. addPropertyChangeListener(
-                    new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-                    ) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-                    ;} } );
+                    panel3.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
+                    swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border
+                    . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog"
+                    ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel3. getBorder
+                    ( )) ); panel3. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
+                    .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException
+                    ( ); }} );
 
                     //---- label3 ----
                     label3.setText("Gestion emploi du temps");
@@ -2399,15 +2437,15 @@ public class VueDeLemploi extends JFrame implements Observer {
                             .addGroup(panel3Layout.createSequentialGroup()
                                 .addGap(192, 192, 192)
                                 .addComponent(label3, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(293, Short.MAX_VALUE))
+                                .addContainerGap(313, Short.MAX_VALUE))
                             .addGroup(panel3Layout.createSequentialGroup()
                                 .addGap(184, 184, 184)
                                 .addComponent(label1)
                                 .addGap(77, 77, 77)
                                 .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 201, Short.MAX_VALUE))
+                                .addGap(0, 266, Short.MAX_VALUE))
                             .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                                .addContainerGap(187, Short.MAX_VALUE)
+                                .addContainerGap(207, Short.MAX_VALUE)
                                 .addGroup(panel3Layout.createParallelGroup()
                                     .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
                                         .addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
@@ -2431,7 +2469,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                 .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(label1)
                                     .addComponent(choixFormationBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                                 .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(boutonCreerEmploi, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                                     .addComponent(button2, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
@@ -2465,6 +2503,10 @@ public class VueDeLemploi extends JFrame implements Observer {
                         scrollPane2.setViewportView(tableMatiere);
                     }
 
+                    //---- associerBouton ----
+                    associerBouton.setText("Associer");
+                    associerBouton.addActionListener(e -> associerBoutonActionPerformed(e));
+
                     GroupLayout panel4Layout = new GroupLayout(panel4);
                     panel4.setLayout(panel4Layout);
                     panel4Layout.setHorizontalGroup(
@@ -2472,8 +2514,14 @@ public class VueDeLemploi extends JFrame implements Observer {
                             .addGroup(panel4Layout.createSequentialGroup()
                                 .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                                .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                                 .addContainerGap())
+                            .addGroup(GroupLayout.Alignment.TRAILING, panel4Layout.createSequentialGroup()
+                                .addGap(155, 155, 155)
+                                .addComponent(associerBouton)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 255, Short.MAX_VALUE)
+                                .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(168, 168, 168))
                     );
                     panel4Layout.setVerticalGroup(
                         panel4Layout.createParallelGroup()
@@ -2482,7 +2530,11 @@ public class VueDeLemploi extends JFrame implements Observer {
                                 .addGroup(panel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                     .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                                     .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
-                                .addGap(86, 86, 86))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(panel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                    .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(associerBouton))
+                                .addGap(12, 12, 12))
                     );
                 }
                 tabbedPane1.addTab("Association Matieres/Profs", panel4);
@@ -2524,12 +2576,12 @@ public class VueDeLemploi extends JFrame implements Observer {
                                 .addGroup(panel9Layout.createSequentialGroup()
                                     .addGap(124, 124, 124)
                                     .addComponent(bouttonConfirmReservation, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
                                     .addComponent(boutonRefuseReservation, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
                                     .addGap(135, 135, 135))
                                 .addGroup(panel9Layout.createSequentialGroup()
                                     .addContainerGap()
-                                    .addComponent(scrollPane5, GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
+                                    .addComponent(scrollPane5, GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
                                     .addContainerGap())
                         );
                         panel9Layout.setVerticalGroup(
@@ -2558,44 +2610,27 @@ public class VueDeLemploi extends JFrame implements Observer {
                         panelListeReservation2Layout.createParallelGroup()
                             .addGroup(panelListeReservation2Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(panel9, GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                                .addComponent(panel9, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addContainerGap())
                     );
                 }
                 tabbedPane1.addTab("Liste des Demandes", panelListeReservation2);
             }
 
-            //---- associerBouton ----
-            associerBouton.setText("Associer");
-            associerBouton.addActionListener(e -> associerBoutonActionPerformed(e));
-
             GroupLayout fenetreDebutContentPaneLayout = new GroupLayout(fenetreDebutContentPane);
             fenetreDebutContentPane.setLayout(fenetreDebutContentPaneLayout);
             fenetreDebutContentPaneLayout.setHorizontalGroup(
                 fenetreDebutContentPaneLayout.createParallelGroup()
                     .addComponent(tabbedPane1, GroupLayout.Alignment.TRAILING)
-                    .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(associerBouton)
-                        .addGap(209, 209, 209))
             );
             fenetreDebutContentPaneLayout.setVerticalGroup(
                 fenetreDebutContentPaneLayout.createParallelGroup()
                     .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 316, GroupLayout.PREFERRED_SIZE)
-                        .addGroup(fenetreDebutContentPaneLayout.createParallelGroup()
-                            .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(nomMatiere2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                            .addGroup(fenetreDebutContentPaneLayout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(associerBouton)))
-                        .addContainerGap(17, Short.MAX_VALUE))
+                        .addComponent(tabbedPane1, GroupLayout.PREFERRED_SIZE, 345, GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(20, Short.MAX_VALUE))
             );
-            fenetreDebut.setSize(650, 345);
+            fenetreDebut.setSize(755, 400);
             fenetreDebut.setLocationRelativeTo(fenetreDebut.getOwner());
         }
 
@@ -2722,7 +2757,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                 .addComponent(button1)
                                 .addGap(41, 41, 41)
                                 .addComponent(suppSeanceBouton)))
-                        .addContainerGap(55, Short.MAX_VALUE))
+                        .addContainerGap(100, Short.MAX_VALUE))
             );
             modifierSeanceContentPaneLayout.setVerticalGroup(
                 modifierSeanceContentPaneLayout.createParallelGroup()
@@ -2778,12 +2813,11 @@ public class VueDeLemploi extends JFrame implements Observer {
                         panel5KeyPressed(e);
                     }
                 });
-                panel5.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
-                border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER
-                , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
-                .BOLD ,12 ), java. awt. Color. red) ,panel5. getBorder( )) ); panel5. addPropertyChangeListener (
-                new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r"
-                .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+                panel5.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder( 0
+                , 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
+                , new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,
+                panel5. getBorder( )) ); panel5. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+                ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
 
                 //---- inputLogin ----
                 inputLogin.setText("asayadi246");
@@ -2839,10 +2873,10 @@ public class VueDeLemploi extends JFrame implements Observer {
                                             .addGroup(panel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                                 .addComponent(inputLogin)
                                                 .addComponent(inputPassword, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))))
-                                    .addContainerGap(31, Short.MAX_VALUE))
+                                    .addContainerGap(46, Short.MAX_VALUE))
                                 .addGroup(panel5Layout.createSequentialGroup()
                                     .addComponent(loginButton, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                                     .addComponent(button5, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
                                     .addGap(53, 53, 53))))
                 );
@@ -2881,7 +2915,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                     .addGroup(fenetreAuthentificationContentPaneLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(12, Short.MAX_VALUE))
+                        .addContainerGap(14, Short.MAX_VALUE))
             );
             fenetreAuthentification.pack();
             fenetreAuthentification.setLocationRelativeTo(fenetreAuthentification.getOwner());
@@ -2958,13 +2992,11 @@ public class VueDeLemploi extends JFrame implements Observer {
 
             //======== parentPanel ========
             {
-                parentPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-                javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
-                . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-                .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-                . Color. red) ,parentPanel. getBorder( )) ); parentPanel. addPropertyChangeListener (new java. beans.
-                PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
-                equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+                parentPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+                0, 0, 0, 0) , "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+                . BOTTOM, new java .awt .Font ("D\u0069al\u006fg" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+                red) ,parentPanel. getBorder( )) ); parentPanel. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+                beans .PropertyChangeEvent e) {if ("\u0062or\u0064er" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
                 parentPanel.setLayout(new CardLayout());
 
                 //======== panelEmploi ========
@@ -3077,7 +3109,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                     .addComponent(inputdateReSalle, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
                                     .addGap(233, 233, 233)
                                     .addComponent(buttonDemandeReserv)
-                                    .addGap(0, 293, Short.MAX_VALUE))
+                                    .addGap(0, 315, Short.MAX_VALUE))
                                 .addGroup(panelSalleLayout.createSequentialGroup()
                                     .addContainerGap()
                                     .addComponent(panel6, GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
@@ -3113,7 +3145,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                             .addGroup(panelReserverSalleLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(panelSalle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(53, Short.MAX_VALUE))
+                                .addContainerGap(54, Short.MAX_VALUE))
                     );
                 }
                 parentPanel.add(panelReserverSalle, "card2");
@@ -3245,7 +3277,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                             .addGroup(descriptionReservationContentPaneLayout.createSequentialGroup()
                                 .addGap(107, 107, 107)
                                 .addComponent(scrollPane7, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(33, Short.MAX_VALUE))
+                        .addContainerGap(54, Short.MAX_VALUE))
             );
             descriptionReservationContentPaneLayout.setVerticalGroup(
                 descriptionReservationContentPaneLayout.createParallelGroup()
@@ -3419,7 +3451,7 @@ public class VueDeLemploi extends JFrame implements Observer {
                                 .addGap(18, 18, 18)
                                 .addComponent(button9))
                             .addComponent(scrollPane9))
-                        .addContainerGap(80, Short.MAX_VALUE))
+                        .addContainerGap(62, Short.MAX_VALUE))
             );
             modifierContrainteContentPaneLayout.setVerticalGroup(
                 modifierContrainteContentPaneLayout.createParallelGroup()
@@ -3536,14 +3568,14 @@ public class VueDeLemploi extends JFrame implements Observer {
     private JTable tableEnseignants;
     private JScrollPane scrollPane2;
     private JTable tableMatiere;
+    private JComboBox nomMatiere2;
+    private JButton associerBouton;
     private JPanel panelListeReservation2;
     private JPanel panel9;
     private JScrollPane scrollPane5;
     private JTable tableListeReservation2;
     private JButton bouttonConfirmReservation;
     private JButton boutonRefuseReservation;
-    private JComboBox nomMatiere2;
-    private JButton associerBouton;
     private JFrame modifierSeance;
     private JLabel label21;
     private JLabel label28;

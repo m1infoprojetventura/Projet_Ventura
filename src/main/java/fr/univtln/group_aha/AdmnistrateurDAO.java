@@ -3,7 +3,6 @@ package fr.univtln.group_aha;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class AdmnistrateurDAO extends DAO<Administrateur> {
     public AdmnistrateurDAO(Connection connect) {
@@ -11,7 +10,7 @@ public class AdmnistrateurDAO extends DAO<Administrateur> {
     }
 
     @Override
-    public void create(Administrateur obj) throws EchecChangementTableException {
+    public void create(Administrateur obj) throws EchecContrainteException {
     }
 
     @Override
@@ -20,7 +19,7 @@ public class AdmnistrateurDAO extends DAO<Administrateur> {
     }
 
     @Override
-    public void update(Administrateur obj) throws EchecChangementTableException {
+    public void update(Administrateur obj) throws EchecContrainteException {
 
     }
 

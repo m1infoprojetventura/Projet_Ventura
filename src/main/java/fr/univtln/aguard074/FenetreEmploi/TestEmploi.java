@@ -39,13 +39,13 @@ public class TestEmploi
             Connection connect = DriverManager.getConnection("jdbc:hsqldb:file:planning_db;sql.syntax_mys=true", "student", "");
             connect.prepareStatement("CREATE USER student PASSWORD \"\"");
 
-           // String[] commands = readFile("./planning_db.sql").split(";");
+         //  String[] commands = readFile("./planning_db.sql").split(";");
 
-           // for(int i = 0; i < commands.length - 1; i++) {
-           //     System.out.println(commands[i]);
-           //     System.out.println("----------------------------------------------");
-           //     connect.createStatement().executeUpdate(commands[i].replace("\n", ""));
-           // }
+         //  for(int i = 0; i < commands.length - 1; i++) {
+         //      System.out.println(commands[i]);
+         //      System.out.println("----------------------------------------------");
+         //      connect.createStatement().executeUpdate(commands[i].replace("\n", ""));
+         //  }
 
             ModeleEmploi modele = new ModeleEmploi(connect);
             //Création du contrôleur
@@ -64,9 +64,9 @@ public class TestEmploi
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        // catch (IOException e) {
+        //     e.printStackTrace();
+        // }
 
 
     }

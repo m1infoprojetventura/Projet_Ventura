@@ -7,10 +7,6 @@ import java.util.logging.Level;
 public class ReservationDAO extends DAO<Reservation> {
     String personneAuthentifiee ="";
 
-    public ReservationDAO() {
-        super(connect);
-    }
-
     public ReservationDAO(Connection connect) {
         super(connect);
     }
@@ -30,9 +26,7 @@ public class ReservationDAO extends DAO<Reservation> {
             String query = "INSERT INTO Reservation (id_enseignant, id_salle,  date_reservation, id_seance) VALUES(?, ?, ?, ?)";
 
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
-                                                                        ResultSet.TYPE_SCROLL_SENSITIVE,
-                                                                        ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
 
             java.sql.Date d2 = new java.sql.Date(obj.getDate_reservation().getTime());
@@ -100,11 +94,11 @@ public class ReservationDAO extends DAO<Reservation> {
     @Override
     public ArrayList<Reservation> getData() {
         ArrayList<Reservation> resultat = new ArrayList();
-        EnseignantDAO enseignantDAO = new EnseignantDAO();
+        EnseignantDAO enseignantDAO = new EnseignantDAO(connect);
 
         try {
 
-            int id_enseignant =((Enseignant)enseignantDAO.getEnseignantByLogin(personneAuthentifiee)).getId();
+            int id_enseignant =(enseignantDAO.getEnseignantByLogin(personneAuthentifiee)).getId();
             String query = "SELECT * FROM Reservation where id_enseignant=? ";
             PreparedStatement state = connect.prepareStatement(query,
                                                                 ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -130,7 +124,7 @@ public class ReservationDAO extends DAO<Reservation> {
 
     }
     public ArrayList<Reservation> getAllData() {
-        ArrayList<Reservation> resultat = new ArrayList();
+        ArrayList<Reservation> resultat = new ArrayList<Reservation>();
         try {
             String query = "SELECT * FROM Reservation  ";
             PreparedStatement state = connect.prepareStatement(query,

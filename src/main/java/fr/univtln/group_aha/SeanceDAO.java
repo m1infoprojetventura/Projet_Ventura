@@ -19,7 +19,7 @@ public class SeanceDAO extends DAO<Seance> {
 
     // J'ai pensé pour un jour, un jour lointain (le plus possible) où à le create renverrai l'ID... et finalement ça renvoie un booléen
     @Override
-    public void create(Seance obj) throws EchecChangementTableException {
+    public void create(Seance obj) throws EchecContrainteException, EchecSeancexception {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte)";
 
@@ -40,21 +40,49 @@ public class SeanceDAO extends DAO<Seance> {
             statement.setTime(3,  fin_seance);
             statement.setTime(4,  debut_seance);
 
+
             ResultSet resultSet = statement.executeQuery();
-            int nombre = 0;
+            int nombre1 = 0;
 
             if(resultSet.next()) {
-                nombre = resultSet.getInt(1);
-                System.out.println("On va voir " + nombre);
+                nombre1 = resultSet.getInt(1);
+                System.out.println("On va voir " + nombre1);
             }
 
-            if(nombre == 0) {
+            String query2 = "SELECT COUNT(*) FROM Seance WHERE (id_enseignant=? OR id_formation=? ) AND (date=?) AND NOT(?<=debut_seance OR ?>=fin_seance)";
+
+            PreparedStatement statement1 = connect.prepareStatement(query2,
+                    ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+
+            statement1.setInt(1,  id_enseignant);
+            statement1.setInt(2,  id_formation);
+            statement1.setDate(3,  date);
+            statement1.setTime(4,  fin_seance);
+            statement1.setTime(5,  debut_seance);
+
+
+            ResultSet resultSet1 = statement1.executeQuery();
+            int nombre2 = 0;
+
+            if(resultSet1.next()) {
+                nombre2 = resultSet1.getInt(1);
+                System.out.println("On va voir " + nombre2);
+            }
+
+            if(nombre1 != 0) {
+                throw new EchecContrainteException("Seance");
+            }
+
+            else if(nombre2 != 0)
+                throw new EchecSeancexception();
+
+            else {
                 String query = "INSERT INTO Seance (id_salle, id_enseignant, id_matiere, date, debut_seance, fin_seance, id_formation) " +
                         "VALUES(?, ?, ?, ?, ?, ?,?)";
                 // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-                PreparedStatement state = connect.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
-                                                                          ResultSet.CONCUR_UPDATABLE,
-                                                                          Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
                 state.setInt(1, id_salle);
                 state.setInt(2, id_enseignant);
@@ -72,10 +100,6 @@ public class SeanceDAO extends DAO<Seance> {
                     obj.setId(key.getInt(1));
 
             }
-
-            else
-                // Etre un peu plus explicite que ça, du style mettre la date et l'heure de la séance
-                throw new EchecChangementTableException("Seance");
         }
 
         catch (SQLException e) {
@@ -129,7 +153,7 @@ public class SeanceDAO extends DAO<Seance> {
     }
 
     @Override
-    public void update(Seance obj) throws EchecChangementTableException {
+    public void update(Seance obj) throws EchecContrainteException {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte)";
 
@@ -177,7 +201,7 @@ public class SeanceDAO extends DAO<Seance> {
             }
 
             else
-                throw new EchecChangementTableException("Seance");
+                throw new EchecContrainteException("Seance");
         }
 
 
@@ -480,11 +504,12 @@ public class SeanceDAO extends DAO<Seance> {
         //Time debut_seance = new Time(debutH.getTimeInMillis());
         //Time fin_seance = new Time(finH.getTimeInMillis());
         java.sql.Date date = new java.sql.Date(debutH.getTime().getTime());
-        SalleDAO salleDAO = new SalleDAO();
+        System.out.println(date);
+        SalleDAO salleDAO = new SalleDAO(connect);
 
 
         try {
-            String query = "SELECT * FROM Seance where date = ?";
+            String query = "Select * from Seance WHERE Date=?";
 
             PreparedStatement state = connect.prepareStatement(query);
             state.setDate(1, date);
@@ -494,20 +519,17 @@ public class SeanceDAO extends DAO<Seance> {
 
             ResultSet result = state.executeQuery();
 
-
-
             while (result.next()) {
-                Salle salle = salleDAO.find(result.getInt("id_salle"));
-               /* System.out.println(result.getInt("id_salle"));
+                Salle salle = salleDAO.find(result.getInt("ID_SALLE"));
+               // System.out.println(result.getInt("id_salle"));
 
-                System.out.println("hahaha" + salleDAO.find(result.getInt("id_salle")));
-                System.out.println(date);
-                System.out.println("daate trouve" +result.getDate("date"));*/
+               //  System.out.println("hahaha" + salleDAO.find(result.getInt("id_salle")));
+               //  System.out.println(date);
+               //  System.out.println("daate trouve" +result.getDate("date"));
                 resultat.add(salle);
-
             }
 
-
+            System.out.println(resultat);
 
         } catch (SQLException e) {
             e.printStackTrace();

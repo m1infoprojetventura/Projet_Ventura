@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class SalleDAO extends DAO<Salle> {
-    public SalleDAO() {
-        super(connect);
-    }
 
     PreparedStatement statementFindSalle;
     PreparedStatement statementFindSalleMateriel;
@@ -38,9 +35,7 @@ public class SalleDAO extends DAO<Salle> {
 
             String query = "INSERT INTO Salle (capacite, nom) VALUES(?, ?)";
             // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
-                                                                        ResultSet.TYPE_SCROLL_SENSITIVE,
-                                                                        ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             String nom = obj.getNom();
             int capacite = obj.getCapacite();

@@ -1,7 +1,6 @@
 package fr.univtln.group_aha;
 
 import java.sql.*;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,7 +20,7 @@ public class ContrainteDAO  extends DAO<Contrainte> {
      * @return retourne faux si la contrainte n'a pas été ajoutée dans la base de données
      */
     @Override
-    public void create(Contrainte obj) throws EchecChangementTableException {
+    public void create(Contrainte obj) throws EchecContrainteException {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte)";
 
@@ -51,9 +50,7 @@ public class ContrainteDAO  extends DAO<Contrainte> {
             if(nombre == 0) {
                 String query = "INSERT INTO Contrainte (id_enseignant, date, debut_contrainte, fin_contrainte, motif) " + "VALUES(?, ?, ?, ?, ?)";
                 // Cette méthode précompile la requête (query) donc sont exécution sera plus rapide.
-                PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS,
-                                                                            ResultSet.TYPE_SCROLL_SENSITIVE,
-                                                                            ResultSet.CONCUR_UPDATABLE);
+                PreparedStatement state = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
                 state.setInt(1,  id_enseignant);
                 state.setDate(2,  date);
@@ -71,7 +68,7 @@ public class ContrainteDAO  extends DAO<Contrainte> {
             }
 
             else
-                throw new EchecChangementTableException("Contrainte");
+                throw new EchecContrainteException("Contrainte");
         }
 
         catch (SQLException e) {
@@ -97,7 +94,7 @@ public class ContrainteDAO  extends DAO<Contrainte> {
     }
 
     @Override
-    public void update(Contrainte obj) throws EchecChangementTableException {
+    public void update(Contrainte obj) throws EchecContrainteException {
         try {
             String query1 = "SELECT COUNT(*) FROM Contrainte WHERE id_enseignant=? AND (date=?) AND NOT(?<=debut_contrainte OR ?>=fin_contrainte) AND id !=?";
 
@@ -143,7 +140,7 @@ public class ContrainteDAO  extends DAO<Contrainte> {
 
             else
                 // Etre un peu plus explicite que ça, du style mettre la date et l'heure de la séance
-                throw new EchecChangementTableException("Contrainte");
+                throw new EchecContrainteException("Contrainte");
         }
 
         catch (SQLException e) {

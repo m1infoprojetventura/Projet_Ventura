@@ -53,7 +53,7 @@ public abstract class Personne {
         java.util.Date date = date_naissance;
 
         int x = Math.abs((date.hashCode() + 31*id) % 1000);
-        this.login = prenom.substring(0, 1) + nom + x;
+        this.login = prenom.substring(0, 1).toLowerCase() + nom.toLowerCase() + x;
     }
 
     public String getNom() {
@@ -74,9 +74,8 @@ public abstract class Personne {
     }
 
     public void generationMdp() {
-        Calendar calender = new GregorianCalendar();
-        int annee  = calender.get(Calendar.YEAR);
-        this.mdp = getNom() + getPrenom() + annee;
+        int annee  =  date_naissance.getYear();
+        this.mdp = getNom().toLowerCase() + getPrenom().toLowerCase() + annee;
     }
 
 
@@ -133,8 +132,7 @@ public abstract class Personne {
         this.date_naissance = date_naissance;
     }
 
-
-    public int getMdp() {
-        return mdp.hashCode();
+    public String getMdp() {
+        return mdp;
     }
 }

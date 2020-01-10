@@ -4,7 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DepartementDAO extends DAO<Departement> {
-    public DepartementDAO() {
+
+    public DepartementDAO(Connection connect) {
         super(connect);
     }
 
@@ -25,7 +26,7 @@ public class DepartementDAO extends DAO<Departement> {
     @Override
     public Departement find(int id) {
         Departement departement = new Departement();
-        EnseignantDAO enseignantDAO = new EnseignantDAO();
+        EnseignantDAO enseignantDAO = new EnseignantDAO(connect);
 
         try {
             Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -57,7 +58,7 @@ public class DepartementDAO extends DAO<Departement> {
             String query = "SELECT * FROM Departement";
             PreparedStatement state = connect.prepareStatement(query);
             ResultSet result = state.executeQuery();
-            EnseignantDAO enseignantDAO = new EnseignantDAO();
+            EnseignantDAO enseignantDAO = new EnseignantDAO(connect);
 
             while(result.next()) {
                 Enseignant enseignant = enseignantDAO.find(result.getInt("id_responsable"));
